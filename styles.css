@@ -1,8 +1,3 @@
-/* =========================
-   YASU — STRUCTURAL WORKS
-   Minimal Black Portfolio
-========================= */
-
 *{
   box-sizing:border-box;
   margin:0;
@@ -13,16 +8,15 @@ body{
   background:#000;
   color:#fff;
   font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
-  letter-spacing:.08em;
 }
 
 .wrap{
   max-width:1400px;
   margin:0 auto;
-  padding:60px 40px 80px 40px;
+  padding:60px 40px 80px;
 }
 
-/* ================= HEADER ================= */
+/* HEADER */
 
 .header{
   display:flex;
@@ -36,13 +30,6 @@ body{
   letter-spacing:.5em;
   font-weight:300;
 }
-
-.actions{
-  display:flex;
-  justify-content:flex-end;
-  align-items:center;
-}
-
 
 .mailbtn{
   font-size:12px;
@@ -60,7 +47,7 @@ body{
   color:#000;
 }
 
-/* ================= GRID ================= */
+/* GRID */
 
 .grid{
   display:grid;
@@ -68,42 +55,39 @@ body{
   gap:70px;
 }
 
-/* ================= CARD ================= */
+/* CARD */
 
 .card{
-  background:#0b0b0b;
-  border:1px solid rgba(255,255,255,.10);
-  padding:36px 36px 28px 36px;
-  transition:.35s ease;
+  text-decoration:none;
+  color:#fff;
 }
 
-.card:hover{
-  border-color:rgba(255,255,255,.35);
-  transform:translateY(-4px);
-}
-
-/* ================= IMAGE ================= */
-
-/* 3:2固定コンテナ */
-.thumb{
-  display:block;
+.frame{
+  position:relative;
   width:100%;
-  height:420px;         /* ← ここが3:2の見た目を作る */
-  object-fit:cover;
-  filter:contrast(1.02);
-  border:2px solid rgba(255,255,255,.42);
+  padding-top:66.666%; /* 3:2固定 */
+  border:3px solid rgba(255,255,255,.35);
+  background:#111;
+  overflow:hidden;
 }
 
-/* ================= LABEL ================= */
+.frame img{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 
 .label{
-  font-size:11px;
   margin-top:18px;
+  font-size:11px;
   letter-spacing:.3em;
   color:rgba(255,255,255,.75);
 }
 
-/* ================= FOOTER ================= */
+/* FOOTER */
 
 .footer{
   text-align:center;
@@ -113,7 +97,7 @@ body{
   letter-spacing:.25em;
 }
 
-/* ================= RESPONSIVE ================= */
+/* MOBILE */
 
 @media(max-width:900px){
 
@@ -123,7 +107,7 @@ body{
   }
 
   .wrap{
-    padding:40px 25px 60px 25px;
+    padding:40px 25px 60px;
   }
 
 }
