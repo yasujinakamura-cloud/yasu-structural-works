@@ -66,6 +66,39 @@
       photoStatementEl.textContent = img.statement || '';
     }
 
+    // ===== per-photo GEAR (camera/lens) =====
+    const gearEl = viewer.querySelector('[data-photo-gear]');
+    if (gearEl) {
+    const camera = (img.camera || '').trim();
+    const lens   = (img.lens || '').trim();
+
+  // 2行表示（片方だけでもOK）
+    const lines = [];
+    if (camera) lines.push(camera);
+    if (lens)   lines.push(lens);
+
+    gearEl.textContent = lines.join(' / '); // ← 1行で出すならこれ
+  // gearEl.innerHTML = lines.map(s => `<div>${escapeHtml(s)}</div>`).join(''); // ← 2行にしたいならこっち（その場合 escapeHtml が必要）
+
+// ===== GEAR TOGGLE (persist) =====
+const toggle = viewer.querySelector('[data-gear-toggle]');
+if (toggle) {
+  const saved = localStorage.getItem('gearHidden');
+  if (saved === 'true') viewer.classList.add('hide-gear');
+
+  toggle.addEventListener('click', () => {
+    viewer.classList.toggle('hide-gear');
+    localStorage.setItem('gearHidden', viewer.classList.contains('hide-gear'));
+  });
+}
+
+
+
+}
+
+
+
+
     // pager count
     if (countEl) countEl.textContent = `${pad2(i + 1)} / ${pad2(images.length)}`;
 

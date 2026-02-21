@@ -10,14 +10,17 @@
 <body>
   <main class="viewer" data-series-viewer data-series="structure" data-index="1">
     <header class="viewer-head">
+  <!-- 1行目：左 HOME / 右 INFO -->
       <a class="back" href="../../index.html">← HOME</a>
 
-      <h1 class="series-title" data-series-title>STRUCTURE</h1>
-      <p class="series-statement" data-series-statement></p>
+      <button class="gear-toggle" type="button" data-gear-toggle>INFO</button>
 
+  <!-- 2行目：左 Statement / 右 Gear -->
       <p class="photo-statement" data-photo-statement></p>
-    </header>
 
+      <p class="photo-gear" data-photo-gear></p>
+    </header>
+    
     <section class="stage">
       <figure class="frame">
         <img class="photo" data-series-image src="" alt="" />

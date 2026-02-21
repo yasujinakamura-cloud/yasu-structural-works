@@ -10,17 +10,17 @@
 <body>
   <main class="viewer" data-series-viewer data-series="structure" data-index="0">
     <header class="viewer-head">
+  <!-- 1行目：左 HOME / 右 INFO -->
       <a class="back" href="../../index.html">← HOME</a>
 
-      <!-- タイトルは出しても良いが、主役はステートメント -->
-      <h1 class="series-title" data-series-title>STRUCTURE</h1>
+      <button class="gear-toggle" type="button" data-gear-toggle>INFO</button>
 
-      <!-- シリーズテーマは混線防止のため空にしている（JSが空文字セット） -->
-      <p class="series-statement" data-series-statement></p>
-
-      <!-- 写真ごとのステートメント（ここが主役・センタリング） -->
+  <!-- 2行目：左 Statement / 右 Gear -->
       <p class="photo-statement" data-photo-statement></p>
+
+      <p class="photo-gear" data-photo-gear></p>
     </header>
+
 
     <section class="stage">
       <figure class="frame">

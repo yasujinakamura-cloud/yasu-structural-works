@@ -723,3 +723,127 @@ html, body { background:#000; }
 /* JSが準備完了するまで中身を隠す */
 .viewer { opacity: 0; }
 html.is-ready .viewer { opacity: 1; transition: opacity .12s ease; }
+
+/* =========================
+   Photo statement + Gear (Aligned)
+========================= */
+
+.viewer-head{
+  position: relative;
+
+  /* 2列×2行 */
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+
+  /* 行の並び */
+  grid-template-areas:
+    "back  info"
+    "stmt  gear";
+
+  align-items: start;
+  column-gap: 18px;
+
+  /* 写真との距離：必要なら微調整 */
+  padding-top: 10px;
+}
+
+/* 1行目 左：HOME */
+.viewer-head .back{
+  grid-area: back;
+  line-height: 1;          /* HOMEとINFOの高さを揃える */
+  padding-top: 2px;        /* ほんの少しだけ視覚調整 */
+}
+
+/* 1行目 右：INFO（HOMEと同じ高さに揃う） */
+.gear-toggle{
+  grid-area: info;
+  justify-self: end;
+
+  background: none;
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+
+  padding: 6px 10px;
+  line-height: 1;
+  cursor: pointer;
+
+  opacity: .6;
+  transition: .2s ease;
+}
+
+.gear-toggle:hover{ opacity: 1; }
+
+/* 2行目 左：ステートメント（写真の少し上に） */
+.photo-statement{
+  grid-area: stmt;
+
+  margin: 14px 0 0 0;      /* ← ここで HOME との上下距離を確保 */
+  font-size: 13px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .92;
+}
+
+/* 2行目 右：CAMERA / LENS（1行） */
+.photo-gear{
+  grid-area: gear;
+  justify-self: end;
+
+  margin: 14px 0 0 0;      /* ← stmt と同じ値にして“完全に揃える” */
+  font-size: 11px;
+  letter-spacing: .14em;
+  opacity: .75;
+
+  text-align: right;
+  white-space: nowrap;
+}
+
+
+
+
+
+
+
+
+/* 文字エリアをフレーム幅に合わせる（左右がフレーム端に揃う） */
+.viewer-head{
+  width: min(70vw, 1100px);   /* ← .frame と同じ値にする */
+  margin: 0 auto;             /* ← フレームと同じく中央寄せ */
+}
+.photo-statement{
+  justify-self: start;
+  text-align: left;
+}
+
+/* 右端をフレーム右端にピタッと合わせる */
+.photo-gear{
+  justify-self: end;
+  text-align: right;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 非表示モード（INFOでトグル） */
+.viewer.hide-gear .photo-gear{
+  display: none;
+}
+
+/* スマホ微調整（任意） */
+@media (max-width: 700px){
+  .photo-statement{ margin-top: 12px; font-size: 12px; }
+  .photo-gear{ margin-top: 12px; font-size: 10px; }
+}
+

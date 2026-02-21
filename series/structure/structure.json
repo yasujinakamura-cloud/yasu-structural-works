@@ -2,11 +2,13 @@
   "title": "STRUCTURE",
   "statement": "LIGHT IS FORCE. STRUCTURE IS RESISTANCE.",
   "images": [
-    { "file": "001.jpg", "statement": "YOU MOVE. STRUCTURE REMAINS." },
-    { "file": "002.jpg", "statement": "YOU ARE ALREADY INSIDE." },
-    { "file": "003.jpg", "statement": "LINES DECIDE. YOU FOLLOW." },
-    { "file": "004.jpg", "statement": "DISTRIBUTION IS CONTROL." },
-    { "file": "005.jpg", "statement": "STRUCTURE REMAINS." }
+    { "file": "001.jpg", "statement": "YOU MOVE. STRUCTURE REMAINS.","camera": "LEICA M240", "lens": "Summicron50mm F2.0" },
+    { "file": "002.jpg", "statement": "YOU ARE ALREADY INSIDE.","camera": "LEICA M-MONOCHROME ( CCD )", "lens": "Summicron50mm F2.0" },
+    { "file": "003.jpg", "statement": "LINES DECIDE. YOU FOLLOW.","camera": "LEICA M-MONOCHROME ( CCD )", "lens": "SUPER WIDE-HELIAR 15mm" },
+    { "file": "004.jpg", "statement": "DISTRIBUTION IS CONTROL.","camera": "LEICA M-MONOCHROME ( CCD )", "lens": "SUPER WIDE-HELIAR 15mm" },
+    { "file": "005.jpg", "statement": "STRUCTURE REMAINS.","camera": "LEICA M-MONOCHROME ( CCD )", "lens": "SUPER WIDE-HELIAR 15mm" },
+    { "file": "006.jpg", "statement": "THE CITY DOESN’T ASK. IT INSTRUCTS.","camera": "LEICA M-MONOCHROME ( CCD )", "lens": "SUPER WIDE-HELIAR 15mm" },
+    { "file": "007.jpg", "statement": "WE MOVE. THE GRID REMAINS.","camera": "LEICA M-MONOCHROME ( CCD )", "lens": "Summicron50mm F2.0" }
+
   ]
 }
-
