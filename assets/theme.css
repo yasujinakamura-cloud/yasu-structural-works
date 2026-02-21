@@ -833,6 +833,39 @@ html.is-ready .viewer { opacity: 1; transition: opacity .12s ease; }
 
 
 
+/* ===== Viewer header: mobile fix ===== */
+@media (max-width: 520px){
+
+  /* 上段を2段構成にする（ナビ + メタ / ステートメント） */
+  .viewer-head{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "nav  meta"
+      "stmt stmt";
+    align-items:start;
+    gap: 10px 14px;
+  }
+
+  .viewer-head .nav{ grid-area: nav; justify-self:start; }
+  .viewer-head .meta{ grid-area: meta; justify-self:end; text-align:right; }
+  .viewer-head .statement{ grid-area: stmt; justify-self:start; text-align:left; }
+
+  /* 右（CAMERA/LENS）を2行で安定させる */
+  .viewer-head .meta{
+    white-space:normal;       /* 折り返し許可 */
+    line-height:1.2;
+    max-width: 56vw;          /* 右が広がりすぎない */
+    overflow-wrap:anywhere;   /* どうしても長い時に折る */
+  }
+}
+
+
+
+
+
+
+
 
 
 
@@ -847,3 +880,12 @@ html.is-ready .viewer { opacity: 1; transition: opacity .12s ease; }
   .photo-gear{ margin-top: 12px; font-size: 10px; }
 }
 
+
+
+
+@media (max-width: 520px){
+  .viewer-head .meta{
+    white-space: normal;
+    line-height: 1.2;
+  }
+}
