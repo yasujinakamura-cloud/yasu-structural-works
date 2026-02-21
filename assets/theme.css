@@ -1,0 +1,725 @@
+/* =====================================================
+   YASU STRUCTURAL WORKS
+   Minimal Monochrome System
+===================================================== */
+
+/* ---------- Base ---------- */
+*{ box-sizing:border-box; }
+
+html,body{
+  height:100%;
+}
+
+body{
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family: system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing:.01em;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding: clamp(28px, 5vw, 72px);
+  position:relative;
+}
+
+.hero__inner{
+  width:min(1100px,100%);
+  text-align:center;
+}
+
+.hero__statement{
+  margin:0;
+  font-size: clamp(30px, 4.6vw, 68px);
+  line-height:1.08;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+.hero__statement span{
+  display:block;
+}
+
+.hero__sub{
+  margin:18px 0 4px;
+  font-size: clamp(12px, 1.2vw, 15px);
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  opacity:.72;
+}
+
+.hero__credit{
+  margin:8px 0 0;
+  font-size:11px;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  opacity:.55;
+}
+
+.hero__enter{
+  display:inline-flex;
+  gap:.4em;
+  align-items:center;
+  margin-top:26px;
+  font-size:13px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  opacity:.88;
+  border-bottom:1px solid rgba(255,255,255,.18);
+  padding-bottom:8px;
+  transition:.2s ease;
+}
+
+.hero__enter:hover{
+  opacity:1;
+}
+
+.hero__scroll{
+  position:absolute;
+  bottom:22px;
+  left:50%;
+  transform:translateX(-50%);
+  opacity:.45;
+}
+
+.hero__scrollLine{
+  display:block;
+  width:1px;
+  height:42px;
+  background:rgba(255,255,255,.35);
+}
+
+/* =========================
+   HERO: MAIL BUTTON (Top only)
+========================= */
+
+.hero__mail{
+  position:absolute;
+  top:28px;
+  right:32px;
+
+  display:inline-flex;
+  align-items:center;
+  gap:.5em;
+
+  font-size:12px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+
+  padding:10px 14px;
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.04);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.65) inset;
+
+  opacity:.9;
+  transition: .2s ease;
+}
+
+.hero__mail:hover{
+  opacity:1;
+  border-color:rgba(255,255,255,.34);
+  background:rgba(255,255,255,.055);
+}
+
+@media (max-width: 700px){
+  .hero__mail{
+    top:16px;
+    right:16px;
+    padding:9px 12px;
+    font-size:11px;
+    letter-spacing:.18em;
+  }
+}
+
+/* =====================================================
+   CATEGORY GRID
+===================================================== */
+
+.frontGrid{
+  padding:18px clamp(18px,3vw,42px) 72px;
+}
+
+.frontGrid__inner{
+  width:min(1400px,100%);
+  margin:0 auto;
+}
+
+.frontGrid__head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  margin:10px 0 18px;
+}
+
+.frontGrid__title{
+  margin:0;
+  font-size:14px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  opacity:.85;
+}
+
+.frontGrid__note{
+  margin:0;
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  opacity:.55;
+}
+
+.frontGrid__items{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+
+@media (max-width:720px){
+  .frontGrid__items{ grid-template-columns:1fr; }
+}
+
+/* ---------- Category Card : 3:2 + Framed ---------- */
+
+.catCard{
+  position:relative;
+  display:block;
+  overflow:hidden;
+  aspect-ratio: 3 / 2;
+
+  padding: 14px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.22);
+
+  box-shadow: 0 0 0 1px rgba(0,0,0,.65) inset;
+}
+
+.catCard__img{
+  position:absolute;
+  inset: 14px;
+
+  width: calc(100% - 28px);
+  height: calc(100% - 28px);
+
+  object-fit:cover;
+  filter: grayscale(100%) contrast(1.05);
+  transform: scale(1.02);
+  transition: transform .35s ease;
+
+  border: 1px solid rgba(255,255,255,.14);
+  background:#000;
+}
+
+.catCard__overlay{
+  position:absolute;
+  inset: 14px;
+
+  background: radial-gradient(
+    1000px 520px at 50% 45%,
+    rgba(0,0,0,.25),
+    rgba(0,0,0,.78)
+  );
+}
+
+.catCard__text{
+  position:absolute;
+  inset: 14px;
+  z-index:2;
+
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+.catCard__title{
+  font-size:22px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.catCard__sub{
+  font-size:12px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  opacity:.7;
+}
+
+.catCard__enter{
+  margin-top:6px;
+  font-size:12px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  opacity:.85;
+
+  border-bottom:1px solid rgba(255,255,255,.18);
+  width:fit-content;
+  padding-bottom:8px;
+}
+
+.catCard:hover .catCard__img{ transform:scale(1.06); }
+.catCard:hover{
+  border-color:rgba(255,255,255,.34);
+  background:rgba(255,255,255,.055);
+}
+
+/* =====================================================
+   SERIES PAGE (Grid)
+===================================================== */
+
+.seriesHeader{
+  min-height:40vh;
+  padding:24px clamp(18px,3vw,42px) 28px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.seriesHeader__back{
+  display:inline-block;
+  font-size:12px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  opacity:.72;
+  margin-bottom:18px;
+}
+
+.seriesHeader__back:hover{ opacity:1; }
+
+.seriesHeader__inner{
+  width:min(1100px,100%);
+  margin:0 auto;
+  text-align:center;
+}
+
+.seriesHeader__title{
+  margin:0;
+  font-size:clamp(28px,4.2vw,56px);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.seriesHeader__statement{
+  margin:14px 0 0;
+  font-size:14px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  opacity:.85;
+}
+
+.seriesHeader__sub{
+  margin:10px 0 0;
+  font-size:12px;
+  opacity:.65;
+}
+
+.seriesGrid{
+  padding:18px clamp(18px,3vw,42px) 72px;
+}
+
+.seriesGrid__items{
+  width:min(1400px,100%);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:22px;
+}
+
+@media (max-width:980px){
+  .seriesGrid__items{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:520px){
+  .seriesGrid__items{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+}
+
+.shot{
+  margin:0;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.03);
+  overflow:hidden;
+}
+
+.shot__img{
+  width:100%;
+  display:block;
+  aspect-ratio:3/2;
+  object-fit:cover;
+
+  transform:scale(1.01);
+  transition:transform .25s ease;
+}
+
+.shot__link:hover .shot__img{ transform:scale(1.04); }
+
+.shot__cap{
+  padding:10px 12px 12px;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  opacity:.72;
+}
+
+.seriesEmpty{
+  width:min(1400px,100%);
+  margin:22px auto 0;
+  text-align:center;
+  font-size:12px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  opacity:.55;
+}
+
+/* ---------- Lightbox ---------- */
+
+.lb{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.92);
+  display:grid;
+  place-items:center;
+  z-index:9999;
+  padding:24px;
+}
+
+.lb__img{
+  max-width:min(1200px,96vw);
+  max-height:86vh;
+  display:block;
+}
+
+.lb__close{
+  position:fixed;
+  top:14px;
+  right:16px;
+  font-size:32px;
+  border:0;
+  background:transparent;
+  color:#fff;
+  opacity:.75;
+  cursor:pointer;
+}
+
+.lb__close:hover{ opacity:1; }
+
+/* Monochrome series only */
+.series--mono .shot__img{ filter: grayscale(100%); }
+.series--mono .lb__img{ filter: grayscale(100%); }
+
+/* =====================================================
+   VIEWER MODE (Single image + Prev/Next)
+   - 70% stage on desktop
+   - tighter on mobile
+   - NO overflow / NO photo escaping frame
+===================================================== */
+
+/* 調整用変数（ここだけ触ればOK） */
+:root{
+  --viewerW: 70vw;          /* desktop: 画面幅の70% */
+  --viewerMaxW: 1100px;
+  --viewerH: 70vh;          /* desktop: 画面高の70% */
+  --viewerMaxH: 760px;
+
+  --framePad: 18px;         /* 外枠から内側まで（薄い余白） */
+  --matPad: 22px;           /* 黒マット（内枠までの余白） */
+
+  --frameBorder: 2px solid rgba(255,255,255,.35);
+  --matBorder:   1px solid rgba(255,255,255,.45);
+}
+
+/* Main container */
+.viewer{
+  min-height:100vh;
+  background:#000;
+  color:#fff;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  /* desktopは中央寄せ気味、mobileは上寄せに切り替える */
+  justify-content:center;
+  padding:28px 18px 34px;
+}
+
+/* header row */
+.viewer-head{
+  width:min(var(--viewerMaxW), 92vw);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+
+.viewer-head .back{
+  font-size:12px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  opacity:.8;
+}
+.viewer-head .back:hover{ opacity:1; }
+
+/* statement band (above photo) */
+.statement-band{
+  width:min(var(--viewerMaxW), 92vw);
+  margin:8px 0 16px;
+  padding:10px 0;
+}
+
+.series-statement{
+  margin:0;
+  font-size:14px;
+  letter-spacing:.24em;
+  line-height:1.35;
+  text-transform:uppercase;
+  opacity:.9;
+}
+
+/* stage wrapper */
+.stage{
+  width:min(var(--viewerMaxW), 92vw);
+  display:flex;
+  justify-content:center;
+}
+
+/* FRAME (3:2 fixed) */
+.frame{
+  width: min(var(--viewerW), var(--viewerMaxW));
+  height:min(var(--viewerH), var(--viewerMaxH));
+  aspect-ratio:3 / 2;
+
+  margin:0;
+  padding: var(--framePad);
+  border: var(--frameBorder);
+  background:rgba(255,255,255,.02);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  overflow:hidden; /* ここで絶対に外へ出さない */
+}
+
+/* inner mat: create black mat + thin border */
+.frame-inner{
+  width:100%;
+  height:100%;
+
+  padding: var(--matPad);
+  border: var(--matBorder);
+  background:#000;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  overflow:hidden; /* 内側でも封じる */
+}
+
+/* photo: always contained */
+.photo,
+.stage img{
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+
+  display:block;
+  object-fit:contain;
+
+  border: 1px solid rgba(255,255,255,.45); /* ←追加 */
+}
+
+/* pager */
+.pager{
+  width:min(var(--viewerMaxW), 92vw);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:16px;
+  font-size:12px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+}
+
+.pager a{
+  opacity:.85;
+  cursor:pointer;
+}
+.pager a:hover{ opacity:1; }
+
+/* accessibility helper */
+.visually-hidden{
+  position:absolute !important;
+  width:1px !important;
+  height:1px !important;
+  padding:0 !important;
+  margin:-1px !important;
+  overflow:hidden !important;
+  clip:rect(0,0,0,0) !important;
+  white-space:nowrap !important;
+  border:0 !important;
+}
+
+/* ====== Mobile tuning ======
+   70%だと小さすぎるので、枠をほぼ画面幅へ。
+   ここを触れば「iPhoneで額の余白を詰める」ができる。
+*/
+@media (max-width: 700px){
+  :root{
+    --viewerW: 92vw;
+    --viewerH: 76vh;
+    --framePad: 14px;   /* ← 外枠の余白を詰める */
+    --matPad:  16px;    /* ← 黒マットを詰める */
+  }
+
+  .viewer{
+    justify-content:flex-start;
+    padding-top:18px;
+  }
+
+  .series-statement{
+    font-size:13px;
+    letter-spacing:.20em;
+  }
+}
+
+/* ===== Series: centered statement above photo ===== */
+.viewer-head{
+  position: relative;
+  text-align: center;
+  padding-top: 8px;
+  padding-bottom: 14px;
+}
+
+.viewer-head .back{
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translateY(0);
+}
+
+/* タイトルは「非表示にしたい」なら消す */
+.viewer-head .series-title{
+  display: none;
+}
+
+/* ステートメントを強く見せる（写真上余白） */
+.viewer-head .series-statement{
+  margin: 0 auto;
+  max-width: 58ch;
+  font-size: 15px;      /* ← ここで強度調整 */
+  line-height: 1.55;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.88);
+}
+
+/* =========================================
+   FINAL OVERRIDE: per-photo statement center
+   (always centered on every image)
+========================================= */
+.statement-band{
+  text-align: center !important;
+}
+
+.series-statement{
+  width: 100% !important;
+  text-align: center !important;
+  margin: 0 auto !important;
+}
+
+/* =========================
+   PAGE TRANSITION (quiet)
+========================= */
+
+body{
+  opacity: 1; /* ← 最初から表示（ここが重要） */
+  transition: opacity .22s ease;
+}
+
+/* 遷移開始（静かにフェードアウト） */
+body.is-leaving{
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce){
+  body{ transition: none !important; }
+}
+
+/* 読み込み完了 */
+body.is-ready{
+  opacity: 1;
+}
+
+/* =========================
+   SERIES INTRO (2s)
+========================= */
+.seriesIntro{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px 18px;
+  background:#000;
+}
+
+.seriesIntro__inner{
+  text-align:center;
+  max-width: 900px;
+}
+
+.seriesIntro__kicker{
+  font-size:12px;
+  letter-spacing:.32em;
+  text-transform:uppercase;
+  opacity:.75;
+  margin:0 0 14px 0;
+}
+
+.seriesIntro__title{
+  margin:0 0 14px 0;
+  font-size:22px;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  line-height:1.2;
+}
+
+.seriesIntro__statement{
+  margin:0;
+  font-size:16px;
+  letter-spacing:.08em;
+  line-height:1.6;
+  color: rgba(255,255,255,.85);
+}
+
+/* mobile */
+@media (max-width: 700px){
+  .seriesIntro__title{ font-size:18px; }
+  .seriesIntro__statement{ font-size:14px; }
+}
+
+/* Series page: hide series theme statement (top-left) */
+.series-statement{
+  display:none !important;
+}
+
+/* ===== Prevent flash of unstyled text (FOUC) ===== */
+html, body { background:#000; }
+
+/* JSが準備完了するまで中身を隠す */
+.viewer { opacity: 0; }
+html.is-ready .viewer { opacity: 1; transition: opacity .12s ease; }

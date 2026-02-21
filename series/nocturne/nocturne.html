@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NOCTURNE — Yasu Nakamura</title>
+  <link rel="stylesheet" href="../assets/theme.css" />
+</head>
+<body class="series--mono">
+
+<header class="seriesHeader">
+  <a class="seriesHeader__back" href="../index.html">← BACK</a>
+
+  <div class="seriesHeader__inner">
+    <h1 class="seriesHeader__title">NOCTURNE</h1>
+    <p class="seriesHeader__statement">
+      SILENCE WITH TEETH.
+    </p>
+    <p class="seriesHeader__sub">
+      静けさは、牙を持つ。
+    </p>
+  </div>
+</header>
+
+<main class="seriesMain">
+  <section class="seriesGrid" aria-label="Nocturne gallery">
+    <div id="seriesGrid" class="seriesGrid__items" aria-live="polite"></div>
+    <p class="seriesEmpty" hidden>NO IMAGES YET.</p>
+  </section>
+</main>
+
+<div id="lb" class="lb" hidden>
+  <button class="lb__close" id="lbClose" aria-label="Close">×</button>
+  <img class="lb__img" id="lbImg" alt="">
+</div>
+
+<script>
+  window.SERIES = {
+    title: "NOCTURNE",
+    basePath: "../images/nocturne/",
+    dataUrl: "../data/nocturne.json"
+  };
+</script>
+<script src="../assets/series.js" defer></script>
+
+</body>
+</html>

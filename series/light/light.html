@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LIGHT — Yasu Nakamura</title>
+  <link rel="stylesheet" href="../assets/theme.css" />
+</head>
+<body>
+
+<header class="seriesHeader">
+  <a class="seriesHeader__back" href="../index.html">← BACK</a>
+
+  <div class="seriesHeader__inner">
+    <h1 class="seriesHeader__title">LIGHT</h1>
+    <p class="seriesHeader__statement">
+      LIGHT IS FORCE.
+    </p>
+    <p class="seriesHeader__sub">
+      光は、力だ。
+    </p>
+  </div>
+</header>
+
+<main class="seriesMain">
+  <section class="seriesGrid" aria-label="Light gallery">
+    <div id="seriesGrid" class="seriesGrid__items" aria-live="polite"></div>
+    <p class="seriesEmpty" hidden>NO IMAGES YET.</p>
+  </section>
+</main>
+
+<div id="lb" class="lb" hidden>
+  <button class="lb__close" id="lbClose" aria-label="Close">×</button>
+  <img class="lb__img" id="lbImg" alt="">
+</div>
+
+<script>
+  window.SERIES = {
+    title: "LIGHT",
+    basePath: "../images/light/",
+    dataUrl: "../data/light.json"
+  };
+</script>
+<script src="../assets/series.js" defer></script>
+
+</body>
+</html>

@@ -1,63 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>YASU — STRUCTURAL WORKS</title>
-<link rel="stylesheet" href="styles.css">
-</head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Yasu Nakamura — Monochrome Photography</title>
 
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/theme.css" />
+</head>
 <body>
 
-<div class="wrap">
+<main id="siteMain">
 
-<header class="header">
-  <h1 class="brand">YASU — STRUCTURAL WORKS</h1>
-  <div class="actions">
-    <a class="mailbtn"
-       href="mailto:yourmail@example.com?subject=Portfolio%20Inquiry">
-       Send Mail
+  <!-- HERO -->
+  <section class="hero" aria-label="Hero statement">
+
+    <!-- 右上 CONTACT -->
+    <a class="hero__mail"
+       href="mailto:yasuji.nakamura@gmail.com?subject=Portfolio%20Inquiry">
+       CONTACT
     </a>
-  </div>
-</header>
 
-<main class="grid">
+    <div class="hero__inner">
 
-  <a class="card" href="#">
-    <div class="frame">
-      <img src="structure.jpg" alt="Structure">
+      <h1 class="hero__statement">
+        <span>LIGHT IS FORCE.</span>
+        <span>STRUCTURE IS RESISTANCE.</span>
+      </h1>
+
+      <p class="hero__sub">
+        STUDIES IN LIGHT AND FORM
+      </p>
+
+      <p class="hero__credit">
+        WORKS BY YASU NAKAMURA
+      </p>
+
+      <a class="hero__enter" href="#grid" aria-label="Enter gallery">
+        ENTER <span aria-hidden="true">→</span>
+      </a>
+
     </div>
-    <div class="label">Structure</div>
-  </a>
 
-  <a class="card" href="#">
-    <div class="frame">
-      <img src="lines.jpg" alt="Lines">
+    <div class="hero__scroll" aria-hidden="true">
+      <span class="hero__scrollLine"></span>
     </div>
-    <div class="label">Lines</div>
-  </a>
 
-  <a class="card" href="#">
-    <div class="frame">
-      <img src="velocity.jpg" alt="Velocity">
-    </div>
-    <div class="label">Velocity</div>
-  </a>
+  </section>
 
-  <a class="card" href="#">
-    <div class="frame">
-      <img src="nocturne.jpg" alt="Nocturne">
+
+  <!-- CATEGORY GRID -->
+  <section id="grid" class="frontGrid" aria-label="Categories">
+    <div class="frontGrid__inner">
+
+      <div class="frontGrid__head">
+        <h2 class="frontGrid__title">CATEGORIES</h2>
+        <p class="frontGrid__note">ENTER A SERIES.</p>
+      </div>
+
+      <!-- JSで自動生成 -->
+      <div id="catGrid" class="frontGrid__items" aria-live="polite"></div>
+
     </div>
-    <div class="label">Nocturne</div>
-  </a>
+  </section>
 
 </main>
 
-<footer class="footer">
-© 2026 Yasu Nakamura
-</footer>
-
-</div>
+<!-- JS -->
+<script src="assets/app.js" defer></script>
 
 </body>
 </html>

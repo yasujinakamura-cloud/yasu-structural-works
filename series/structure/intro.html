@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>STRUCTURE — YASU</title>
+  <link rel="stylesheet" href="../../assets/theme.css" />
+</head>
+
+<body>
+  <main class="seriesIntro" aria-label="Series intro">
+    <div class="seriesIntro__inner">
+      <div class="seriesIntro__kicker">SERIES</div>
+      <h1 class="seriesIntro__title" id="introTitle">STRUCTURE</h1>
+      <p class="seriesIntro__statement" id="introStatement">
+        LIGHT IS FORCE. STRUCTURE IS RESISTANCE.
+      </p>
+    </div>
+  </main>
+
+  <script>
+    // 1) できればJSONから title/statement を読んで表示（失敗しても固定文のまま）
+    (async () => {
+      try{
+        const res = await fetch('../../data/structure.json', { cache: 'no-store' });
+        if(!res.ok) throw new Error('json load failed');
+        const data = await res.json();
+        const t = document.getElementById('introTitle');
+        const s = document.getElementById('introStatement');
+        if(t && data.title) t.textContent = data.title;
+        if(s && data.statement) s.textContent = data.statement;
+      }catch(e){}
+    })();
+
+    // 2) 2秒後に 1枚目（index.html）へ
+    setTimeout(() => {
+      location.href = './index.html';
+    }, 3000);
+  </script>
+</body>
+</html>

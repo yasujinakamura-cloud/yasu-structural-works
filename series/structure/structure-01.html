@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>STRUCTURE 01 — YASU</title>
+  <link rel="stylesheet" href="../../assets/theme.css" />
+</head>
+
+<body>
+  <main class="viewer" data-series-viewer data-series="structure" data-index="0">
+    <header class="viewer-head">
+      <a class="back" href="../../index.html">← HOME</a>
+
+      <!-- タイトルは出しても良いが、主役はステートメント -->
+      <h1 class="series-title" data-series-title>STRUCTURE</h1>
+
+      <!-- シリーズテーマは混線防止のため空にしている（JSが空文字セット） -->
+      <p class="series-statement" data-series-statement></p>
+
+      <!-- 写真ごとのステートメント（ここが主役・センタリング） -->
+      <p class="photo-statement" data-photo-statement></p>
+    </header>
+
+    <section class="stage">
+      <figure class="frame">
+        <img class="photo" data-series-image src="" alt="" />
+      </figure>
+    </section>
+
+    <nav class="pager" aria-label="Series navigation">
+      <a class="prev" data-series-prev>← PREV</a>
+      <span class="count" data-series-count></span>
+      <a class="next" data-series-next>NEXT →</a>
+    </nav>
+  </main>
+
+  <script src="../series.js"></script>
+</body>
+</html>
