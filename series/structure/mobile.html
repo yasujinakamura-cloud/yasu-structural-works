@@ -6,53 +6,63 @@
   <title>STRUCTURE — YASU</title>
 
   <!-- PCと同じテーマ（見た目のDNAは共通） -->
-  <link rel="stylesheet" href="../../assets/theme.css?v=20260222a" />
+  <link rel="stylesheet" href="../../assets/theme.css?v=20260222b" />
   <!-- スマホ専用（PCに一切影響しない） -->
-  <link rel="stylesheet" href="../../assets/mobile.css?v=20260222a" />
+  <link rel="stylesheet" href="../../assets/mobile.css?v=20260222b" />
 </head>
 
-<body class="mobile-series">
+<body class="mobile-series" data-series="structure">
   <header class="m-head">
     <a class="m-back" href="../../index.html">← HOME</a>
-    <button class="m-info" type="button" aria-pressed="false">INFO</button>
+    <button class="m-info" type="button" aria-pressed="true">INFO</button>
   </header>
 
   <h1 class="m-title">STRUCTURE</h1>
 
-  <!-- ★スクロールコンテナ（ラッパー） -->
+  <!-- スクロールコンテナ -->
   <main id="mFeed" class="m-feed" aria-live="polite"></main>
 
-  <!-- ★上下ナビ（1枚ずつ強制ジャンプ） -->
+  <!-- 上下ナビ（1枚ずつ強制ジャンプ） -->
   <nav class="m-nav" aria-label="Photo navigation">
-    <button class="m-navBtn" type="button" data-step="-1" aria-label="Previous photo">↑</button>
-    <button class="m-navBtn" type="button" data-step="1" aria-label="Next photo">↓</button>
+    <button class="m-navBtn" type="button" data-nav="up" aria-label="Previous photo">↑</button>
+    <button class="m-navBtn" type="button" data-nav="down" aria-label="Next photo">↓</button>
   </nav>
 
   <script>
   (async function(){
-    const FEED = document.getElementById('mFeed');
-    const infoBtn = document.querySelector('.m-info');
-    const head = document.querySelector('.m-head');
-    const title = document.querySelector('.m-title');
-    const navBtns = document.querySelectorAll('.m-navBtn');
+    const FEED   = document.getElementById('mFeed');
+    const infoBtn= document.querySelector('.m-info');
+    const head   = document.querySelector('.m-head');
+    const title  = document.querySelector('.m-title');
 
-    // ★ヘッダー高さをCSS変数へ（スナップ位置ズレ対策）
-    function setHeadHeightVar(){
-      const h = head ? head.getBoundingClientRect().height : 0;
-      document.documentElement.style.setProperty('--mhead-h', h + 'px');
+    // ===== BASE（最重要）：GitHub Pages / ローカルで自動切替 =====
+    // 本番: https://yasujinakamura-cloud.github.io/yasu-structural-works/...
+    //   -> BASE = "/yasu-structural-works/"
+    // ローカル(Live Serverなど): http://127.0.0.1:5500/...
+    //   -> BASE = "/"
+    const BASE = location.hostname.includes('github.io')
+      ? '/yasu-structural-works/'
+      : '/';
 
-      // タイトルがある場合、その高さも加味して「1枚=1画面」を計算
+    // series は body data-series から取得（コピペ事故防止）
+    const series = document.body.dataset.series || 'structure';
+
+    // 絶対パスで固定（どこにHTMLを置いても壊れない）
+    const JSON_URL = `${BASE}series/${series}/${series}.json`;
+    const IMG_DIR  = `${BASE}series/${series}/images/`;
+
+    // ===== ヘッダー高さをCSS変数へ（ズレ対策） =====
+    function setHeadVars(){
+      const h  = head  ? head.getBoundingClientRect().height : 0;
       const th = title ? title.getBoundingClientRect().height : 0;
+      document.documentElement.style.setProperty('--mhead-h',  h + 'px');
       document.documentElement.style.setProperty('--mtitle-h', th + 'px');
     }
-    setHeadHeightVar();
-    window.addEventListener('resize', setHeadHeightVar, { passive: true });
-    window.addEventListener('orientationchange', setHeadHeightVar, { passive: true });
+    setHeadVars();
+    window.addEventListener('resize', setHeadVars, { passive:true });
+    window.addEventListener('orientationchange', setHeadVars, { passive:true });
 
-    const series = 'structure';
-    const JSON_URL = `./${series}.json`;
-
-    // INFO 初期：ON
+    // ===== INFO 初期：ON =====
     let showInfo = true;
     applyInfoState();
 
@@ -66,35 +76,70 @@
       infoBtn.setAttribute('aria-pressed', String(showInfo));
     }
 
+    // ===== UI: ↑↓（先頭/末尾で止める） =====
+    const btnUp   = document.querySelector('[data-nav="up"]');
+    const btnDown = document.querySelector('[data-nav="down"]');
+
+    function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+
+    // 1枚=1画面 前提（m-post の height で合わせる）
+    function getCurrentIndex(total){
+      const h = FEED.clientHeight || 1;
+      return clamp(Math.round(FEED.scrollTop / h), 0, total - 1);
+    }
+
+    function setBtnState(i,total){
+      const upDisabled   = (i <= 0);
+      const downDisabled = (i >= total - 1);
+
+      btnUp.disabled = upDisabled;
+      btnDown.disabled = downDisabled;
+
+      btnUp.style.opacity = upDisabled ? '0.35' : '1';
+      btnDown.style.opacity = downDisabled ? '0.35' : '1';
+    }
+
+    function goToIndex(i,total){
+      const h = FEED.clientHeight || 1;
+      const next = clamp(i, 0, total - 1);
+      const cur  = getCurrentIndex(total);
+      if(next === cur) return; // 先頭/末尾で止める（黒画面/空白防止の核）
+      FEED.scrollTo({ top: next * h, behavior: 'smooth' });
+      setBtnState(next,total);
+    }
+
+    // ===== JSONロードして描画 =====
     try{
       const res = await fetch(JSON_URL, { cache:'no-store' });
-      if(!res.ok) throw new Error('Failed to load JSON');
+      if(!res.ok){
+        throw new Error(`JSON load failed: ${res.status} ${res.statusText} | ${JSON_URL}`);
+      }
       const data = await res.json();
 
       const images = Array.isArray(data.images) ? data.images : [];
-      if(!images.length) throw new Error('No images');
+      if(!images.length){
+        throw new Error(`No images in JSON | ${JSON_URL}`);
+      }
 
-      const IMG_DIR = 'images/';
-
-      // ★ここが正しい：FEED.innerHTML はこの1回だけ
+      // ここだけ：FEED.innerHTML は1回だけ
       FEED.innerHTML = images.map((it, idx) => {
         const n = String(idx+1).padStart(2,'0');
         const stmt = escapeHtml(it.statement || '');
         const cam  = escapeHtml(it.camera || '');
         const lens = escapeHtml(it.lens || '');
         const gear = [cam, lens].filter(Boolean).join(' / ');
-       
+
         return `
-          <article class="m-post m-item" data-index="${idx}">
+          <article class="m-post" data-index="${idx}">
             <div class="m-meta">
               <div class="m-statement">${stmt}</div>
-              <div class="m-gear" data-gear>${escapeHtml(gear)}</div>
+              <div class="m-gear">${escapeHtml(gear)}</div>
             </div>
 
             <figure class="m-frame">
               <img class="m-photo"
                    src="${IMG_DIR + escapeHtml(it.file)}"
-                   alt="STRUCTURE ${n}"
+                   alt="${escapeHtml((data.title || series).toUpperCase())} ${n}"
                    loading="lazy"
                    decoding="async">
             </figure>
@@ -104,133 +149,46 @@
         `;
       }).join('');
 
-    // ======= NAV（↑↓）: 先頭/末尾で止める =======
-// 前提：.m-feed の中に .m-post が縦に並び、1枚=1画面（height:100%）になっている
+      // 描画後に再計算（iOSズレ対策）
+      setHeadVars();
 
-// 1) NAV UI が無ければ作る
-let nav = document.querySelector('.m-nav');
-if(!nav){
-  nav = document.createElement('div');
-  nav.className = 'm-nav';
-  nav.innerHTML = `
-    <button class="m-navBtn" type="button" data-nav="up" aria-label="Previous photo">↑</button>
-    <button class="m-navBtn" type="button" data-nav="down" aria-label="Next photo">↓</button>
-  `;
-  document.body.appendChild(nav);
-}
+      const total = images.length;
 
-const btnUp = nav.querySelector('[data-nav="up"]');
-const btnDown = nav.querySelector('[data-nav="down"]');
+      // 初期ボタン状態
+      setBtnState(0,total);
 
-const posts = Array.from(FEED.querySelectorAll('.m-post'));
-const total = posts.length;
-
-// 現在位置 → index を算出（1枚=1画面なのでこれが一番堅い）
-function getCurrentIndex(){
-  const h = FEED.clientHeight || 1;
-  return Math.round(FEED.scrollTop / h);
-}
-
-function clamp(n, min, max){
-  return Math.max(min, Math.min(max, n));
-}
-
-function updateNavState(){
-  if(!total) return;
-  const i = clamp(getCurrentIndex(), 0, total - 1);
-
-  // 先頭/末尾で無効化
-  btnUp.disabled = (i <= 0);
-  btnDown.disabled = (i >= total - 1);
-
-  btnUp.style.opacity = btnUp.disabled ? '0.35' : '1';
-  btnDown.style.opacity = btnDown.disabled ? '0.35' : '1';
-}
-
-function goToIndex(nextIndex){
-  if(!total) return;
-  const i = clamp(nextIndex, 0, total - 1);
-
-  // 範囲外に行こうとしていたら何もしない（黒画面防止の核心）
-  const cur = clamp(getCurrentIndex(), 0, total - 1);
-  if(i === cur) return;
-
-  const h = FEED.clientHeight || 1;
-  FEED.scrollTo({ top: i * h, behavior: 'smooth' });
-}
-
-btnUp.addEventListener('click', () => {
-  const cur = clamp(getCurrentIndex(), 0, total - 1);
-  goToIndex(cur - 1);
-});
-
-btnDown.addEventListener('click', () => {
-  const cur = clamp(getCurrentIndex(), 0, total - 1);
-  goToIndex(cur + 1);
-});
-
-// スクロール時に状態更新（軽くするためrAFで間引き）
-let ticking = false;
-FEED.addEventListener('scroll', () => {
-  if(ticking) return;
-  ticking = true;
-  requestAnimationFrame(() => {
-    updateNavState();
-    ticking = false;
-  });
-});
-
-// 初期状態
-updateNavState();
-
-// iOS対策：向き変更/リサイズで高さが変わるので再計算
-window.addEventListener('resize', () => {
-  updateNavState();
-});
-
-
-
-      // DOMが積まれたあとに再計算（微妙なズレ対策）
-      setHeadHeightVar();
-
-      // ★上下矢印：次/前のスナップへ（1画面分スクロール）
-      navBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const step = Number(btn.dataset.step || 0);
-          FEED.scrollBy({
-            top: step * FEED.clientHeight,
-            left: 0,
-            behavior: 'smooth'
-          });
-        }, { passive: true });
+      btnUp.addEventListener('click', () => {
+        goToIndex(getCurrentIndex(total) - 1, total);
       });
 
-      // ★スワイプで止まりを強める（対応ブラウザのみ効く）
-      // スナップが弱い端末向けの保険：スクロール終了っぽいタイミングで近い投稿へ寄せる
-      let snapTimer = 0;
+      btnDown.addEventListener('click', () => {
+        goToIndex(getCurrentIndex(total) + 1, total);
+      });
+
+      // スクロールに追随してボタン更新（軽くrAF）
+      let ticking = false;
       FEED.addEventListener('scroll', () => {
-        window.clearTimeout(snapTimer);
-        snapTimer = window.setTimeout(() => {
-          const items = Array.from(FEED.querySelectorAll('.m-item'));
-          if (!items.length) return;
-
-          const y = FEED.scrollTop;
-          let best = items[0];
-          let bestDist = Infinity;
-
-          for (const it of items) {
-            const top = it.offsetTop;
-            const d = Math.abs(top - y);
-            if (d < bestDist) { bestDist = d; best = it; }
-          }
-          // 近い開始位置へ吸着
-          FEED.scrollTo({ top: best.offsetTop, behavior: 'smooth' });
-        }, 90);
-      }, { passive: true });
+        if(ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          setBtnState(getCurrentIndex(total), total);
+          ticking = false;
+        });
+      }, { passive:true });
 
     }catch(e){
       console.error(e);
-      FEED.innerHTML = `<p style="padding:18px;opacity:.8">Series data not found.</p>`;
+      FEED.innerHTML = `
+        <p style="padding:18px;opacity:.85;letter-spacing:.08em;line-height:1.5">
+          Series data not found.<br>
+          <span style="opacity:.7;font-size:12px;display:block;margin-top:10px">
+            ${escapeHtml(String(e.message || e))}
+          </span>
+        </p>
+      `;
+      // ボタンは無効化
+      btnUp.disabled = true; btnDown.disabled = true;
+      btnUp.style.opacity = '0.35'; btnDown.style.opacity = '0.35';
     }
 
     function escapeHtml(s){
