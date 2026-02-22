@@ -83,7 +83,7 @@
         const cam  = escapeHtml(it.camera || '');
         const lens = escapeHtml(it.lens || '');
         const gear = [cam, lens].filter(Boolean).join(' / ');
-
+       
         return `
           <article class="m-post m-item" data-index="${idx}">
             <div class="m-meta">
@@ -103,6 +103,92 @@
           </article>
         `;
       }).join('');
+
+    // ======= NAV（↑↓）: 先頭/末尾で止める =======
+// 前提：.m-feed の中に .m-post が縦に並び、1枚=1画面（height:100%）になっている
+
+// 1) NAV UI が無ければ作る
+let nav = document.querySelector('.m-nav');
+if(!nav){
+  nav = document.createElement('div');
+  nav.className = 'm-nav';
+  nav.innerHTML = `
+    <button class="m-navBtn" type="button" data-nav="up" aria-label="Previous photo">↑</button>
+    <button class="m-navBtn" type="button" data-nav="down" aria-label="Next photo">↓</button>
+  `;
+  document.body.appendChild(nav);
+}
+
+const btnUp = nav.querySelector('[data-nav="up"]');
+const btnDown = nav.querySelector('[data-nav="down"]');
+
+const posts = Array.from(FEED.querySelectorAll('.m-post'));
+const total = posts.length;
+
+// 現在位置 → index を算出（1枚=1画面なのでこれが一番堅い）
+function getCurrentIndex(){
+  const h = FEED.clientHeight || 1;
+  return Math.round(FEED.scrollTop / h);
+}
+
+function clamp(n, min, max){
+  return Math.max(min, Math.min(max, n));
+}
+
+function updateNavState(){
+  if(!total) return;
+  const i = clamp(getCurrentIndex(), 0, total - 1);
+
+  // 先頭/末尾で無効化
+  btnUp.disabled = (i <= 0);
+  btnDown.disabled = (i >= total - 1);
+
+  btnUp.style.opacity = btnUp.disabled ? '0.35' : '1';
+  btnDown.style.opacity = btnDown.disabled ? '0.35' : '1';
+}
+
+function goToIndex(nextIndex){
+  if(!total) return;
+  const i = clamp(nextIndex, 0, total - 1);
+
+  // 範囲外に行こうとしていたら何もしない（黒画面防止の核心）
+  const cur = clamp(getCurrentIndex(), 0, total - 1);
+  if(i === cur) return;
+
+  const h = FEED.clientHeight || 1;
+  FEED.scrollTo({ top: i * h, behavior: 'smooth' });
+}
+
+btnUp.addEventListener('click', () => {
+  const cur = clamp(getCurrentIndex(), 0, total - 1);
+  goToIndex(cur - 1);
+});
+
+btnDown.addEventListener('click', () => {
+  const cur = clamp(getCurrentIndex(), 0, total - 1);
+  goToIndex(cur + 1);
+});
+
+// スクロール時に状態更新（軽くするためrAFで間引き）
+let ticking = false;
+FEED.addEventListener('scroll', () => {
+  if(ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => {
+    updateNavState();
+    ticking = false;
+  });
+});
+
+// 初期状態
+updateNavState();
+
+// iOS対策：向き変更/リサイズで高さが変わるので再計算
+window.addEventListener('resize', () => {
+  updateNavState();
+});
+
+
 
       // DOMが積まれたあとに再計算（微妙なズレ対策）
       setHeadHeightVar();
