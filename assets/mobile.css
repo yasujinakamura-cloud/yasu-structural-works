@@ -2,14 +2,16 @@
    mobile.css  (SMARTPHONE ONLY)
    - PCには一切影響させない（@media でガード）
    - Instagram風：縦スクロール + 1枚ごとにパチッと止める
+   - “前後の写真がチラ見え”しない（1枚=1画面）
 ========================================================= */
 
 @media (max-width: 700px){
 
-  /* ===== スクロールは feed のみ（最重要） ===== */
+  /* ===== 画面は固定：スクロールは .m-feed のみ ===== */
   html, body{
     height: 100%;
-    overflow: hidden; /* 画面（body）は固定 */
+    overflow: hidden;
+    background: #000;
   }
 
   body.mobile-series{
@@ -53,45 +55,49 @@
     opacity: .65;
   }
 
-  /* ===== フィード（ここだけ縦スクロール + snap） ===== */
+  /* ===== フィード：ここだけが縦スクロール + snap =====
+     ※ JSが --mhead-h と --mtitle-h を入れている前提（あなたの最新版 mobile.html はOK）
+  */
   .m-feed{
-    height: 100vh;
+    height: calc(100vh - var(--mhead-h, 56px) - var(--mtitle-h, 34px) - 22px);
     overflow-y: auto;
     overflow-x: hidden;
 
     scroll-snap-type: y mandatory;
     -webkit-overflow-scrolling: touch;
 
-    /* ヘッダーに食われない */
-    padding-top: calc(var(--mhead-h, 56px) + 12px);
-    scroll-padding-top: calc(var(--mhead-h, 56px) + 12px);
-
-    /* Instagramっぽい密度 */
     padding-left: 14px;
     padding-right: 14px;
-    padding-bottom: 18px;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
   }
 
-  /* 1枚＝スナップ対象
-     ※ HTMLが <article class="m-post"> のままなら .m-post に当てる */
+  /* ===== 1枚＝1画面（チラ見え防止の核心） ===== */
   .m-post{
+    height: 100%;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* 上寄せにするなら flex-start */
+    gap: 10px;
+
     scroll-snap-align: start;
     scroll-snap-stop: always;
 
-    padding: 14px 2px 26px;
-    margin-bottom: 18px;
+    margin: 0;               /* 1画面固定なので余白ゼロ */
+    padding: 8px 2px 10px;   /* 画面内の“呼吸”だけ残す */
   }
 
   /* ===== 上の情報 ===== */
   .m-meta{
-    margin: 10px 0 12px;
+    margin: 0 0 6px;
   }
 
   .m-statement{
     font-size: 14px;
     letter-spacing: .22em;
     line-height: 1.35;
-    margin-bottom: 10px;
+    margin: 0 0 10px;
   }
 
   /* INFOトグルでON/OFF */
@@ -102,31 +108,63 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
     display: none; /* default: OFF → html.show-info で ON */
   }
   html.show-info .m-gear{
     display: block;
   }
 
-  /* ===== 写真フレーム ===== */
+  /* ===== 写真フレーム（画面内に収める） ===== */
   .m-frame{
     margin: 0;
     border: 1px solid rgba(255,255,255,.35);
     padding: 8px;
+
+    /* メタ情報が増えても破綻しないように */
+    max-height: 70vh;
+    overflow: hidden;
   }
 
   .m-photo{
     display: block;
     width: 100%;
     height: auto;
+
     border: 1px solid rgba(255,255,255,.16);
+
+    /* 高さ制限に合わせて画像を収める（切らない） */
+    max-height: 70vh;
+    object-fit: contain;
   }
 
   .m-count{
-    margin-top: 10px;
+    margin-top: 8px;
     font-size: 12px;
     letter-spacing: .26em;
     opacity: .55;
     text-align: center;
+  }
+
+  /* ===== 上下矢印（固定UI） ===== */
+  .m-nav{
+    position: fixed;
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    z-index: 60;
+    display: grid;
+    gap: 10px;
+  }
+
+  .m-navBtn{
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.22);
+    background: rgba(0,0,0,.55);
+    color: #fff;
+    backdrop-filter: blur(10px);
+    font-size: 18px;
+    line-height: 1;
   }
 }

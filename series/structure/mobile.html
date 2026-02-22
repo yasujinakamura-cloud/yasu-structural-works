@@ -14,39 +14,45 @@
 <body class="mobile-series">
   <header class="m-head">
     <a class="m-back" href="../../index.html">← HOME</a>
-
-    <!-- 右上：INFOトグル（機材ON/OFF） -->
     <button class="m-info" type="button" aria-pressed="false">INFO</button>
   </header>
 
-  <!-- シリーズ名（必要なら表示。不要ならCSSで消せる） -->
   <h1 class="m-title">STRUCTURE</h1>
 
-  <!-- ★スクロールコンテナ（これが「ラッパー」です） -->
+  <!-- ★スクロールコンテナ（ラッパー） -->
   <main id="mFeed" class="m-feed" aria-live="polite"></main>
+
+  <!-- ★上下ナビ（1枚ずつ強制ジャンプ） -->
+  <nav class="m-nav" aria-label="Photo navigation">
+    <button class="m-navBtn" type="button" data-step="-1" aria-label="Previous photo">↑</button>
+    <button class="m-navBtn" type="button" data-step="1" aria-label="Next photo">↓</button>
+  </nav>
 
   <script>
   (async function(){
     const FEED = document.getElementById('mFeed');
     const infoBtn = document.querySelector('.m-info');
     const head = document.querySelector('.m-head');
+    const title = document.querySelector('.m-title');
+    const navBtns = document.querySelectorAll('.m-navBtn');
 
-    // ★重要：ヘッダー高さをCSS変数に入れる（スナップ位置のズレ対策）
+    // ★ヘッダー高さをCSS変数へ（スナップ位置ズレ対策）
     function setHeadHeightVar(){
-      if (!head) return;
-      const h = head.getBoundingClientRect().height || 0;
+      const h = head ? head.getBoundingClientRect().height : 0;
       document.documentElement.style.setProperty('--mhead-h', h + 'px');
+
+      // タイトルがある場合、その高さも加味して「1枚=1画面」を計算
+      const th = title ? title.getBoundingClientRect().height : 0;
+      document.documentElement.style.setProperty('--mtitle-h', th + 'px');
     }
     setHeadHeightVar();
-
-    // iPhoneの向き変更などで高さが変わるので追従
     window.addEventListener('resize', setHeadHeightVar, { passive: true });
     window.addEventListener('orientationchange', setHeadHeightVar, { passive: true });
 
     const series = 'structure';
     const JSON_URL = `./${series}.json`;
 
-    // INFOの初期状態：ON（必要ならOFFに変えてOK）
+    // INFO 初期：ON
     let showInfo = true;
     applyInfoState();
 
@@ -68,28 +74,29 @@
       const images = Array.isArray(data.images) ? data.images : [];
       if(!images.length) throw new Error('No images');
 
-      // 画像の場所：/series/structure/images/001.jpg
       const IMG_DIR = 'images/';
 
+      // ★ここが正しい：FEED.innerHTML はこの1回だけ
       FEED.innerHTML = images.map((it, idx) => {
         const n = String(idx+1).padStart(2,'0');
         const stmt = escapeHtml(it.statement || '');
         const cam  = escapeHtml(it.camera || '');
         const lens = escapeHtml(it.lens || '');
-
-        // camera/lensが1行で収まるように「 / 」で結合
         const gear = [cam, lens].filter(Boolean).join(' / ');
 
         return `
-          <!-- ★スナップ対象：1枚=1投稿 -->
-          <article class="m-post m-item">
+          <article class="m-post m-item" data-index="${idx}">
             <div class="m-meta">
               <div class="m-statement">${stmt}</div>
               <div class="m-gear" data-gear>${escapeHtml(gear)}</div>
             </div>
 
             <figure class="m-frame">
-              <img class="m-photo" src="${IMG_DIR + escapeHtml(it.file)}" alt="STRUCTURE ${n}" loading="lazy" decoding="async">
+              <img class="m-photo"
+                   src="${IMG_DIR + escapeHtml(it.file)}"
+                   alt="STRUCTURE ${n}"
+                   loading="lazy"
+                   decoding="async">
             </figure>
 
             <div class="m-count">${n} / ${String(images.length).padStart(2,'0')}</div>
@@ -97,8 +104,43 @@
         `;
       }).join('');
 
-      // 画像を積んだ後、もう一回ヘッダー高さを計算（微妙なズレ対策）
+      // DOMが積まれたあとに再計算（微妙なズレ対策）
       setHeadHeightVar();
+
+      // ★上下矢印：次/前のスナップへ（1画面分スクロール）
+      navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const step = Number(btn.dataset.step || 0);
+          FEED.scrollBy({
+            top: step * FEED.clientHeight,
+            left: 0,
+            behavior: 'smooth'
+          });
+        }, { passive: true });
+      });
+
+      // ★スワイプで止まりを強める（対応ブラウザのみ効く）
+      // スナップが弱い端末向けの保険：スクロール終了っぽいタイミングで近い投稿へ寄せる
+      let snapTimer = 0;
+      FEED.addEventListener('scroll', () => {
+        window.clearTimeout(snapTimer);
+        snapTimer = window.setTimeout(() => {
+          const items = Array.from(FEED.querySelectorAll('.m-item'));
+          if (!items.length) return;
+
+          const y = FEED.scrollTop;
+          let best = items[0];
+          let bestDist = Infinity;
+
+          for (const it of items) {
+            const top = it.offsetTop;
+            const d = Math.abs(top - y);
+            if (d < bestDist) { bestDist = d; best = it; }
+          }
+          // 近い開始位置へ吸着
+          FEED.scrollTo({ top: best.offsetTop, behavior: 'smooth' });
+        }, 90);
+      }, { passive: true });
 
     }catch(e){
       console.error(e);
