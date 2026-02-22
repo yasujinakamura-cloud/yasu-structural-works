@@ -1,0 +1,30 @@
+{
+  "title": "LIGHT",
+  "definition": "LIGHT IS FORCE.",
+  "images": [
+    {
+      "file": "001.jpg",
+      "statement": "LIGHT DOES NOT ILLUMINATE. IT DIVIDES.",
+      "camera": "LEICA M-MONOCHROME ( CCD )",
+      "lens": "Summicron50mm F2.0"
+    },
+    {
+      "file": "002.jpg",
+      "statement": "LIGHT DRAWS THE BORDER.",
+      "camera": "LEICA M240",
+      "lens": "SUPER WIDE-HELIAR 15mm"
+    },
+    {
+      "file": "003.jpg",
+      "statement": "LIGHT EXPOSES YOU.",
+      "camera": "LEICA M-MONOCHROME ( CCD )",
+      "lens": "SUPER WIDE-HELIAR 15mm"
+    },
+    {
+      "file": "004.jpg",
+      "statement": "LIGHT COMMANDS THE PATH.",
+      "camera": "LEICA M-MONOCHROME ( CCD )",
+      "lens": "Summicron50mm F2.0"
+    }
+  ]
+}

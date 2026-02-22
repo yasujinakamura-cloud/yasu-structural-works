@@ -1,48 +1,37 @@
-// ===== Mobile redirect (Top -> /mobile.html) =====
-(function () {
-  // ?desktop=1 を付けたらモバイルでもPCトップを見れる
-  const params = new URLSearchParams(location.search);
-  if (params.get('desktop') === '1') return;
-
-  const isMobile = window.matchMedia('(max-width: 700px)').matches;
-  const isTop = location.pathname.endsWith('/index.html') || location.pathname.endsWith('/yasu-structural-works/') || location.pathname.endsWith('/yasu-structural-works');
-  const isAlreadyMobile = location.pathname.endsWith('/mobile.html');
-
-  if (isMobile && isTop && !isAlreadyMobile) {
-    location.replace('mobile.html');
-  }
-})();
-
-
-
-
-
-
 /* =========================================================
    app.js
    - Top page category grid renderer
-   - (NEW) Mobile-only redirect to mobile.html
+   - Mobile-only redirect (Top -> mobile.html)
 ========================================================= */
 
-(async function () {
-  // =====================================================
-  // 3) Topから「スマホだけ」mobile.htmlへ飛ばす（PCは現状維持）
-  // =====================================================
-  const isMobile =
-    window.matchMedia("(max-width: 700px)").matches &&
-    (("ontouchstart" in window) || (navigator.maxTouchPoints || 0) > 0);
+(function () {
+  // ?desktop=1 を付けたらスマホでもPCトップを見れる
+  const params = new URLSearchParams(location.search);
+  if (params.get("desktop") === "1") return;
 
-  const isAlreadyMobilePage = /\/mobile\.html($|\?|#)/.test(location.pathname);
+  const isMobile = window.matchMedia("(max-width: 700px)").matches;
 
-  if (isMobile && !isAlreadyMobilePage) {
+  // GitHub Pages とローカル両方で「トップ」を判定
+  const path = location.pathname;
+  const isTop =
+    path.endsWith("/index.html") ||
+    path.endsWith("/yasu-structural-works/") ||
+    path.endsWith("/yasu-structural-works") ||
+    path === "/" ||
+    path === "";
+
+  const isAlreadyMobile = path.endsWith("/mobile.html");
+
+  if (isMobile && isTop && !isAlreadyMobile) {
     // hash / query を引き継ぐ（必要なら）
     const suffix = (location.search || "") + (location.hash || "");
     location.replace("mobile.html" + suffix);
-    return;
   }
+})();
 
+(async function () {
   // =====================================================
-  // Existing: category grid rendering
+  // Category grid rendering
   // =====================================================
   const mount = document.getElementById("catGrid");
   if (!mount) return;
@@ -56,24 +45,24 @@
       .map((c) => {
         const hasCover = Boolean(c.cover);
         return `
-        <a class="catCard" href="${escapeHtml(c.href)}" data-slug="${escapeHtml(
-          c.slug
-        )}" aria-label="${escapeHtml(c.title)}">
-          ${
-            hasCover
-              ? `<img class="catCard__img" src="${escapeHtml(
-                  c.cover
-                )}" alt="" loading="lazy" decoding="async">`
-              : ``
-          }
-          <div class="catCard__overlay" aria-hidden="true"></div>
-          <div class="catCard__text">
-            <div class="catCard__title">${escapeHtml(c.title)}</div>
-            <div class="catCard__sub">${escapeHtml(c.subtitle || "")}</div>
-            <div class="catCard__enter">ENTER →</div>
-          </div>
-        </a>
-      `;
+          <a class="catCard" href="${escapeHtml(c.href)}" data-slug="${escapeHtml(
+            c.slug
+          )}" aria-label="${escapeHtml(c.title)}">
+            ${
+              hasCover
+                ? `<img class="catCard__img" src="${escapeHtml(
+                    c.cover
+                  )}" alt="" loading="lazy" decoding="async">`
+                : ``
+            }
+            <div class="catCard__overlay" aria-hidden="true"></div>
+            <div class="catCard__text">
+              <div class="catCard__title">${escapeHtml(c.title)}</div>
+              <div class="catCard__sub">${escapeHtml(c.subtitle || "")}</div>
+              <div class="catCard__enter">ENTER →</div>
+            </div>
+          </a>
+        `;
       })
       .join("");
   } catch (e) {

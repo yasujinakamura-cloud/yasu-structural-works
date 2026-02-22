@@ -1,0 +1,30 @@
+{
+  "title": "VELOCITY",
+  "definition": "WE DO NOT MOVE. TIME DOES.",
+  "images": [
+    {
+      "file": "001.jpg",
+      "statement": "TIME PUSHES FIRST.",
+      "camera": "LEICA M240",
+      "lens": "Summicron50mm F2.0"
+    },
+    {
+      "file": "002.jpg",
+      "statement": "THE CROWD HAS NO FACE.",
+      "camera": "LEICA M-MONOCHROME ( CCD )",
+      "lens": "Summicron35mm F2.0"
+    },
+    {
+      "file": "003.jpg",
+      "statement": "WE CROSS WITHOUT ARRIVING.",
+      "camera": "LEICA M-MONOCHROME ( CCD )",
+      "lens": "Summicron50mm F2.0"
+    },
+    {
+      "file": "004.jpg",
+      "statement": "VELOCITY ERASES THE SELF.",
+      "camera": "LEICA M8.2",
+      "lens": "Summicron50mm F2.0"
+    }
+  ]
+}
