@@ -22,13 +22,27 @@
   <!-- シリーズ名（必要なら表示。不要ならCSSで消せる） -->
   <h1 class="m-title">STRUCTURE</h1>
 
-  <!-- ここにJSで写真を縦に積む（Instagram風） -->
+  <!-- ★スクロールコンテナ（これが「ラッパー」です） -->
   <main id="mFeed" class="m-feed" aria-live="polite"></main>
 
   <script>
   (async function(){
     const FEED = document.getElementById('mFeed');
     const infoBtn = document.querySelector('.m-info');
+    const head = document.querySelector('.m-head');
+
+    // ★重要：ヘッダー高さをCSS変数に入れる（スナップ位置のズレ対策）
+    function setHeadHeightVar(){
+      if (!head) return;
+      const h = head.getBoundingClientRect().height || 0;
+      document.documentElement.style.setProperty('--mhead-h', h + 'px');
+    }
+    setHeadHeightVar();
+
+    // iPhoneの向き変更などで高さが変わるので追従
+    window.addEventListener('resize', setHeadHeightVar, { passive: true });
+    window.addEventListener('orientationchange', setHeadHeightVar, { passive: true });
+
     const series = 'structure';
     const JSON_URL = `./${series}.json`;
 
@@ -67,7 +81,8 @@
         const gear = [cam, lens].filter(Boolean).join(' / ');
 
         return `
-          <article class="m-post" style="scroll-snap-align:start">
+          <!-- ★スナップ対象：1枚=1投稿 -->
+          <article class="m-post m-item">
             <div class="m-meta">
               <div class="m-statement">${stmt}</div>
               <div class="m-gear" data-gear>${escapeHtml(gear)}</div>
@@ -81,6 +96,9 @@
           </article>
         `;
       }).join('');
+
+      // 画像を積んだ後、もう一回ヘッダー高さを計算（微妙なズレ対策）
+      setHeadHeightVar();
 
     }catch(e){
       console.error(e);

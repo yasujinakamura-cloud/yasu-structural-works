@@ -1,23 +1,22 @@
 /* =========================================================
    mobile.css  (SMARTPHONE ONLY)
-   - PCには一切影響させない
+   - PCには一切影響させない（@media でガード）
    - Instagram風：縦スクロール + 1枚ごとにパチッと止める
 ========================================================= */
 
 @media (max-width: 700px){
 
-  /* 画面全体を縦スクロールにする */
+  /* ===== スクロールは feed のみ（最重要） ===== */
   html, body{
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden; /* 画面（body）は固定 */
   }
 
   body.mobile-series{
-    background: #000;
+    background:#000;
   }
 
-  /* 上部バー */
+  /* ===== 上部バー ===== */
   .m-head{
     position: sticky;
     top: 0;
@@ -54,16 +53,36 @@
     opacity: .65;
   }
 
-  /* 1枚ごとに止める（snap） */
+  /* ===== フィード（ここだけ縦スクロール + snap） ===== */
   .m-feed{
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+
     scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+
+    /* ヘッダーに食われない */
+    padding-top: calc(var(--mhead-h, 56px) + 12px);
+    scroll-padding-top: calc(var(--mhead-h, 56px) + 12px);
+
+    /* Instagramっぽい密度 */
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-bottom: 18px;
   }
 
+  /* 1枚＝スナップ対象
+     ※ HTMLが <article class="m-post"> のままなら .m-post に当てる */
   .m-post{
-    padding: 14px 16px 26px;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+
+    padding: 14px 2px 26px;
+    margin-bottom: 18px;
   }
 
-  /* 上の情報：左にステートメント、下に機材（1行） */
+  /* ===== 上の情報 ===== */
   .m-meta{
     margin: 10px 0 12px;
   }
@@ -89,7 +108,7 @@
     display: block;
   }
 
-  /* 写真の“額装”はスマホでは軽くする（余白を詰める） */
+  /* ===== 写真フレーム ===== */
   .m-frame{
     margin: 0;
     border: 1px solid rgba(255,255,255,.35);
