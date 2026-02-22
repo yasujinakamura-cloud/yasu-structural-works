@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Yasu Nakamura — Mobile</title>
+
+  <!-- モバイル専用CSS（既に assets/mobile.css がある前提） -->
+  <link rel="stylesheet" href="assets/mobile.css" />
+</head>
+<body>
+
+  <main class="mHome">
+    <header class="mHome__head">
+      <div class="mHome__brand">YASU NAKAMURA</div>
+      <div class="mHome__statement">
+        <div>LIGHT IS FORCE.</div>
+        <div>STRUCTURE IS RESISTANCE.</div>
+      </div>
+      <a class="mHome__toDesktop" href="index.html?desktop=1">DESKTOP →</a>
+    </header>
+
+    <section class="mHome__cats" aria-label="Categories">
+      <div id="mCatGrid" class="mGrid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <!-- モバイル専用JS -->
+  <script src="assets/mobile-home.js" defer></script>
+</body>
+</html>
+

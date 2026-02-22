@@ -1,3 +1,23 @@
+// ===== Mobile redirect (Top -> /mobile.html) =====
+(function () {
+  // ?desktop=1 を付けたらモバイルでもPCトップを見れる
+  const params = new URLSearchParams(location.search);
+  if (params.get('desktop') === '1') return;
+
+  const isMobile = window.matchMedia('(max-width: 700px)').matches;
+  const isTop = location.pathname.endsWith('/index.html') || location.pathname.endsWith('/yasu-structural-works/') || location.pathname.endsWith('/yasu-structural-works');
+  const isAlreadyMobile = location.pathname.endsWith('/mobile.html');
+
+  if (isMobile && isTop && !isAlreadyMobile) {
+    location.replace('mobile.html');
+  }
+})();
+
+
+
+
+
+
 /* =========================================================
    app.js
    - Top page category grid renderer
