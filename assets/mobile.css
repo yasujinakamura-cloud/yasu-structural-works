@@ -1,0 +1,113 @@
+/* =========================================================
+   mobile.css  (SMARTPHONE ONLY)
+   - PCには一切影響させない
+   - Instagram風：縦スクロール + 1枚ごとにパチッと止める
+========================================================= */
+
+@media (max-width: 700px){
+
+  /* 画面全体を縦スクロールにする */
+  html, body{
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  body.mobile-series{
+    background: #000;
+  }
+
+  /* 上部バー */
+  .m-head{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: rgba(0,0,0,.72);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+
+  .m-back{
+    letter-spacing: .28em;
+    font-size: 12px;
+    opacity: .92;
+  }
+
+  .m-info{
+    letter-spacing: .28em;
+    font-size: 12px;
+    padding: 10px 14px;
+    border: 1px solid rgba(255,255,255,.22);
+    background: transparent;
+    color: #fff;
+    border-radius: 10px;
+  }
+
+  .m-title{
+    margin: 16px 16px 6px;
+    font-size: 12px;
+    letter-spacing: .34em;
+    opacity: .65;
+  }
+
+  /* 1枚ごとに止める（snap） */
+  .m-feed{
+    scroll-snap-type: y mandatory;
+  }
+
+  .m-post{
+    padding: 14px 16px 26px;
+  }
+
+  /* 上の情報：左にステートメント、下に機材（1行） */
+  .m-meta{
+    margin: 10px 0 12px;
+  }
+
+  .m-statement{
+    font-size: 14px;
+    letter-spacing: .22em;
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+
+  /* INFOトグルでON/OFF */
+  .m-gear{
+    font-size: 12px;
+    letter-spacing: .22em;
+    opacity: .72;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: none; /* default: OFF → html.show-info で ON */
+  }
+  html.show-info .m-gear{
+    display: block;
+  }
+
+  /* 写真の“額装”はスマホでは軽くする（余白を詰める） */
+  .m-frame{
+    margin: 0;
+    border: 1px solid rgba(255,255,255,.35);
+    padding: 8px;
+  }
+
+  .m-photo{
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid rgba(255,255,255,.16);
+  }
+
+  .m-count{
+    margin-top: 10px;
+    font-size: 12px;
+    letter-spacing: .26em;
+    opacity: .55;
+    text-align: center;
+  }
+}

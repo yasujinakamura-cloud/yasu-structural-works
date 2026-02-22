@@ -911,4 +911,57 @@ html.is-ready .viewer { opacity: 1; transition: opacity .12s ease; }
 .viewer-head .meta{
   white-space:normal;
 }
+/* =========================================================
+   MOBILE MODE — Vertical Scroll Version
+   ========================================================= */
+@media (max-width: 700px){
 
+  /* viewerを通常フローに戻す */
+  .viewer{
+    display:block;
+    padding: 18px 14px 40px;
+  }
+
+  /* ステージ固定高さを解除 */
+  .stage{
+    margin-top: 16px;
+  }
+
+  .frame{
+    width: 100%;
+    height: auto;              /* ← 固定高さを解除 */
+    padding: 14px;             /* マットは少し詰める */
+  }
+
+  .photo{
+    width:100%;
+    height:auto;               /* ← 縦スクロールに合わせる */
+    object-fit:contain;
+    border:1px solid rgba(255,255,255,.5);
+  }
+
+  /* 情報帯を写真の上に自然配置 */
+  .viewer-head{
+    width:100%;
+    margin:0 auto 12px;
+  }
+
+  /* ステートメント少し強化 */
+  [data-photo-statement]{
+    font-size:14px;
+    letter-spacing:.08em;
+    font-weight:600;
+  }
+
+  /* 機材1行 */
+  [data-gear-line]{
+    font-size:12px;
+    opacity:.9;
+    white-space:nowrap;
+  }
+
+  /* ページャ下に余白 */
+  .pager{
+    margin-top:24px;
+  }
+}

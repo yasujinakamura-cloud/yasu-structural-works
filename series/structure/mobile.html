@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>STRUCTURE — YASU</title>
+
+  <!-- PCと同じテーマ（見た目のDNAは共通） -->
+  <link rel="stylesheet" href="../../assets/theme.css" />
+  <!-- スマホ専用（PCに一切影響しない） -->
+  <link rel="stylesheet" href="../../assets/mobile.css" />
+</head>
+
+<body class="mobile-series">
+  <header class="m-head">
+    <a class="m-back" href="../../index.html">← HOME</a>
+
+    <!-- 右上：INFOトグル（機材ON/OFF） -->
+    <button class="m-info" type="button" aria-pressed="false">INFO</button>
+  </header>
+
+  <!-- シリーズ名（必要なら表示。不要ならCSSで消せる） -->
+  <h1 class="m-title">STRUCTURE</h1>
+
+  <!-- ここにJSで写真を縦に積む（Instagram風） -->
+  <main id="mFeed" class="m-feed" aria-live="polite"></main>
+
+  <script>
+  (async function(){
+    const FEED = document.getElementById('mFeed');
+    const infoBtn = document.querySelector('.m-info');
+    const series = 'structure';
+    const JSON_URL = `./${series}.json`;
+
+    // INFOの初期状態：ON（必要ならOFFに変えてOK）
+    let showInfo = true;
+    applyInfoState();
+
+    infoBtn.addEventListener('click', () => {
+      showInfo = !showInfo;
+      applyInfoState();
+    });
+
+    function applyInfoState(){
+      document.documentElement.classList.toggle('show-info', showInfo);
+      infoBtn.setAttribute('aria-pressed', String(showInfo));
+    }
+
+    try{
+      const res = await fetch(JSON_URL, { cache:'no-store' });
+      if(!res.ok) throw new Error('Failed to load JSON');
+      const data = await res.json();
+
+      const images = Array.isArray(data.images) ? data.images : [];
+      if(!images.length) throw new Error('No images');
+
+      // 画像の場所：/series/structure/images/001.jpg
+      const IMG_DIR = 'images/';
+
+      FEED.innerHTML = images.map((it, idx) => {
+        const n = String(idx+1).padStart(2,'0');
+        const stmt = escapeHtml(it.statement || '');
+        const cam  = escapeHtml(it.camera || '');
+        const lens = escapeHtml(it.lens || '');
+
+        // camera/lensが1行で収まるように「 / 」で結合
+        const gear = [cam, lens].filter(Boolean).join(' / ');
+
+        return `
+          <article class="m-post" style="scroll-snap-align:start">
+            <div class="m-meta">
+              <div class="m-statement">${stmt}</div>
+              <div class="m-gear" data-gear>${escapeHtml(gear)}</div>
+            </div>
+
+            <figure class="m-frame">
+              <img class="m-photo" src="${IMG_DIR + escapeHtml(it.file)}" alt="STRUCTURE ${n}" loading="lazy" decoding="async">
+            </figure>
+
+            <div class="m-count">${n} / ${String(images.length).padStart(2,'0')}</div>
+          </article>
+        `;
+      }).join('');
+
+    }catch(e){
+      console.error(e);
+      FEED.innerHTML = `<p style="padding:18px;opacity:.8">Series data not found.</p>`;
+    }
+
+    function escapeHtml(s){
+      return String(s ?? '')
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'","&#039;");
+    }
+  })();
+  </script>
+</body>
+</html>
