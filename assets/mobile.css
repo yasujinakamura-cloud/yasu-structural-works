@@ -100,17 +100,37 @@
     margin: 0 0 10px;
   }
 
-  /* INFOトグルでON/OFF */
-  .m-gear{
-    font-size: 12px;
-    letter-spacing: .22em;
-    opacity: .72;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+/* INFOトグルでON/OFF（default: OFF → html.show-info で ON） */
+.m-gear{
+  margin-top: 2px;
+  font-size: 12px;
+  letter-spacing: .18em;
+  opacity: .72;
+  line-height: 1.35;
 
-    display: none; /* default: OFF → html.show-info で ON */
-  }
+  /* default OFF */
+  display: none;
+}
+html.show-info .m-gear{
+  display: block;
+}
+
+/* 2段を整える */
+.m-gear__line{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 1段目/2段目の微調整（任意） */
+.m-gear__cam{  opacity: .78; }
+.m-gear__lens{ opacity: .68; }
+
+
+
+
+
+
   html.show-info .m-gear{
     display: block;
   }

@@ -127,13 +127,19 @@
         const stmt = escapeHtml(it.statement || '');
         const cam  = escapeHtml(it.camera || '');
         const lens = escapeHtml(it.lens || '');
-        const gear = [cam, lens].filter(Boolean).join(' / ');
+        const camLine  = cam  ? `<div class="m-gear__line m-gear__cam">${cam}</div>` : '';
+        const lensLine = lens ? `<div class="m-gear__line m-gear__lens">${lens}</div>` : '';
+
+
 
         return `
           <article class="m-post" data-index="${idx}">
             <div class="m-meta">
               <div class="m-statement">${stmt}</div>
-              <div class="m-gear">${escapeHtml(gear)}</div>
+              <div class="m-gear" data-gear>
+                ${camLine}
+                ${lensLine}
+              </div>
             </div>
 
             <figure class="m-frame">
