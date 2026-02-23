@@ -3,14 +3,109 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>STRUCTURE — YASU</title>
-  <meta http-equiv="refresh" content="0; url=structure-01.html">
+
+  <!-- SEO: Title -->
+  <title>STRUCTURE | Architectural Monochrome Series | Yasu Nakamura Photography</title>
+
+  <!-- SEO: Description -->
+  <meta name="description" content="STRUCTURE is an architectural monochrome photography series by Yasu Nakamura—geometry, tension, and human presence inside the built environment. Explore the full series." />
+
+  <!-- SEO: Canonical -->
+  <link rel="canonical" href="https://yasu-nakamura.com/series/structure/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Yasu Nakamura Photography" />
+  <meta property="og:title" content="STRUCTURE | Yasu Nakamura Photography" />
+  <meta property="og:description" content="Architectural monochrome series—geometry, tension, and human presence in the built environment." />
+  <meta property="og:url" content="https://yasu-nakamura.com/series/structure/" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="STRUCTURE | Yasu Nakamura Photography" />
+  <meta name="twitter:description" content="Architectural monochrome series—geometry, tension, and human presence in the built environment." />
+
+  <!-- CSS -->
   <link rel="stylesheet" href="../../assets/theme.css" />
+
+  <!-- Structured Data (Series / CollectionPage) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "STRUCTURE",
+    "description": "Architectural monochrome photography series by Yasu Nakamura.",
+    "url": "https://yasu-nakamura.com/series/structure/",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Yasu Nakamura Photography",
+      "url": "https://yasu-nakamura.com/"
+    }
+  }
+  </script>
 </head>
+
 <body>
-  <main class="viewer">
-    <p style="opacity:.75; letter-spacing:.12em;">Redirecting…</p>
-    <p><a href="structure-01.html">Go to STRUCTURE 01</a></p>
-  </main>
+<main id="siteMain">
+
+  <!-- SERIES HERO / INTRO -->
+  <section class="hero" aria-label="STRUCTURE series introduction">
+    <div class="hero__inner">
+
+      <h1 class="hero__statement">
+        <span>STRUCTURE.</span>
+        <span>RESISTANCE.</span>
+      </h1>
+
+      <p class="hero__sub">
+        ARCHITECTURAL MONOCHROME SERIES
+      </p>
+
+      <!-- SEO text: short, meaningful, not too long -->
+      <p class="hero__credit" style="max-width: 56ch; line-height: 1.6; opacity: .78;">
+        STRUCTURE is a monochrome series exploring geometry, tension, and human presence inside the built environment.
+        Each frame is a study in light, mass, and resistance.
+      </p>
+
+      <a class="hero__enter" href="#works" aria-label="Enter STRUCTURE works">
+        ENTER <span aria-hidden="true">→</span>
+      </a>
+
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">
+      <span class="hero__scrollLine"></span>
+    </div>
+  </section>
+
+  <!-- WORKS LIST -->
+  <section id="works" class="frontGrid" aria-label="STRUCTURE works">
+    <div class="frontGrid__inner">
+
+      <div class="frontGrid__head">
+        <h2 class="frontGrid__title">WORKS</h2>
+        <p class="frontGrid__note">OPEN A FRAME.</p>
+      </div>
+
+      <!-- Minimal link grid (safe even without JS) -->
+      <div class="frontGrid__items" aria-live="polite">
+        <a class="card" href="structure-01.html" aria-label="Open STRUCTURE 01">STRUCTURE 01</a>
+        <a class="card" href="structure-02.html" aria-label="Open STRUCTURE 02">STRUCTURE 02</a>
+        <a class="card" href="structure-03.html" aria-label="Open STRUCTURE 03">STRUCTURE 03</a>
+        <a class="card" href="structure-04.html" aria-label="Open STRUCTURE 04">STRUCTURE 04</a>
+        <a class="card" href="structure-05.html" aria-label="Open STRUCTURE 05">STRUCTURE 05</a>
+        <a class="card" href="structure-06.html" aria-label="Open STRUCTURE 06">STRUCTURE 06</a>
+        <a class="card" href="structure-07.html" aria-label="Open STRUCTURE 07">STRUCTURE 07</a>
+      </div>
+
+      <!-- Simple navigation -->
+      <p style="margin-top: 18px; opacity: .72; letter-spacing: .08em;">
+        <a href="../../index.html">← HOME</a>
+      </p>
+
+    </div>
+  </section>
+
+</main>
 </body>
 </html>
