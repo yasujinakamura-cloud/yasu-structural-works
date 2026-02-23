@@ -40,25 +40,18 @@
   </main>
 
  <script>
-  const go = () => {
+  // 2秒は必ず表示
+  setTimeout(() => {
     document.body.classList.add('is-leaving');
     setTimeout(() => {
       const isMobile = window.matchMedia('(max-width: 700px)').matches;
 
-      // ★重要：必ず相対パス（先頭/を付けない）
+      // ★B案：スマホは mobile.html、PCは viewer（*-01.html）
       const target = isMobile ? './mobile.html' : './light-01.html';
 
       location.replace(target + (location.search || '') + (location.hash || ''));
     }, 230);
-  };
-
-  let t = setTimeout(go, 2000);
-
-  window.addEventListener('pageshow', (e) => {
-    if (!e.persisted) return;
-    clearTimeout(t);
-    t = setTimeout(go, 200);
-  });
+  }, 2000);
 </script>
 </body>
 </html>
