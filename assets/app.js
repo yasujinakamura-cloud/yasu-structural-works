@@ -12,19 +12,23 @@
 
   const isMobile = window.matchMedia("(max-width: 700px)").matches;
 
-  // GitHub Pages: /yasu-structural-works/ でも /index.html でもOKにする
-  const path = location.pathname;
-  const isTop =
-    path.endsWith("/index.html") ||
-    path.endsWith("/yasu-structural-works/") ||
-    path.endsWith("/yasu-structural-works");
+ // GitHub Pages と 独自ドメイン両対応
+const path = location.pathname;
 
-  const isAlreadyMobile = path.endsWith("/mobile.html");
+// "/" (ルート) もトップ扱いにする
+const isTop =
+  path === "/" ||
+  path.endsWith("/index.html") ||
+  path.endsWith("/yasu-structural-works/") ||
+  path.endsWith("/yasu-structural-works");
 
-  if (isMobile && isTop && !isAlreadyMobile) {
-    location.replace("mobile.html" + (location.search || "") + (location.hash || ""));
-  }
-})();
+const isAlreadyMobile = path.endsWith("/mobile.html");
+
+if (isMobile && isTop && !isAlreadyMobile) {
+  location.replace("/mobile.html" + (location.search || "") + (location.hash || ""));
+}
+
+
 
 
 // ===== Category grid renderer =====
