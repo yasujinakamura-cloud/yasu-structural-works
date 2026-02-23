@@ -37,11 +37,10 @@
     const head   = document.querySelector('.m-head');
     const title  = document.querySelector('.m-title');
 
-    // series は body data-series から取得
-    const series = document.body.dataset.series || 'structure';
+    const series = 'structure';          // 固定（再発防止）
 
     // ★最重要：相対パス固定（ここが一番壊れにくい）
-    const JSON_URL = `./${series}.json`;
+    const JSON_URL = './structure.json'; // 固定（再発防止）
     const IMG_DIR  = `./images/`;
 
     // ===== ヘッダー高さをCSS変数へ（ズレ対策） =====
