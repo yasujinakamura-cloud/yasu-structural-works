@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>STRUCTURE — YASU</title>
+  <title>VELOCITY — YASU</title>
 
   <!-- PCと同じテーマ（見た目のDNAは共通） -->
   <link rel="stylesheet" href="../../assets/theme.css?v=20260222b" />
@@ -11,13 +11,13 @@
   <link rel="stylesheet" href="../../assets/mobile.css?v=20260222b" />
 </head>
 
-<body class="mobile-series" data-series="structure">
+<body class="mobile-series" data-series="velocity">
   <header class="m-head">
     <a class="m-back" href="../../index.html">← HOME</a>
     <button class="m-info" type="button" aria-pressed="true">INFO</button>
   </header>
 
-  <h1 class="m-title">STRUCTURE</h1>
+  <h1 class="m-title">VELOCITY</h1>
 
   <!-- スクロールコンテナ -->
   <main id="mFeed" class="m-feed" aria-live="polite"></main>
@@ -45,7 +45,7 @@
       : '/';
 
     // series は body data-series から取得（コピペ事故防止）
-    const series = document.body.dataset.series || 'structure';
+    const series = document.body.dataset.series || 'velocity';
 
     // 絶対パスで固定（どこにHTMLを置いても壊れない）
     const JSON_URL = `${BASE}series/${series}/${series}.json`;
