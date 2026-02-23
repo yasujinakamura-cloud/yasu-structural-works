@@ -44,7 +44,7 @@
         const hasCover = Boolean(c.cover);
 
         // ★ここが核心：スマホなら mobileHref を優先
-        const raw = c.href; // どの端末でも intro.html に入る（2秒表示）
+        const raw = c.href; // スマホでも必ず intro.html を踏む
         const link = raw.replace(/^\/+/, "");
 
         return `
