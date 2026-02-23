@@ -20,7 +20,6 @@
   </main>
 
  <script>
-  // 2秒後に 1枚目（viewer）へ：iOS Safari 対策で “再トリガ” も入れる
   const go = () => {
     document.body.classList.add('is-leaving');
     setTimeout(() => {
@@ -29,19 +28,21 @@
     }, 230);
   };
 
+  // 初回表示は必ず2秒
   let t = setTimeout(go, 2000);
 
-  // iOSのBFCache復帰などで timer が止まる/遅延する対策
-  window.addEventListener('pageshow', () => {
+  // BFCache復帰のときだけ短縮（←ここが重要）
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;     // 初回ロードでは何もしない
     clearTimeout(t);
-    t = setTimeout(go, 200); // 復帰時は短めに
+    t = setTimeout(go, 200);
   });
 
+  // タブ復帰などの保険（初回は通常起きない）
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-      clearTimeout(t);
-      t = setTimeout(go, 200);
-    }
+    if (document.visibilityState !== 'visible') return;
+    clearTimeout(t);
+    t = setTimeout(go, 200);
   });
 </script>
 </body>
