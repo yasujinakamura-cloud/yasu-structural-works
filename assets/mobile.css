@@ -188,3 +188,91 @@ html.show-info .m-gear{
     line-height: 1;
   }
 }
+
+
+/* ===== Mobile TOP only ===== */
+@media (max-width: 700px){
+
+  body.mobile-top{
+    background:#000;
+    color:#fff;
+  }
+
+  body.mobile-top .m-head{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    padding: 14px 16px;
+    background: rgba(0,0,0,.72);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+
+  body.mobile-top .m-back,
+  body.mobile-top .m-contact{
+    letter-spacing:.28em;
+    font-size:12px;
+    opacity:.92;
+    text-decoration:none;
+    color:inherit;
+  }
+
+  body.mobile-top .m-top{
+    padding: 18px 16px 26px;
+  }
+
+  body.mobile-top .m-siteTitle{
+    margin: 12px 0 14px;
+    font-size: 40px;
+    line-height: 1.02;
+    letter-spacing: .02em;
+  }
+
+  body.mobile-top .m-siteStmt{
+    margin: 0 0 18px;
+    font-size: 18px;
+    letter-spacing: .06em;
+    opacity: .92;
+  }
+
+  body.mobile-top .m-catGrid{
+    display:grid;
+    gap: 14px;
+  }
+
+  body.mobile-top .m-catCard{
+    display:block;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 14px;
+    overflow:hidden;
+    text-decoration:none;
+    color:inherit;
+    background: rgba(255,255,255,.02);
+  }
+
+  body.mobile-top .m-catImg{
+    width:100%;
+    height:auto;
+    display:block;
+  }
+
+  body.mobile-top .m-catText{
+    padding: 12px 12px 14px;
+  }
+
+  body.mobile-top .m-catTitle{
+    font-size: 14px;
+    letter-spacing: .26em;
+  }
+
+  body.mobile-top .m-catSub{
+    margin-top: 6px;
+    font-size: 12px;
+    letter-spacing: .18em;
+    opacity: .72;
+  }
+}
+

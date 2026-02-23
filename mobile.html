@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Yasu Nakamura — Mobile</title>
 
-  <!-- PCと同じ見た目DNA -->
+  <!-- 共通DNA -->
   <link rel="stylesheet" href="assets/theme.css?v=20260223a" />
   <!-- スマホ専用 -->
   <link rel="stylesheet" href="assets/mobile.css?v=20260223a" />
@@ -13,61 +13,47 @@
 
 <body class="mobile-top">
   <header class="m-head">
-    <!-- 左：PCトップへ戻す（任意） -->
-    <a class="m-back" href="index.html">← HOME</a>
+    <!-- モバイルからPCトップへ戻る導線 -->
+    <a class="m-back" href="index.html?desktop=1">DESKTOP →</a>
 
-    <!-- 右：メール -->
-    <a class="m-mail" href="mailto:yourmail@example.com?subject=Portfolio%20Inquiry">CONTACT</a>
+    <!-- CONTACT（既存のメール先に合わせて変更OK） -->
+    <a class="m-contact" href="mailto:yourmail@example.com?subject=Portfolio%20Inquiry">CONTACT</a>
   </header>
 
   <main class="m-top">
-    <h1 class="m-brand">YASU — STRUCTURAL WORKS</h1>
-
-    <p class="m-topStatement">
+    <h1 class="m-siteTitle">YASU — STRUCTURAL WORKS</h1>
+    <p class="m-siteStmt">
       LIGHT IS FORCE.<br>
       STRUCTURE IS RESISTANCE.
     </p>
 
-    <!-- ここにカテゴリカードを描画 -->
-    <section class="m-cats" aria-label="Categories">
+    <section class="m-cat">
       <div id="mCatGrid" class="m-catGrid" aria-live="polite"></div>
     </section>
   </main>
 
   <script>
   (async function(){
-    // 念のため：PC幅で開いたらトップへ戻す（不要なら削除OK）
-    const isMobile = window.matchMedia('(max-width: 700px)').matches;
-    if(!isMobile){
-      // ?mobile=1 で強制表示したい場合の逃げ道
-      const params = new URLSearchParams(location.search);
-      if(params.get('mobile') !== '1'){
-        location.replace('index.html');
-        return;
-      }
-    }
-
     const mount = document.getElementById('mCatGrid');
-    if(!mount) return;
+    if (!mount) return;
 
     try{
-      const res = await fetch('data/categories.json', { cache: 'no-store' });
+      const res = await fetch('data/categories.json?v=20260223a', { cache:'no-store' });
       if(!res.ok) throw new Error('Failed to load categories.json');
       const cats = await res.json();
 
       mount.innerHTML = cats.map(c => {
-        // ★スマホトップは mobileHref を優先（これが核心）
-        const link = (c.mobileHref || c.href || '#');
-        const hasCover = Boolean(c.cover);
+        const link = c.mobileHref || c.href; // ★スマホは mobileHref 優先
+        const cover = c.cover ? `
+          <img class="m-catImg" src="${esc(c.cover)}" alt="" loading="lazy" decoding="async">
+        ` : '';
 
         return `
-          <a class="m-catCard" href="${escapeHtml(link)}" aria-label="${escapeHtml(c.title)}">
-            ${hasCover ? `<img class="m-catImg" src="${escapeHtml(c.cover)}" alt="" loading="lazy" decoding="async">` : ``}
-            <div class="m-catOverlay" aria-hidden="true"></div>
+          <a class="m-catCard" href="${esc(link)}" aria-label="${esc(c.title)}">
+            ${cover}
             <div class="m-catText">
-              <div class="m-catTitle">${escapeHtml(c.title)}</div>
-              <div class="m-catSub">${escapeHtml(c.subtitle || '')}</div>
-              <div class="m-catEnter">ENTER →</div>
+              <div class="m-catTitle">${esc(c.title)}</div>
+              <div class="m-catSub">${esc(c.subtitle || '')}</div>
             </div>
           </a>
         `;
@@ -75,10 +61,10 @@
 
     }catch(e){
       console.error(e);
-      mount.innerHTML = `<p style="padding:18px;opacity:.8">FAILED TO LOAD CATEGORIES.</p>`;
+      mount.innerHTML = `<p style="opacity:.8;padding:18px">FAILED TO LOAD CATEGORIES.</p>`;
     }
 
-    function escapeHtml(s){
+    function esc(s){
       return String(s ?? '')
         .replaceAll('&','&amp;')
         .replaceAll('<','&lt;')
