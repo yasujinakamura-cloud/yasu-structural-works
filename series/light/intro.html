@@ -22,13 +22,13 @@
     // 1) できればJSONから title/statement を読んで表示（失敗しても固定文のまま）
     (async () => {
       try{
-        const res = await fetch('../../data/light.json', { cache: 'no-store' });
+        const res = await fetch('./light.json', { cache: 'no-store' });
         if(!res.ok) throw new Error('json load failed');
         const data = await res.json();
         const t = document.getElementById('introTitle');
         const s = document.getElementById('introStatement');
         if(t && data.title) t.textContent = data.title;
-        if(s && data.statement) s.textContent = data.statement;
+        if(s && (data.statement || data.definition)) s.textContent = (data.statement || data.definition);
       }catch(e){}
     })();
 
