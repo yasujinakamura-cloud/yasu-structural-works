@@ -45,7 +45,7 @@
       mount.innerHTML = cats.map(c => {
         // ★スマホは「必ず」各カテゴリの mobile.html へ
         // mobileHref が categories.json に無くても動くように保険を入れる
-        const link = (c.mobileHref || c.href).replace(/^\/+/, "");
+        const link = (c.href).replace(/^\/+/, "");
 
         const cover = c.cover ? `
           <img class="m-catImg" src="${esc(c.cover)}" alt="" loading="lazy" decoding="async">
