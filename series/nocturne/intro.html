@@ -19,27 +19,38 @@
   </main>
 
   <script>
-    // 1) できればJSONから title/statement を読んで表示（失敗しても固定文のまま）
-    (async () => {
-      try{
-        const res = await fetch('../../data/nocturne.json', { cache: 'no-store' });
-        if(!res.ok) throw new Error('json load failed');
-        const data = await res.json();
-        const t = document.getElementById('introTitle');
-        const s = document.getElementById('introStatement');
-        if(t && data.title) t.textContent = data.title;
-        if(s && data.statement) s.textContent = data.statement;
-      }catch(e){}
-    })();
-
-    // 2) 2秒後に 1枚目（index.html）へ
-    setTimeout(() => {
+  const go = () => {
     document.body.classList.add('is-leaving');
+
     setTimeout(() => {
-      const next = './nocturne-01.html' + (location.search || '') + (location.hash || '');
-      location.replace(next);
+      const isMobile = window.matchMedia('(max-width: 700px)').matches;
+
+      // スマホは縦スナップへ、PCはviewerへ
+      const target = isMobile ? './mobile.html' : './nocturne-01.html';
+
+      location.replace(target + (location.search || '') + (location.hash || ''));
     }, 230);
-  }, 2000);
+  };
+
+  // 初回は必ず2秒
+  let t = setTimeout(go, 2000);
+
+  // BFCache復帰のときだけ短縮（PCで即消え防止）
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;
+    clearTimeout(t);
+    t = setTimeout(go, 200);
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+    clearTimeout(t);
+    t = setTimeout(go, 200);
+  });
 </script>
+
+
+
+
 </body>
 </html>
