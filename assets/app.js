@@ -45,7 +45,7 @@
 
         // ★ここが核心：スマホなら mobileHref を優先
         const raw = (isMobile && c.mobileHref) ? c.mobileHref : c.href;
-        const link = "/" + raw.replace(/^\/+/, "");
+        const link = raw.replace(/^\/+/, "");
 
         return `
         <a class="catCard" href="${escapeHtml(link)}"
