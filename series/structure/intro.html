@@ -4,6 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>STRUCTURE — YASU</title>
+
+  <!-- スプラッシュはインデックス不要（SEO安定） -->
+  <meta name="robots" content="noindex,follow" />
+
   <link rel="stylesheet" href="../../assets/theme.css" />
 </head>
 
@@ -19,22 +23,27 @@
   </main>
 
   <script>
-    // 1) できればJSONから title/statement を読んで表示（失敗しても固定文のまま）
+    // 1) JSONから title/statement を読んで表示（失敗しても固定文のまま）
     (async () => {
       try{
-        const res = await fetch('../../data/structure.json', { cache: 'no-store' });
+        // ✅ 同階層にある structure.json を読む
+        const res = await fetch('./structure.json', { cache: 'no-store' });
         if(!res.ok) throw new Error('json load failed');
         const data = await res.json();
         const t = document.getElementById('introTitle');
         const s = document.getElementById('introStatement');
         if(t && data.title) t.textContent = data.title;
-        if(s && data.statement) s.textContent = data.statement;
+
+        // structure.json は "statement"、light/velocity/nocturne は "definition" だったので両対応
+        const statement = data.statement || data.definition || '';
+        if(s && statement) s.textContent = statement;
       }catch(e){}
     })();
 
-    // 2) 2秒後に 1枚目（index.html）へ
+    // 2) 3秒後にカテゴリ一覧ページへ（WORKS一覧）
+    // ✅ あなたの構造では mobile.html が「カテゴリページ本体」になっている
     setTimeout(() => {
-      location.href = './index.html';
+      location.replace('./mobile.html');
     }, 3000);
   </script>
 </body>
