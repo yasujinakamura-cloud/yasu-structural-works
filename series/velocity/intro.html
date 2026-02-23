@@ -34,8 +34,12 @@
 
     // 2) 2秒後に 1枚目（index.html）へ
     setTimeout(() => {
-      location.href = './index.html';
-    }, 3000);
-  </script>
+    document.body.classList.add('is-leaving');
+    setTimeout(() => {
+      const next = './velocity-01.html' + (location.search || '') + (location.hash || '');
+      location.replace(next);
+    }, 230);
+  }, 2000);
+</script>
 </body>
 </html>
