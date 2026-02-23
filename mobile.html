@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="is-mobile-top">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -43,7 +43,10 @@
       const cats = await res.json();
 
       mount.innerHTML = cats.map(c => {
-        const link = c.mobileHref || c.href; // ★スマホは mobileHref 優先
+        // ★スマホは「必ず」各カテゴリの mobile.html へ
+        // mobileHref が categories.json に無くても動くように保険を入れる
+        const link = c.mobileHref || `series/${c.slug}/mobile.html`;
+
         const cover = c.cover ? `
           <img class="m-catImg" src="${esc(c.cover)}" alt="" loading="lazy" decoding="async">
         ` : '';

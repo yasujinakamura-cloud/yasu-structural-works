@@ -276,3 +276,18 @@ html.show-info .m-gear{
   }
 }
 
+/* ===== FIX: Mobile TOPは縦スクロールOKにする ===== */
+@media (max-width: 700px){
+  html.is-mobile-top,
+  html.is-mobile-top body{
+    height: auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  /* 念のため：トップのコンテンツが伸びるように */
+  body.mobile-top .m-top{
+    min-height: 100vh;
+  }
+}
+
