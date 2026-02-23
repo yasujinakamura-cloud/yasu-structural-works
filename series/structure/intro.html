@@ -19,24 +19,19 @@
     </div>
   </main>
 
- <script>
-  function isBackForward(){
-    try{
-      const nav = performance.getEntriesByType('navigation')[0];
-      return nav && nav.type === 'back_forward';
-    }catch(_){ return false; }
-  }
-
-  const delay = isBackForward() ? 200 : 2000;
-
+<script>
+  // 2秒は必ず表示
   setTimeout(() => {
     document.body.classList.add('is-leaving');
     setTimeout(() => {
       const isMobile = window.matchMedia('(max-width: 700px)').matches;
+
+      // ★B案：スマホは mobile.html、PCは viewer（*-01.html）
       const target = isMobile ? './mobile.html' : './structure-01.html';
+
       location.replace(target + (location.search || '') + (location.hash || ''));
     }, 230);
-  }, delay);
-</script>
+  }, 2000);
+</script> 
 </body>
 </html>
