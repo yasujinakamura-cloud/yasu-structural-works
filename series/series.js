@@ -12,9 +12,6 @@
   if (!viewer) return;
 
   // ==== FOUC対策：JS準備完了まで表示しない（theme.css側とセット） ====
-  // theme.css に:
-  //   .viewer{opacity:0;}
-  //   html.is-ready .viewer{opacity:1; transition: opacity .12s ease;}
   document.documentElement.classList.remove('is-ready');
 
   const series = viewer.dataset.series;             // ex: "structure"
@@ -28,12 +25,9 @@
   const nextEl  = viewer.querySelector('[data-series-next]');
 
   // ★重要：画像は「このHTMLと同階層の images/」に入っている前提
-  // ex) /series/structure/structure-01.html から見て
-  //     images/001.jpg になる
   const IMG_DIR = 'images/';
 
   // JSON は「このHTMLと同階層」に置く
-  // ex) /series/structure/structure.json
   const JSON_URL = `./${series}.json`;
 
   init().catch(err => {
@@ -54,53 +48,44 @@
     const i = clamp(index, 0, images.length - 1);
     const img = images[i];
 
-    // title
-    if (titleEl) titleEl.textContent = data.title || series.toUpperCase();
+    const seriesTitle = (data.title || series).toUpperCase();
+    const num = pad2(i + 1);
+
+    // series title (if exists in DOM)
+    if (titleEl) titleEl.textContent = data.title || seriesTitle;
 
     // series theme statement (top) -> 非表示（空にする）
     if (themeEl) themeEl.textContent = '';
 
-    // per-photo statement（写真ごとの文言：右上に出している想定）
+    // per-photo statement
     const photoStatementEl = viewer.querySelector('[data-photo-statement]');
-    if (photoStatementEl) {
-      photoStatementEl.textContent = img.statement || '';
-    }
+    if (photoStatementEl) photoStatementEl.textContent = img.statement || '';
 
-    // ===== per-photo GEAR (camera/lens) =====
+    // per-photo GEAR (camera/lens)
     const gearEl = viewer.querySelector('[data-photo-gear]');
-    if (gearEl) {
     const camera = (img.camera || '').trim();
     const lens   = (img.lens || '').trim();
+    if (gearEl) {
+      const lines = [];
+      if (camera) lines.push(camera);
+      if (lens)   lines.push(lens);
+      gearEl.textContent = lines.join(' / '); // 1行表示
+    }
 
-  // 2行表示（片方だけでもOK）
-    const lines = [];
-    if (camera) lines.push(camera);
-    if (lens)   lines.push(lens);
+    // GEAR TOGGLE (persist)
+    const toggle = viewer.querySelector('[data-gear-toggle]');
+    if (toggle) {
+      const saved = localStorage.getItem('gearHidden');
+      if (saved === 'true') viewer.classList.add('hide-gear');
 
-    gearEl.textContent = lines.join(' / '); // ← 1行で出すならこれ
-  // gearEl.innerHTML = lines.map(s => `<div>${escapeHtml(s)}</div>`).join(''); // ← 2行にしたいならこっち（その場合 escapeHtml が必要）
-
-// ===== GEAR TOGGLE (persist) =====
-const toggle = viewer.querySelector('[data-gear-toggle]');
-if (toggle) {
-  const saved = localStorage.getItem('gearHidden');
-  if (saved === 'true') viewer.classList.add('hide-gear');
-
-  toggle.addEventListener('click', () => {
-    viewer.classList.toggle('hide-gear');
-    localStorage.setItem('gearHidden', viewer.classList.contains('hide-gear'));
-  });
-}
-
-
-
-}
-
-
-
+      toggle.addEventListener('click', () => {
+        viewer.classList.toggle('hide-gear');
+        localStorage.setItem('gearHidden', viewer.classList.contains('hide-gear'));
+      });
+    }
 
     // pager count
-    if (countEl) countEl.textContent = `${pad2(i + 1)} / ${pad2(images.length)}`;
+    if (countEl) countEl.textContent = `${num} / ${pad2(images.length)}`;
 
     // pager links（ファイル名は structure-01.html, structure-02.html... 前提）
     if (prevEl) {
@@ -125,36 +110,87 @@ if (toggle) {
       }
     }
 
-    // image src（画像が読み込めてから “is-ready” を付けて表示）
+    // image src + SEO alt + social image meta
     if (imageEl) {
-      const src = IMG_DIR + img.file; // images/001.jpg
-      imageEl.alt = `${(data.title || series).toUpperCase()} ${pad2(i + 1)}`;
+      const srcRel = IMG_DIR + img.file; // images/001.jpg
+      const srcAbs = new URL(srcRel, window.location.href).toString();
 
-      // 画像がロードされてから表示（Safariのチラ見え防止）
+      // --- ALT: JSONのaltを最優先。無い場合は自動生成 ---
+      imageEl.alt = buildAlt({
+        seriesTitle,
+        num,
+        statement: img.statement,
+        camera,
+        lens,
+        jsonAlt: img.alt
+      });
+
+      // --- ページtitle（SNSやタブでの視認性向上） ---
+      // SEOの主はHTMLの<title>だが、UXとして補強（JSは実行されない場合もあるので“上書きしても致命ではない”設計に）
+      const base = `${seriesTitle} ${num} | Yasu Nakamura Photography`;
+      const st = (img.statement || '').trim();
+      document.title = st ? `${seriesTitle} ${num} — ${st} | Yasu Nakamura Photography` : base;
+
+      // --- OG/Twitter 画像を自動で差し替え（共有強化） ---
+      setMetaContent('property', 'og:image', srcAbs);
+      setMetaContent('name', 'twitter:image', srcAbs);
+
+      // 画像がロードされてから表示
       imageEl.onload = () => {
         document.documentElement.classList.add('is-ready');
       };
       imageEl.onerror = () => {
-        // 画像が読めない場合も、画面が真っ黒のままにならないよう表示はする
         document.documentElement.classList.add('is-ready');
-        console.error('Failed to load image:', src);
+        console.error('Failed to load image:', srcRel);
       };
 
+      imageEl.src = srcRel;
+
       // キャッシュで onload が発火しないケース対策
-      imageEl.src = src;
       if (imageEl.complete) {
-        // complete でも失敗している可能性はあるが、ここでは“表示だけ”を優先
         document.documentElement.classList.add('is-ready');
       }
     } else {
-      // 画像要素がないなら、その時点で表示
       document.documentElement.classList.add('is-ready');
     }
   }
 
+  function buildAlt({ seriesTitle, num, statement, camera, lens, jsonAlt }) {
+    const cleanJsonAlt = (jsonAlt || '').trim();
+    if (cleanJsonAlt) return cleanJsonAlt;
+
+    // 過度に断定しない（被写体・場所を推測しない）。シリーズ意図＋機材＋文言で“説明的”にする。
+    const parts = [];
+
+    parts.push(`${seriesTitle} ${num}`);
+    if ((statement || '').trim()) parts.push((statement || '').trim());
+
+    // SEOワードは控えめに入れる（スパム化しない）
+    parts.push('Monochrome photography.');
+
+    const gear = [];
+    if (camera) gear.push(camera);
+    if (lens) gear.push(lens);
+    if (gear.length) parts.push(`Camera: ${gear.join(' / ')}.`);
+
+    // 長すぎるaltは避ける（目安125〜160文字程度）
+    const alt = parts.join(' ');
+    return alt.length > 170 ? alt.slice(0, 167).trim() + '…' : alt;
+  }
+
+  function setMetaContent(attrName, attrValue, content) {
+    if (!content) return;
+    let el = document.querySelector(`meta[${attrName}="${attrValue}"]`);
+    if (!el) {
+      el = document.createElement('meta');
+      el.setAttribute(attrName, attrValue);
+      document.head.appendChild(el);
+    }
+    el.setAttribute('content', content);
+  }
+
   function showFatal(msg) {
     viewer.innerHTML = `<p style="padding:24px;opacity:.8">${escapeHtml(msg)}</p>`;
-    // エラー時も真っ黒固定にならないよう表示
     document.documentElement.classList.add('is-ready');
   }
 
