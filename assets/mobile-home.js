@@ -14,7 +14,7 @@
       const fallback = c.href; // 既存 (例: series/structure/intro.html or series/structure/index.html)
 
       // STRUCTURE以外はまだmobile.htmlが無い前提 → fallbackへ
-      const href = (c.slug === 'structure') ? mobileHref : fallback;
+      const href = fallback; // = c.href（intro.html）へ統一
 
       const hasCover = Boolean(c.cover);
       return `
