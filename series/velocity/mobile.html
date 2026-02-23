@@ -44,13 +44,10 @@
       ? '/yasu-structural-works/'
       : '/';
 
-    // series は body data-series から取得（コピペ事故防止）
-    const series = document.body.dataset.series || 'velocity';
+    const series = 'velocity';
 
-    // 絶対パスで固定（どこにHTMLを置いても壊れない）
-    const JSON_URL = `${BASE}series/${series}/${series}.json`;
-    const IMG_DIR  = `${BASE}series/${series}/images/`;
-
+    const JSON_URL = './velocity.json';
+    const IMG_DIR  = './images/';
     // ===== ヘッダー高さをCSS変数へ（ズレ対策） =====
     function setHeadVars(){
       const h  = head  ? head.getBoundingClientRect().height : 0;
