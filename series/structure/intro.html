@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>STRUCTURE — YASU</title>
 
-  <!-- スプラッシュはインデックス不要（SEO安定） -->
+  <!-- スプラッシュは検索結果に出さない -->
   <meta name="robots" content="noindex,follow" />
 
   <link rel="stylesheet" href="../../assets/theme.css" />
@@ -26,25 +26,25 @@
     // 1) JSONから title/statement を読んで表示（失敗しても固定文のまま）
     (async () => {
       try{
-        // ✅ 同階層にある structure.json を読む
         const res = await fetch('./structure.json', { cache: 'no-store' });
         if(!res.ok) throw new Error('json load failed');
         const data = await res.json();
+
         const t = document.getElementById('introTitle');
         const s = document.getElementById('introStatement');
+
         if(t && data.title) t.textContent = data.title;
 
-        // structure.json は "statement"、light/velocity/nocturne は "definition" だったので両対応
-        const statement = data.statement || data.definition || '';
-        if(s && statement) s.textContent = statement;
+        // structure は statement / 他は definition の可能性があるため両対応
+        const msg = data.statement || data.definition || '';
+        if(s && msg) s.textContent = msg;
       }catch(e){}
     })();
 
-    // 2) 3秒後にカテゴリ一覧ページへ（WORKS一覧）
-    // ✅ あなたの構造では mobile.html が「カテゴリページ本体」になっている
+    // 2) 3秒後に「カテゴリページ（WORKS一覧）」へ
     setTimeout(() => {
       location.replace('./mobile.html');
-    }, 3000);
+    }, 2000); // ←あなたの仕様が2秒なら2000
   </script>
 </body>
 </html>
