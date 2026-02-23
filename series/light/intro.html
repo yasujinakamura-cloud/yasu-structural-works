@@ -19,7 +19,7 @@
   </main>
 
   <script>
-    // 1) できればJSONから title/statement を読んで表示（失敗しても固定文のまま）
+    // 1) JSONから title/statement を読んで表示（失敗しても固定文のまま）
     (async () => {
       try{
         const res = await fetch('./light.json', { cache: 'no-store' });
@@ -32,10 +32,18 @@
       }catch(e){}
     })();
 
-    // 2) 2秒後に 1枚目（index.html）へ
+    // 2) 2秒後に 1枚目（viewer）へ
     setTimeout(() => {
-      location.href = './index.html';
-    }, 3000);
+      // フェードアウト（theme.css の is-leaving を利用）
+      document.body.classList.add('is-leaving');
+
+      // フェードの時間だけ待ってから遷移（0.22sに合わせる）
+      setTimeout(() => {
+        const next = './light-01.html' + (location.search || '') + (location.hash || '');
+        location.replace(next);
+      }, 230);
+
+    }, 2000);
   </script>
 </body>
 </html>
