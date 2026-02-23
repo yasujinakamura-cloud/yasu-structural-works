@@ -19,28 +19,30 @@
     </div>
   </main>
 
-  <script>
-    // 1) JSONから title/statement(or definition) を読んで表示（失敗しても固定文のまま）
-    (async () => {
-      try{
-        const res = await fetch('./structure.json', { cache: 'no-store' });
-        if(!res.ok) throw new Error('json load failed');
-        const data = await res.json();
-        const t = document.getElementById('introTitle');
-        const s = document.getElementById('introStatement');
-        if(t && data.title) t.textContent = data.title;
-        if(s && (data.statement || data.definition)) s.textContent = (data.statement || data.definition);
-      }catch(e){}
-    })();
-
-    // 2) 2秒後に 1枚目へ（フェード→replace）
+ <script>
+  // 2秒後に 1枚目（viewer）へ：iOS Safari 対策で “再トリガ” も入れる
+  const go = () => {
+    document.body.classList.add('is-leaving');
     setTimeout(() => {
-      document.body.classList.add('is-leaving');
-      setTimeout(() => {
-        const next = './structure-01.html' + (location.search || '') + (location.hash || '');
-        location.replace(next);
-      }, 230);
-    }, 2000);
-  </script>
+      const next = './structure-01.html' + (location.search || '') + (location.hash || '');
+      location.replace(next);
+    }, 230);
+  };
+
+  let t = setTimeout(go, 2000);
+
+  // iOSのBFCache復帰などで timer が止まる/遅延する対策
+  window.addEventListener('pageshow', () => {
+    clearTimeout(t);
+    t = setTimeout(go, 200); // 復帰時は短めに
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      clearTimeout(t);
+      t = setTimeout(go, 200);
+    }
+  });
+</script>
 </body>
 </html>
