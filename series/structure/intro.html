@@ -4,10 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>STRUCTURE — YASU</title>
-
-  <!-- スプラッシュは検索結果に出さない -->
-  <meta name="robots" content="noindex,follow" />
-
   <link rel="stylesheet" href="../../assets/theme.css" />
 </head>
 
@@ -23,28 +19,64 @@
   </main>
 
   <script>
-    // 1) JSONから title/statement を読んで表示（失敗しても固定文のまま）
+    // 1) できればJSONから title/statement を読んで表示（失敗しても固定文のまま）
     (async () => {
       try{
-        const res = await fetch('./structure.json', { cache: 'no-store' });
+        const res = await fetch('../../data/structure.json', { cache: 'no-store' });
         if(!res.ok) throw new Error('json load failed');
         const data = await res.json();
-
         const t = document.getElementById('introTitle');
         const s = document.getElementById('introStatement');
-
         if(t && data.title) t.textContent = data.title;
-
-        // structure は statement / 他は definition の可能性があるため両対応
-        const msg = data.statement || data.definition || '';
-        if(s && msg) s.textContent = msg;
+        if(s && data.statement) s.textContent = data.statement;
       }catch(e){}
     })();
 
-    // 2) 3秒後に「カテゴリページ（WORKS一覧）」へ
+    // 2) 2秒後に 1枚目（index.html）へ
+    <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NOCTURNE — YASU</title>
+  <link rel="stylesheet" href="../../assets/theme.css" />
+</head>
+
+<body>
+  <main class="seriesIntro" aria-label="Series intro">
+    <div class="seriesIntro__inner">
+      <div class="seriesIntro__kicker">SERIES</div>
+      <h1 class="seriesIntro__title" id="introTitle">NOCTURNE</h1>
+      <p class="seriesIntro__statement" id="introStatement">
+        THE NIGHT REMEMBERS NOTHING.
+      </p>
+    </div>
+  </main>
+
+  <script>
+    // 1) できればJSONから title/statement を読んで表示（失敗しても固定文のまま）
+    (async () => {
+      try{
+        const res = await fetch('../../data/nocturne.json', { cache: 'no-store' });
+        if(!res.ok) throw new Error('json load failed');
+        const data = await res.json();
+        const t = document.getElementById('introTitle');
+        const s = document.getElementById('introStatement');
+        if(t && data.title) t.textContent = data.title;
+        if(s && data.statement) s.textContent = data.statement;
+      }catch(e){}
+    })();
+
+    // 2) 2秒後に 1枚目（index.html）へ
     setTimeout(() => {
-      location.replace('./mobile.html');
-    }, 2000); // ←あなたの仕様が2秒なら2000
-  </script>
+    document.body.classList.add('is-leaving');
+    setTimeout(() => {
+      const next = './structure-01.html' + (location.search || '') + (location.hash || '');
+      location.replace(next);
+    }, 230);
+  }, 2000);
+</script>
+</body>
+</html>
 </body>
 </html>
