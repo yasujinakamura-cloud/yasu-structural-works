@@ -3,7 +3,7 @@
     "slug": "structure",
     "title": "STRUCTURE",
     "subtitle": "RESISTANCE IN FORM",
-    "href": "/series/structure/intro.html",
+    "href": "/series/structure/",
     "mobileHref": "/series/structure/mobile.html",
     "cover": "/images/covers/structure.jpg"
   },
@@ -11,7 +11,7 @@
     "slug": "light",
     "title": "LIGHT",
     "subtitle": "FORCE AGAINST VOID",
-    "href": "/series/light/intro.html",
+    "href": "/series/light/",
     "mobileHref": "/series/light/mobile.html",
     "cover": "/images/covers/light.jpg"
   },
@@ -19,7 +19,7 @@
     "slug": "velocity",
     "title": "VELOCITY",
     "subtitle": "MOTION AS PRESSURE",
-    "href": "/series/velocity/intro.html",
+    "href": "/series/velocity/",
     "mobileHref": "/series/velocity/mobile.html",
     "cover": "/images/covers/velocity.jpg"
   },
@@ -27,7 +27,7 @@
     "slug": "nocturne",
     "title": "NOCTURNE",
     "subtitle": "SILENCE WITH TEETH",
-    "href": "/series/nocturne/intro.html",
+    "href": "/series/nocturne/",
     "mobileHref": "/series/nocturne/mobile.html",
     "cover": "/images/covers/nocturne.jpg"
   }
