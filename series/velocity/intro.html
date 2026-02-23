@@ -6,7 +6,6 @@
   <title>VELOCITY — YASU</title>
   <link rel="stylesheet" href="../../assets/theme.css" />
 </head>
-
 <body>
   <main class="seriesIntro" aria-label="Series intro">
     <div class="seriesIntro__inner">
@@ -17,40 +16,19 @@
       </p>
     </div>
   </main>
-
-  
 <script>
-  const go = () => {
+  // 2秒は必ず表示
+  setTimeout(() => {
     document.body.classList.add('is-leaving');
-
     setTimeout(() => {
       const isMobile = window.matchMedia('(max-width: 700px)').matches;
 
-      // スマホは縦スナップへ、PCはviewerへ
+      // ★B案：スマホは mobile.html、PCは viewer（*-01.html）
       const target = isMobile ? './mobile.html' : './velocity-01.html';
 
       location.replace(target + (location.search || '') + (location.hash || ''));
     }, 230);
-  };
-
-  // 初回は必ず2秒
-  let t = setTimeout(go, 2000);
-
-  // BFCache復帰のときだけ短縮（PCで即消え防止）
-  window.addEventListener('pageshow', (e) => {
-    if (!e.persisted) return;
-    clearTimeout(t);
-    t = setTimeout(go, 200);
-  });
-
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState !== 'visible') return;
-    clearTimeout(t);
-    t = setTimeout(go, 200);
-  });
+  }, 2000);
 </script>
-
-
-
 </body>
 </html>
