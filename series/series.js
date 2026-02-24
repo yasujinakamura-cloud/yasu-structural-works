@@ -141,87 +141,30 @@ if (d) {
       const file = (typeof img === 'string') ? img : img.file;
       const src = IMG_DIR + file;
 
-      // alt（JSONに alt があればそれを優先）
-      imageEl.alt = img.alt || `${(data.title || series).toUpperCase()} ${pad2(i + 1)}`;
+// alt（JSONに alt があればそれを優先）
+imageEl.alt = img.alt || `${(data.title || series).toUpperCase()} ${pad2(i + 1)}`;
 
-      imageEl.onload = () => document.documentElement.classList.add('is-ready');
-      imageEl.onerror = () => {
-        document.documentElement.classList.add('is-ready');
-        console.error('Failed to load image:', src);
-      };
+imageEl.onload = () => document.documentElement.classList.add('is-ready');
+imageEl.onerror = () => {
+  document.documentElement.classList.add('is-ready');
+  console.error('Failed to load image:', src);
+};
 
-      
-       
-       
-       // ===== OG/Twitter image injection (absolute URL) =====
-      const imgAbs = new URL(src, location.href).href;
-      upsertMeta('meta[property="og:image"]', 'property', 'og:image', imgAbs);
-      upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', imgAbs);
+// ===== OG/Twitter image injection (absolute URL) =====
+const imgAbs = new URL(src, location.href).href;
+upsertMeta('meta[property="og:image"]', 'property', 'og:image', imgAbs);
+upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', imgAbs);
+upsertMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
 
-       // ===== JSON-LD (Photograph) =====
-         const pageAbs = location.href.split('#')[0];
-         const title = `${(data.title || series).toUpperCase()} ${pad2(i + 1)}`;
-         const desc  = SERIES_DESC[series] || '';
-
-         upsertJsonLd('ld-photo', {
-           "@context": "https://schema.org",
-           "@type": "Photograph",
-           "name": title,
-           "description": desc,
-           "image": imgAbs,
-           "url": pageAbs,
-           "mainEntityOfPage": pageAbs,
-           "author": {
-             "@type": "Person",
-             "name": "Yasu Nakamura",
-             "url": "https://yasu-nakamura.com/"
-           },
-           "isPartOf": {
-             "@type": "CollectionPage",
-             "name": (data.title || series).toUpperCase(),
-             "url": new URL('./', location.href).href
-           }
-});
-
-// ===== JSON-LD (BreadcrumbList) =====
-const homeAbs = 'https://yasu-nakamura.com/index.html';
-const seriesAbs = new URL(`./${series}-01.html`, location.href).href; // intro(noindex)は使わない
-const currentAbs = pageAbs;
-
-upsertJsonLd('ld-breadcrumb', {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": homeAbs
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": (data.title || series).toUpperCase(),
-      "item": seriesAbs
-    },
-    {
-      "@type": "ListItem",
-      "position": 3,
-      "name": `${(data.title || series).toUpperCase()} ${pad2(i + 1)}`,
-      "item": currentAbs
-    }
-  ]
-});
-       
 // ===== JSON-LD (Photograph) =====
 const pageAbs = location.href.split('#')[0];
-const title = `${(data.title || series).toUpperCase()} ${pad2(i + 1)}`;
-const desc  = SERIES_DESC[series] || '';
+const photoTitle = `${(data.title || series).toUpperCase()} ${pad2(i + 1)}`;
+const desc = SERIES_DESC[series] || '';
 
 upsertJsonLd('ld-photo', {
   "@context": "https://schema.org",
   "@type": "Photograph",
-  "name": title,
+  "name": photoTitle,
   "description": desc,
   "image": imgAbs,
   "url": pageAbs,
@@ -258,17 +201,17 @@ upsertJsonLd('ld-breadcrumb', {
     {
       "@type": "ListItem",
       "position": 3,
-      "name": title,
+      "name": photoTitle,
       "item": pageAbs
     }
   ]
-});       
-
-// 保険：ページ側に無い場合でもカード形式を固定
-   upsertMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
+});
 
 // srcセット（注入の後）
-      imageEl.src = src;
+imageEl.src = src;
+
+// キャッシュで onload が発火しないケース対策
+if (imageEl.complete) document.documentElement.classList.add('is-ready');
 
        
       // キャッシュで onload が発火しないケース対策
