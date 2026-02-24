@@ -28,6 +28,14 @@
   const IMG_DIR  = './images/';
   const JSON_URL = `./${series}.json`;
 
+const SERIES_DESC = {
+  structure: 'Monochrome architecture—geometry, tension, and resistance.',
+  light:    'Monochrome studies where light becomes force.',
+  nocturne: 'Night as structure—silence, shadow, and drift.',
+  velocity: 'Time in motion—color studies of speed and trace.'
+};
+   
+
   init().catch(err => {
     console.error(err);
     showFatal('Series data not found.');
@@ -40,6 +48,18 @@
     if (!res.ok) throw new Error(`Failed to load: ${JSON_URL}`);
 
     const data = await res.json();
+
+// ===== Force unified descriptions (series-level) =====
+const d = SERIES_DESC[series] || '';
+if (d) {
+  upsertMeta('meta[name="description"]', 'name', 'description', d);
+  upsertMeta('meta[property="og:description"]', 'property', 'og:description', d);
+  upsertMeta('meta[name="twitter:description"]', 'name', 'twitter:description', d);
+  upsertMeta('meta[property="og:site_name"]', 'property', 'og:site_name', 'Yasu Nakamura Photography');
+  upsertMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
+}
+
+     
 
     const images = Array.isArray(data.images) ? data.images : [];
     if (!images.length) throw new Error('No images in JSON.');
@@ -130,7 +150,10 @@
         console.error('Failed to load image:', src);
       };
 
-      // ===== OG/Twitter image injection (absolute URL) =====
+      
+       
+       
+       // ===== OG/Twitter image injection (absolute URL) =====
       const imgAbs = new URL(src, location.href).href;
       upsertMeta('meta[property="og:image"]', 'property', 'og:image', imgAbs);
       upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', imgAbs);
