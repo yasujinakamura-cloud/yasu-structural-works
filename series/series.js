@@ -12,13 +12,10 @@
   if (!viewer) return;
 
   // ==== FOUC対策：JS準備完了まで表示しない（theme.css側とセット） ====
-  // theme.css に:
-  //   .viewer{opacity:0;}
-  //   html.is-ready .viewer{opacity:1; transition: opacity .12s ease;}
   document.documentElement.classList.remove('is-ready');
 
-  const series = viewer.dataset.series;             // ex: "structure"
-  const index  = Number(viewer.dataset.index || 0); // 0-based
+  const series = (viewer.dataset.series || '').trim();        // ex: "structure"
+  const index  = Number(viewer.dataset.index || 0);           // 0-based
 
   const titleEl = viewer.querySelector('[data-series-title]');
   const themeEl = viewer.querySelector('[data-series-statement]'); // series statement (theme)
@@ -27,13 +24,8 @@
   const prevEl  = viewer.querySelector('[data-series-prev]');
   const nextEl  = viewer.querySelector('[data-series-next]');
 
-  // ★重要：画像は「このHTMLと同階層の images/」に入っている前提
-  // ex) /series/structure/structure-01.html から見て
-  //     images/001.jpg になる
-  const IMG_DIR = 'images/';
-
-  // JSON は「このHTMLと同階層」に置く
-  // ex) /series/structure/structure.json
+  // ★固定パス（このHTMLと同階層）
+  const IMG_DIR  = './images/';
   const JSON_URL = `./${series}.json`;
 
   init().catch(err => {
@@ -42,6 +34,8 @@
   });
 
   async function init() {
+    if (!series) throw new Error('Missing data-series on viewer');
+
     const res = await fetch(JSON_URL, { cache: 'no-store' });
     if (!res.ok) throw new Error(`Failed to load: ${JSON_URL}`);
 
@@ -60,49 +54,42 @@
     // series theme statement (top) -> 非表示（空にする）
     if (themeEl) themeEl.textContent = '';
 
-    // per-photo statement（写真ごとの文言：右上に出している想定）
+    // per-photo statement
     const photoStatementEl = viewer.querySelector('[data-photo-statement]');
-    if (photoStatementEl) {
-      photoStatementEl.textContent = img.statement || '';
-    }
+    if (photoStatementEl) photoStatementEl.textContent = img.statement || '';
 
-    // ===== per-photo GEAR (camera/lens) =====
+    // per-photo GEAR
     const gearEl = viewer.querySelector('[data-photo-gear]');
     if (gearEl) {
-    const camera = (img.camera || '').trim();
-    const lens   = (img.lens || '').trim();
+      const camera = (img.camera || '').trim();
+      const lens   = (img.lens || '').trim();
+      const lines = [];
+      if (camera) lines.push(camera);
+      if (lens)   lines.push(lens);
+      gearEl.textContent = lines.join(' / ');
+    }
 
-  // 2行表示（片方だけでもOK）
-    const lines = [];
-    if (camera) lines.push(camera);
-    if (lens)   lines.push(lens);
+    // GEAR TOGGLE (persist)
+    const toggle = viewer.querySelector('[data-gear-toggle]');
+    if (toggle) {
+      const saved = localStorage.getItem('gearHidden');
+      if (saved === 'true') viewer.classList.add('hide-gear');
 
-    gearEl.textContent = lines.join(' / '); // ← 1行で出すならこれ
-  // gearEl.innerHTML = lines.map(s => `<div>${escapeHtml(s)}</div>`).join(''); // ← 2行にしたいならこっち（その場合 escapeHtml が必要）
-
-// ===== GEAR TOGGLE (persist) =====
-const toggle = viewer.querySelector('[data-gear-toggle]');
-if (toggle) {
-  const saved = localStorage.getItem('gearHidden');
-  if (saved === 'true') viewer.classList.add('hide-gear');
-
-  toggle.addEventListener('click', () => {
-    viewer.classList.toggle('hide-gear');
-    localStorage.setItem('gearHidden', viewer.classList.contains('hide-gear'));
-  });
-}
-
-
-
-}
-
-
-
+      toggle.addEventListener('click', () => {
+        viewer.classList.toggle('hide-gear');
+        localStorage.setItem('gearHidden', viewer.classList.contains('hide-gear'));
+      });
+    }
 
     // pager count
     if (countEl) countEl.textContent = `${pad2(i + 1)} / ${pad2(images.length)}`;
 
-    // pager links（ファイル名は structure-01.html, structure-02.html... 前提）
+    // ---- navigation: keep href for SEO, but always replace() to HTML (no JSON accidents)
+    const goTo = (n) => {
+      const url = `./${series}-${pad2(n)}.html`;
+      location.replace(url + (location.search || '') + (location.hash || ''));
+    };
+
     if (prevEl) {
       if (i <= 0) {
         prevEl.removeAttribute('href');
@@ -110,7 +97,9 @@ if (toggle) {
         prevEl.style.opacity = '0.35';
         prevEl.style.pointerEvents = 'none';
       } else {
-        prevEl.href = `${series}-${pad2(i)}.html`; // i=1 -> structure-01.html
+        const n = i; // i=1 -> 01
+        prevEl.href = `${series}-${pad2(n)}.html`;
+        prevEl.addEventListener('click', (e) => { e.preventDefault(); goTo(n); });
       }
     }
 
@@ -121,42 +110,37 @@ if (toggle) {
         nextEl.style.opacity = '0.35';
         nextEl.style.pointerEvents = 'none';
       } else {
-        nextEl.href = `${series}-${pad2(i + 2)}.html`; // i=0 -> structure-02.html
+        const n = i + 2; // i=0 -> 02
+        nextEl.href = `${series}-${pad2(n)}.html`;
+        nextEl.addEventListener('click', (e) => { e.preventDefault(); goTo(n); });
       }
     }
 
     // image src（画像が読み込めてから “is-ready” を付けて表示）
     if (imageEl) {
-      const file = typeof img === 'string' ? img : img.file;
+      const file = (typeof img === 'string') ? img : img.file;
       const src = IMG_DIR + file;
-      
-      imageEl.alt = `${(data.title || series).toUpperCase()} ${pad2(i + 1)}`;
 
-      // 画像がロードされてから表示（Safariのチラ見え防止）
-      imageEl.onload = () => {
-        document.documentElement.classList.add('is-ready');
-      };
+      // alt（JSONに alt があればそれを優先）
+      imageEl.alt = img.alt || `${(data.title || series).toUpperCase()} ${pad2(i + 1)}`;
+
+      imageEl.onload = () => document.documentElement.classList.add('is-ready');
       imageEl.onerror = () => {
-        // 画像が読めない場合も、画面が真っ黒のままにならないよう表示はする
         document.documentElement.classList.add('is-ready');
         console.error('Failed to load image:', src);
       };
 
-      // キャッシュで onload が発火しないケース対策
       imageEl.src = src;
-      if (imageEl.complete) {
-        // complete でも失敗している可能性はあるが、ここでは“表示だけ”を優先
-        document.documentElement.classList.add('is-ready');
-      }
+
+      // キャッシュで onload が発火しないケース対策
+      if (imageEl.complete) document.documentElement.classList.add('is-ready');
     } else {
-      // 画像要素がないなら、その時点で表示
       document.documentElement.classList.add('is-ready');
     }
   }
 
   function showFatal(msg) {
     viewer.innerHTML = `<p style="padding:24px;opacity:.8">${escapeHtml(msg)}</p>`;
-    // エラー時も真っ黒固定にならないよう表示
     document.documentElement.classList.add('is-ready');
   }
 
@@ -177,4 +161,3 @@ if (toggle) {
       .replaceAll("'", '&#039;');
   }
 })();
-
