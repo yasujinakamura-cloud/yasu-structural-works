@@ -213,7 +213,56 @@ upsertJsonLd('ld-breadcrumb', {
   ]
 });
        
-       
+// ===== JSON-LD (Photograph) =====
+const pageAbs = location.href.split('#')[0];
+const title = `${(data.title || series).toUpperCase()} ${pad2(i + 1)}`;
+const desc  = SERIES_DESC[series] || '';
+
+upsertJsonLd('ld-photo', {
+  "@context": "https://schema.org",
+  "@type": "Photograph",
+  "name": title,
+  "description": desc,
+  "image": imgAbs,
+  "url": pageAbs,
+  "mainEntityOfPage": pageAbs,
+  "author": {
+    "@type": "Person",
+    "name": "Yasu Nakamura",
+    "url": "https://yasu-nakamura.com/"
+  },
+  "isPartOf": {
+    "@type": "CollectionPage",
+    "name": (data.title || series).toUpperCase(),
+    "url": new URL('./', location.href).href
+  }
+});
+
+// ===== JSON-LD (BreadcrumbList) =====
+upsertJsonLd('ld-breadcrumb', {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://yasu-nakamura.com/index.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": (data.title || series).toUpperCase(),
+      "item": new URL(`./${series}-01.html`, location.href).href
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": title,
+      "item": pageAbs
+    }
+  ]
+});       
 
 // 保険：ページ側に無い場合でもカード形式を固定
    upsertMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
