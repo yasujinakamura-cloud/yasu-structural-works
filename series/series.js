@@ -183,6 +183,36 @@ if (d) {
            }
 });
 
+// ===== JSON-LD (BreadcrumbList) =====
+const homeAbs = 'https://yasu-nakamura.com/index.html';
+const seriesAbs = new URL(`./${series}-01.html`, location.href).href; // intro(noindex)は使わない
+const currentAbs = pageAbs;
+
+upsertJsonLd('ld-breadcrumb', {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": homeAbs
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": (data.title || series).toUpperCase(),
+      "item": seriesAbs
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": `${(data.title || series).toUpperCase()} ${pad2(i + 1)}`,
+      "item": currentAbs
+    }
+  ]
+});
+       
        
 
 // 保険：ページ側に無い場合でもカード形式を固定
