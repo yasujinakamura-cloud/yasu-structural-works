@@ -161,3 +161,14 @@
       .replaceAll("'", '&#039;');
   }
 })();
+
+function upsertMeta(selector, attrName, attrValue, content){
+  let m = document.querySelector(selector);
+  if (!m) {
+    m = document.createElement('meta');
+    m.setAttribute(attrName, attrValue);
+    document.head.appendChild(m);
+  }
+  m.setAttribute('content', content);
+}
+
