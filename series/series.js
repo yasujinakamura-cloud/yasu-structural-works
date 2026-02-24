@@ -130,11 +130,16 @@
         console.error('Failed to load image:', src);
       };
 
-      imageEl.src = src;
       // ===== OG/Twitter image injection (absolute URL) =====
       const imgAbs = new URL(src, location.href).href;
       upsertMeta('meta[property="og:image"]', 'property', 'og:image', imgAbs);
       upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', imgAbs);
+
+// 保険：ページ側に無い場合でもカード形式を固定
+   upsertMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
+
+// srcセット（注入の後）
+      imageEl.src = src;
 
        
       // キャッシュで onload が発火しないケース対策
@@ -157,6 +162,18 @@
     return String(n).padStart(2, '0');
   }
 
+   function upsertMeta(selector, attrName, attrValue, content){
+     let m = document.querySelector(selector);
+     if (!m) {
+       m = document.createElement('meta');
+       m.setAttribute(attrName, attrValue);
+       document.head.appendChild(m);
+  }
+  m.setAttribute('content', content);
+}
+
+
+   
   function escapeHtml(s) {
     return String(s ?? '')
       .replaceAll('&', '&amp;')
@@ -167,13 +184,5 @@
   }
 })();
 
-function upsertMeta(selector, attrName, attrValue, content){
-  let m = document.querySelector(selector);
-  if (!m) {
-    m = document.createElement('meta');
-    m.setAttribute(attrName, attrValue);
-    document.head.appendChild(m);
-  }
-  m.setAttribute('content', content);
-}
+
 
