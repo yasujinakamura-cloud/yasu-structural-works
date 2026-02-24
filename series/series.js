@@ -131,7 +131,12 @@
       };
 
       imageEl.src = src;
+      // ===== OG/Twitter image injection (absolute URL) =====
+      const imgAbs = new URL(src, location.href).href;
+      upsertMeta('meta[property="og:image"]', 'property', 'og:image', imgAbs);
+      upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', imgAbs);
 
+       
       // キャッシュで onload が発火しないケース対策
       if (imageEl.complete) document.documentElement.classList.add('is-ready');
     } else {
