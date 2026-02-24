@@ -158,6 +158,33 @@ if (d) {
       upsertMeta('meta[property="og:image"]', 'property', 'og:image', imgAbs);
       upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', imgAbs);
 
+       // ===== JSON-LD (Photograph) =====
+         const pageAbs = location.href.split('#')[0];
+         const title = `${(data.title || series).toUpperCase()} ${pad2(i + 1)}`;
+         const desc  = SERIES_DESC[series] || '';
+
+         upsertJsonLd('ld-photo', {
+           "@context": "https://schema.org",
+           "@type": "Photograph",
+           "name": title,
+           "description": desc,
+           "image": imgAbs,
+           "url": pageAbs,
+           "mainEntityOfPage": pageAbs,
+           "author": {
+             "@type": "Person",
+             "name": "Yasu Nakamura",
+             "url": "https://yasu-nakamura.com/"
+           },
+           "isPartOf": {
+             "@type": "CollectionPage",
+             "name": (data.title || series).toUpperCase(),
+             "url": new URL('./', location.href).href
+           }
+});
+
+       
+
 // 保険：ページ側に無い場合でもカード形式を固定
    upsertMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
 
