@@ -198,36 +198,34 @@ if (d) {
 
    
   function escapeHtml(s) {
-    return String(s ?? '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#039;');
-  }
-})();
+  return String(s ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
 
-
-  function upsertMeta(selector, attrName, attrValue, content){
-    let m = document.querySelector(selector);
-    if (!m) {
-      m = document.createElement('meta');
-      m.setAttribute(attrName, attrValue);
-      document.head.appendChild(m);
-    }
-    m.setAttribute('content', content);
+function upsertMeta(selector, attrName, attrValue, content){
+  let m = document.querySelector(selector);
+  if (!m) {
+    m = document.createElement('meta');
+    m.setAttribute(attrName, attrValue);
+    document.head.appendChild(m);
   }
+  m.setAttribute('content', content);
+}
 
-  function upsertJsonLd(id, obj){
-    let s = document.getElementById(id);
-    if (!s) {
-      s = document.createElement('script');
-      s.type = 'application/ld+json';
-      s.id = id;
-      document.head.appendChild(s);
-    }
-    s.textContent = JSON.stringify(obj);
+function upsertJsonLd(id, obj){
+  let s = document.getElementById(id);
+  if (!s) {
+    s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.id = id;
+    document.head.appendChild(s);
   }
+  s.textContent = JSON.stringify(obj);
+}
 
 })();
 
