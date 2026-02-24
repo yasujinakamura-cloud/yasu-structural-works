@@ -208,4 +208,26 @@ if (d) {
 })();
 
 
+  function upsertMeta(selector, attrName, attrValue, content){
+    let m = document.querySelector(selector);
+    if (!m) {
+      m = document.createElement('meta');
+      m.setAttribute(attrName, attrValue);
+      document.head.appendChild(m);
+    }
+    m.setAttribute('content', content);
+  }
+
+  function upsertJsonLd(id, obj){
+    let s = document.getElementById(id);
+    if (!s) {
+      s = document.createElement('script');
+      s.type = 'application/ld+json';
+      s.id = id;
+      document.head.appendChild(s);
+    }
+    s.textContent = JSON.stringify(obj);
+  }
+
+})();
 
