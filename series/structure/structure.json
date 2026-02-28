@@ -5,7 +5,7 @@
     {
       "file": "001.jpg",
       "statement": "WE MOVE. THE GRID REMAINS.",
-      "alt": "STRUCTURE 07 — WE MOVE. THE GRID REMAINS. Monochrome photograph exploring grid, movement, and structural permanence.",
+      "alt": "STRUCTURE 01 — WE MOVE. THE GRID REMAINS. Monochrome photograph exploring grid, movement, and structural permanence.",
       "camera": "LEICA M-MONOCHROME ( CCD )",
       "lens": "Summicron50mm F2.0"
     },
@@ -19,7 +19,7 @@
     {
       "file": "003.jpg",
       "statement": "INDIFFERENT. IMMOVABLE.",
-      "alt": "STRUCTURE 03 — LINES DECIDE. YOU FOLLOW. High-contrast monochrome study of lines, structure, and control.",
+      "alt": "STRUCTURE 03 — INDIFFERENT. IMMOVABLE. High-contrast monochrome study of lines, structure, and control.",
       "camera": "LEICA M-MONOCHROME ( CCD )",
       "lens": "Summicron50mm F2.0"
     },
@@ -47,15 +47,16 @@
     {
       "file": "007.jpg",
       "statement": "INSIDE THE GRID.",
-      "alt": "STRUCTURE 07 — WE MOVE. THE GRID REMAINS. Monochrome photograph exploring grid, movement, and structural permanence.",
+      "alt": "STRUCTURE 07 — INSIDE THE GRID. Monochrome photograph exploring containment, geometry, and presence.",
       "camera": "LEICA M-MONOCHROME ( CCD )",
       "lens": "Summicron50mm F2.0"
-    }
-  ]{
+    },
+    {
       "file": "008.jpg",
       "statement": "THE GRID RULES.",
-      "alt": "STRUCTURE 08 — WE MOVE. THE GRID REMAINS. Monochrome photograph exploring grid, movement, and structural permanence.",
+      "alt": "STRUCTURE 08 — THE GRID RULES. Monochrome photograph exploring light as control and architecture as command.",
       "camera": "LEICA M-MONOCHROME ( CCD )",
       "lens": "SUPER WIDE-HELIAR 15mm"
     }
+  ]
 }
