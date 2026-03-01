@@ -15,7 +15,8 @@
   document.documentElement.classList.remove('is-ready');
 
   const series = (viewer.dataset.series || '').trim();        // ex: "structure"
-  const index  = Number(viewer.dataset.index || 0);           // 0-based
+  const qs = new URLSearchParams(location.search);
+  const index = Number(qs.get('i') ?? viewer.dataset.index ?? 0);           // 0-based
 
   const titleEl = viewer.querySelector('[data-series-title]');
   const themeEl = viewer.querySelector('[data-series-statement]'); // series statement (theme)
@@ -232,21 +233,7 @@ if (imageEl.complete) document.documentElement.classList.add('is-ready');
 
   function pad2(n) {
     return String(n).padStart(2, '0');
-  }
-
-   function upsertMeta(selector, attrName, attrValue, content){
-     let m = document.querySelector(selector);
-     if (!m) {
-       m = document.createElement('meta');
-       m.setAttribute(attrName, attrValue);
-       document.head.appendChild(m);
-  }
-  m.setAttribute('content', content);
-}
-
-
-   
-  function escapeHtml(s) {
+  }  function escapeHtml(s) {
   return String(s ?? '')
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
