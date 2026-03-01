@@ -1,0 +1,55 @@
+{
+  "title": "STRUCTURE",
+  "statement": "LIGHT IS FORCE. STRUCTURE IS RESISTANCE.",
+  "images": [
+    {
+      "file": "001.jpg",
+      "statement": "YOU MOVE. STRUCTURE REMAINS.",
+      "alt": "STRUCTURE 01 — YOU MOVE. STRUCTURE REMAINS. Monochrome photograph exploring structure, tension, and resistance.",
+      "camera": "LEICA M240",
+      "lens": "Summicron50mm F2.0"
+    },
+    {
+      "file": "002.jpg",
+      "statement": "YOU ARE ALREADY INSIDE.",
+      "alt": "STRUCTURE 02 — YOU ARE ALREADY INSIDE. Monochrome photograph exploring geometry and presence within the built environment.",
+      "camera": "LEICA M-MONOCHROME ( CCD )",
+      "lens": "Summicron50mm F2.0"
+    },
+    {
+      "file": "003.jpg",
+      "statement": "LINES DECIDE. YOU FOLLOW.",
+      "alt": "STRUCTURE 03 — LINES DECIDE. YOU FOLLOW. High-contrast monochrome study of lines, structure, and control.",
+      "camera": "LEICA M-MONOCHROME ( CCD )",
+      "lens": "SUPER WIDE-HELIAR 15mm"
+    },
+    {
+      "file": "004.jpg",
+      "statement": "DISTRIBUTION IS CONTROL.",
+      "alt": "STRUCTURE 04 — DISTRIBUTION IS CONTROL. Monochrome photograph focused on composition, distribution, and architectural force.",
+      "camera": "LEICA M-MONOCHROME ( CCD )",
+      "lens": "SUPER WIDE-HELIAR 15mm"
+    },
+    {
+      "file": "005.jpg",
+      "statement": "STRUCTURE REMAINS.",
+      "alt": "STRUCTURE 05 — STRUCTURE REMAINS. Minimal monochrome study of form, mass, and resistance.",
+      "camera": "LEICA M-MONOCHROME ( CCD )",
+      "lens": "SUPER WIDE-HELIAR 15mm"
+    },
+    {
+      "file": "006.jpg",
+      "statement": "THE CITY DOESN’T ASK. IT INSTRUCTS.",
+      "alt": "STRUCTURE 06 — THE CITY DOESN’T ASK. IT INSTRUCTS. Monochrome photograph emphasizing urban structure and instruction through form.",
+      "camera": "LEICA M-MONOCHROME ( CCD )",
+      "lens": "SUPER WIDE-HELIAR 15mm"
+    },
+    {
+      "file": "007.jpg",
+      "statement": "WE MOVE. THE GRID REMAINS.",
+      "alt": "STRUCTURE 07 — WE MOVE. THE GRID REMAINS. Monochrome photograph exploring grid, movement, and structural permanence.",
+      "camera": "LEICA M-MONOCHROME ( CCD )",
+      "lens": "Summicron50mm F2.0"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- TOP -->
+  <url>
+    <loc>https://yasu-nakamura.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- SERIES PAGES -->
+  <url>
+    <loc>https://yasu-nakamura.com/series/structure/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://yasu-nakamura.com/series/light/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://yasu-nakamura.com/series/velocity/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://yasu-nakamura.com/series/nocturne/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- STRUCTURE -->
+  <url><loc>https://yasu-nakamura.com/series/structure/structure-01.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/structure/structure-02.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/structure/structure-03.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/structure/structure-04.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/structure/structure-05.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/structure/structure-06.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/structure/structure-07.html</loc></url>
+
+  <!-- LIGHT -->
+  <url><loc>https://yasu-nakamura.com/series/light/light-01.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/light/light-02.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/light/light-03.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/light/light-04.html</loc></url>
+
+  <!-- VELOCITY -->
+  <url><loc>https://yasu-nakamura.com/series/velocity/velocity-01.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/velocity/velocity-02.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/velocity/velocity-03.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/velocity/velocity-04.html</loc></url>
+
+  <!-- NOCTURNE -->
+  <url><loc>https://yasu-nakamura.com/series/nocturne/nocturne-01.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/nocturne/nocturne-02.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/nocturne/nocturne-03.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/nocturne/nocturne-04.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/nocturne/nocturne-05.html</loc></url>
+  <url><loc>https://yasu-nakamura.com/series/nocturne/nocturne-06.html</loc></url>
+
+</urlset>

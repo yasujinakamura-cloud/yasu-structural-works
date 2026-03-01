@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>STRUCTURE — YASU</title>
+  <link rel="stylesheet" href="../../assets/theme.css" />
+</head>
+<body>
+  <main class="seriesIntro" aria-label="Series intro">
+    <div class="seriesIntro__inner">
+      <div class="seriesIntro__kicker">SERIES</div>
+      <h1 class="seriesIntro__title" id="introTitle">STRUCTURE</h1>
+      <p class="seriesIntro__statement" id="introStatement">
+        LIGHT IS FORCE. STRUCTURE IS RESISTANCE.
+      </p>
+    </div>
+  </main>
+<script>
+  // 2秒は必ず表示
+  setTimeout(() => {
+    document.body.classList.add('is-leaving');
+    setTimeout(() => {
+      const isMobile = window.matchMedia('(max-width: 700px)').matches;
+
+      // ★B案：スマホは mobile.html、PCは viewer（*-01.html）
+      const target = isMobile ? './mobile.html' : './structure-01.html';
+
+      location.replace(target + (location.search || '') + (location.hash || ''));
+    }, 230);
+  }, 2000);
+</script> 
+</body>
+</html>

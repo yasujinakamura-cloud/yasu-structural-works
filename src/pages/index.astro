@@ -1,0 +1,124 @@
+---
+import cats from "../../public/data/categories.json";
+
+const title = "Yasu Nakamura — Monochrome Photography";
+
+// JSONの揺れを吸収（?v=削除 / mobileHref補完）
+const norm = cats.map((c) => {
+  const href = String(c.href || "").replace(/\?.*$/, "");
+  const mobileHref =
+    c.mobileHref || href.replace(/\/intro\.html$/, "/mobile.html");
+
+  return {
+    slug: c.slug,
+    title: c.title,
+    subtitle: c.subtitle || "",
+    cover: c.cover || "",
+    href,
+    mobileHref,
+  };
+});
+---
+
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{title}</title>
+
+  <!-- NOTE: いったん現状維持（base対応は次ステップで） -->
+  <link rel="stylesheet" href={`${import.meta.env.BASE_URL}assets/theme.css`} />
+</head>
+
+<body>
+  <main id="siteMain">
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Hero statement">
+      <a class="hero__mail"
+         href="mailto:yasuji.nakamura@gmail.com?subject=Portfolio%20Inquiry">
+         CONTACT
+      </a>
+
+      <div class="hero__inner">
+        <h1 class="hero__statement">
+          <span>LIGHT IS FORCE.</span>
+          <span>STRUCTURE IS RESISTANCE.</span>
+        </h1>
+
+        <p class="hero__sub">STUDIES IN LIGHT AND FORM</p>
+        <p class="hero__credit">WORKS BY YASU NAKAMURA</p>
+
+        <a class="hero__enter" href="#grid" aria-label="Enter gallery">
+          ENTER <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="hero__scroll" aria-hidden="true">
+        <span class="hero__scrollLine"></span>
+      </div>
+    </section>
+
+    <!-- CATEGORY GRID -->
+    <section id="grid" class="frontGrid" aria-label="Categories">
+      <div class="frontGrid__inner">
+        <div class="frontGrid__head">
+          <h2 class="frontGrid__title">CATEGORIES</h2>
+          <p class="frontGrid__note">ENTER A SERIES.</p>
+        </div>
+
+        <div class="frontGrid__items">
+          {norm.map((c) => (
+            <a
+              class="catCard"
+              href={`${import.meta.env.BASE_URL}${c.href.replace(/^\/+/, "")}`}
+              data-slug={c.slug}
+              aria-label={c.title}
+            >
+              {c.cover ? (
+                <img
+                  class="catCard__img"
+                  src={`${import.meta.env.BASE_URL}${c.cover.replace(/^\/+/, "")}`}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : null}
+
+              <div class="catCard__overlay" aria-hidden="true"></div>
+
+              <div class="catCard__text">
+                <div class="catCard__title">{c.title}</div>
+                <div class="catCard__sub">{c.subtitle}</div>
+                <div class="catCard__enter">ENTER →</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+<script src={`${import.meta.env.BASE_URL}assets/app.js`} defer></script>
+
+  <script>
+    // desktop=1 は「モバイルリダイレクト無効」の合図。
+    // トップ表示後は URL からだけ消して見た目を綺麗にする（挙動は変えない）
+    (function () {
+      const u = new URL(location.href);
+      if (u.searchParams.get('desktop') === '1') {
+        u.searchParams.delete('desktop');
+        history.replaceState(
+          null,
+          '',
+          u.pathname +
+            (u.searchParams.toString() ? '?' + u.searchParams.toString() : '') +
+            u.hash
+        );
+      }
+    })();
+  </script>
+</body>
+</html>

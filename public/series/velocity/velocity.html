@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VELOCITY — Yasu Nakamura</title>
+  <link rel="stylesheet" href="../assets/theme.css" />
+</head>
+<body>
+
+<header class="seriesHeader">
+  <a class="seriesHeader__back" href="../index.html">← BACK</a>
+
+  <div class="seriesHeader__inner">
+    <h1 class="seriesHeader__title">VELOCITY</h1>
+    <p class="seriesHeader__statement">
+      SPEED IS PRESSURE.
+    </p>
+    <p class="seriesHeader__sub">
+      速度は、圧だ。
+    </p>
+  </div>
+</header>
+
+<main class="seriesMain">
+  <section class="seriesGrid" aria-label="Velocity gallery">
+    <div id="seriesGrid" class="seriesGrid__items" aria-live="polite"></div>
+  </section>
+</main>
+
+<!-- Lightbox -->
+<div id="lb" class="lb" hidden>
+  <button class="lb__close" id="lbClose" aria-label="Close">×</button>
+  <img class="lb__img" id="lbImg" alt="">
+</div>
+
+<script>
+  window.SERIES = {
+    title: "VELOCITY",
+    basePath: "../images/velocity/",
+    dataUrl: "../data/velocity.json"
+  };
+</script>
+<script src="../assets/series.js" defer></script>
+
+</body>
+</html>
