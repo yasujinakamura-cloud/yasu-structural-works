@@ -449,7 +449,6 @@ a{
   flex-direction:column;
   align-items:center;
 
-  /* desktopは中央寄せ気味、mobileは上寄せに切り替える */
   justify-content:center;
   padding:28px 18px 34px;
 }
@@ -510,10 +509,10 @@ a{
   align-items:center;
   justify-content:center;
 
-  overflow:hidden; /* ここで絶対に外へ出さない */
+  overflow:hidden;
 }
 
-/* inner mat: create black mat + thin border */
+/* inner mat */
 .frame-inner{
   width:100%;
   height:100%;
@@ -526,10 +525,10 @@ a{
   align-items:center;
   justify-content:center;
 
-  overflow:hidden; /* 内側でも封じる */
+  overflow:hidden;
 }
 
-/* photo: always contained */
+/* photo */
 .photo,
 .stage img{
   max-width:100%;
@@ -540,7 +539,7 @@ a{
   display:block;
   object-fit:contain;
 
-  border: 1px solid rgba(255,255,255,.45); /* ←追加 */
+  border: 1px solid rgba(255,255,255,.45);
 }
 
 /* pager */
@@ -574,16 +573,13 @@ a{
   border:0 !important;
 }
 
-/* ====== Mobile tuning ======
-   70%だと小さすぎるので、枠をほぼ画面幅へ。
-   ここを触れば「iPhoneで額の余白を詰める」ができる。
-*/
+/* ===== Mobile tuning ===== */
 @media (max-width: 700px){
   :root{
     --viewerW: 92vw;
     --viewerH: 76vh;
-    --framePad: 14px;   /* ← 外枠の余白を詰める */
-    --matPad:  16px;    /* ← 黒マットを詰める */
+    --framePad: 14px;
+    --matPad:  16px;
   }
 
   .viewer{
@@ -621,7 +617,7 @@ a{
 .viewer-head .series-statement{
   margin: 0 auto;
   max-width: 58ch;
-  font-size: 15px;      /* ← ここで強度調整 */
+  font-size: 15px;
   line-height: 1.55;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -630,7 +626,6 @@ a{
 
 /* =========================================
    FINAL OVERRIDE: per-photo statement center
-   (always centered on every image)
 ========================================= */
 .statement-band{
   text-align: center !important;
@@ -647,11 +642,10 @@ a{
 ========================= */
 
 body{
-  opacity: 1; /* ← 最初から表示（ここが重要） */
+  opacity: 1;
   transition: opacity .22s ease;
 }
 
-/* 遷移開始（静かにフェードアウト） */
 body.is-leaving{
   opacity: 0;
 }
@@ -660,7 +654,6 @@ body.is-leaving{
   body{ transition: none !important; }
 }
 
-/* 読み込み完了 */
 body.is-ready{
   opacity: 1;
 }
@@ -706,7 +699,6 @@ body.is-ready{
   color: rgba(255,255,255,.85);
 }
 
-/* mobile */
 @media (max-width: 700px){
   .seriesIntro__title{ font-size:18px; }
   .seriesIntro__statement{ font-size:14px; }
@@ -720,7 +712,6 @@ body.is-ready{
 /* ===== Prevent flash of unstyled text (FOUC) ===== */
 html, body { background:#000; }
 
-/* JSが準備完了するまで中身を隠す */
 .viewer { opacity: 0; }
 html.is-ready .viewer { opacity: 1; transition: opacity .12s ease; }
 
@@ -731,12 +722,10 @@ html.is-ready .viewer { opacity: 1; transition: opacity .12s ease; }
 .viewer-head{
   position: relative;
 
-  /* 2列×2行 */
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
 
-  /* 行の並び */
   grid-template-areas:
     "back  info"
     "stmt  gear";
@@ -744,18 +733,15 @@ html.is-ready .viewer { opacity: 1; transition: opacity .12s ease; }
   align-items: start;
   column-gap: 18px;
 
-  /* 写真との距離：必要なら微調整 */
   padding-top: 10px;
 }
 
-/* 1行目 左：HOME */
 .viewer-head .back{
   grid-area: back;
-  line-height: 1;          /* HOMEとINFOの高さを揃える */
-  padding-top: 2px;        /* ほんの少しだけ視覚調整 */
+  line-height: 1;
+  padding-top: 2px;
 }
 
-/* 1行目 右：INFO（HOMEと同じ高さに揃う） */
 .gear-toggle{
   grid-area: info;
   justify-self: end;
@@ -778,23 +764,21 @@ html.is-ready .viewer { opacity: 1; transition: opacity .12s ease; }
 
 .gear-toggle:hover{ opacity: 1; }
 
-/* 2行目 左：ステートメント（写真の少し上に） */
 .photo-statement{
   grid-area: stmt;
 
-  margin: 14px 0 0 0;      /* ← ここで HOME との上下距離を確保 */
+  margin: 14px 0 0 0;
   font-size: 13px;
   letter-spacing: .18em;
   text-transform: uppercase;
   opacity: .92;
 }
 
-/* 2行目 右：CAMERA / LENS（1行） */
 .photo-gear{
   grid-area: gear;
   justify-self: end;
 
-  margin: 14px 0 0 0;      /* ← stmt と同じ値にして“完全に揃える” */
+  margin: 14px 0 0 0;
   font-size: 11px;
   letter-spacing: .14em;
   opacity: .75;
@@ -803,94 +787,22 @@ html.is-ready .viewer { opacity: 1; transition: opacity .12s ease; }
   white-space: nowrap;
 }
 
-
-
-
-
-
-
-
-/* 文字エリアをフレーム幅に合わせる（左右がフレーム端に揃う） */
+/* 文字エリアをフレーム幅に合わせる */
 .viewer-head{
-  width: min(70vw, 1100px);   /* ← .frame と同じ値にする */
-  margin: 0 auto;             /* ← フレームと同じく中央寄せ */
+  width: min(70vw, 1100px);
+  margin: 0 auto;
 }
 .photo-statement{
   justify-self: start;
   text-align: left;
 }
 
-/* 右端をフレーム右端にピタッと合わせる */
 .photo-gear{
   justify-self: end;
   text-align: right;
 }
 
-
-
-
-
-
-
-
 /* ===== Viewer header: mobile fix ===== */
-@media (max-width: 520px){
-
-  /* 上段を2段構成にする（ナビ + メタ / ステートメント） */
-  .viewer-head{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "nav  meta"
-      "stmt stmt";
-    align-items:start;
-    gap: 10px 14px;
-  }
-
-  .viewer-head .nav{ grid-area: nav; justify-self:start; }
-  .viewer-head .meta{ grid-area: meta; justify-self:end; text-align:right; }
-  .viewer-head .statement{ grid-area: stmt; justify-self:start; text-align:left; }
-
-  /* 右（CAMERA/LENS）を2行で安定させる */
-  .viewer-head .meta{
-    white-space:normal;       /* 折り返し許可 */
-    line-height:1.2;
-    max-width: 56vw;          /* 右が広がりすぎない */
-    overflow-wrap:anywhere;   /* どうしても長い時に折る */
-  }
-}
-
-
-
-
-
-
-
-
-
-
-/* 非表示モード（INFOでトグル） */
-.viewer.hide-gear .photo-gear{
-  display: none;
-}
-
-/* スマホ微調整（任意） */
-@media (max-width: 700px){
-  .photo-statement{ margin-top: 12px; font-size: 12px; }
-  .photo-gear{ margin-top: 12px; font-size: 10px; }
-}
-
-
-
-
-@media (max-width: 520px){
-  .viewer-head .meta{
-    white-space: normal;
-    line-height: 1.2;
-  }
-}
-
-
 @media (max-width: 520px){
 
   .viewer-head{
@@ -911,57 +823,81 @@ html.is-ready .viewer { opacity: 1; transition: opacity .12s ease; }
 .viewer-head .meta{
   white-space:normal;
 }
+
 /* =========================================================
    MOBILE MODE — Vertical Scroll Version
-   ========================================================= */
+========================================================= */
 @media (max-width: 700px){
 
-  /* viewerを通常フローに戻す */
   .viewer{
     display:block;
     padding: 18px 14px 40px;
   }
 
-  /* ステージ固定高さを解除 */
   .stage{
     margin-top: 16px;
   }
 
   .frame{
     width: 100%;
-    height: auto;              /* ← 固定高さを解除 */
-    padding: 14px;             /* マットは少し詰める */
+    height: auto;
+    padding: 14px;
   }
 
   .photo{
     width:100%;
-    height:auto;               /* ← 縦スクロールに合わせる */
+    height:auto;
     object-fit:contain;
     border:1px solid rgba(255,255,255,.5);
   }
 
-  /* 情報帯を写真の上に自然配置 */
   .viewer-head{
     width:100%;
     margin:0 auto 12px;
   }
 
-  /* ステートメント少し強化 */
   [data-photo-statement]{
     font-size:14px;
     letter-spacing:.08em;
     font-weight:600;
   }
 
-  /* 機材1行 */
   [data-gear-line]{
     font-size:12px;
     opacity:.9;
     white-space:nowrap;
   }
 
-  /* ページャ下に余白 */
   .pager{
     margin-top:24px;
   }
+}
+
+/* =====================================================
+   TOP CARD THUMBNAIL (for new Astro top grid)
+===================================================== */
+
+/* card thumbnail background (brighter) */
+.card .bg{
+  position:absolute;
+  inset:0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity:.55;
+  filter: grayscale(1) brightness(1.35) contrast(1.0);
+  transform: scale(1.02);
+}
+
+/* readability veil (lighter) */
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,.10),
+    rgba(0,0,0,.25)
+  );
+  pointer-events:none;
 }
