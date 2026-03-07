@@ -48,17 +48,18 @@ button{
 .wrap{
   width:min(var(--maxw), calc(100vw - var(--gutter)*2));
   margin:0 auto;
-  padding:38px 0 18px;
+  padding:8px 0 6px;
 }
 
 .siteStatement{
-  padding:30px 0 100px;
+  padding:2px 0 28px;
 }
 
 .siteStatement p{
   margin:0;
-  font-size:28px;
-  letter-spacing:.16em;
+  font-size:40px;
+  line-height:1.08;
+  letter-spacing:.10em;
   text-transform:uppercase;
   color:rgba(255,255,255,.82);
 }
@@ -445,6 +446,7 @@ button{
   }
 
   .wrap > .footer{
-    margin-top:14px;
+    margin-top:10px;
+    padding:0;
   }
 }
