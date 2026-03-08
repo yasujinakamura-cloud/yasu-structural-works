@@ -104,13 +104,6 @@ img{
   letter-spacing:.22em;
 }
 
-.m-thumb{
-  width:100%;
-  aspect-ratio: 4 / 5;
-  object-fit:cover;
-  background:#111;
-}
-
 .m-thumb-bright{
   filter:brightness(var(--thumb-brightness));
 }
