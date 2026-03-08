@@ -4,7 +4,7 @@
   --muted:rgba(255,255,255,.78);
   --line:rgba(255,255,255,.22);
   --line-strong:rgba(255,255,255,.45);
-  --thumb-brightness:1.24;
+  --thumb-brightness:1.16;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
@@ -85,7 +85,6 @@ img{
   aspect-ratio:4 / 5;
   object-fit:cover;
   background:#111;
-  border:1px solid rgba(255,255,255,.32);
 }
 
 .m-thumb-bright{
@@ -104,7 +103,20 @@ img{
   letter-spacing:.22em;
 }
 
+.m-thumb{
+  width:100%;
+  aspect-ratio: 4 / 5;
+  object-fit:cover;
+  background:#111;
+}
 
+.m-thumb-bright{
+  filter:brightness(var(--thumb-brightness));
+}
+
+.m-thumb-mono{
+  filter:brightness(var(--thumb-brightness)) grayscale(1);
+}
 
 /* ------------------------------
    CATEGORY INDEX
@@ -236,7 +248,6 @@ img{
   max-height:52svh;
   object-fit:contain;
   background:#000;
-  border:1px solid rgba(255,255,255,.32);
 }
 
 .m-statement{
@@ -319,14 +330,8 @@ img{
 ------------------------------ */
 @media (max-width: 380px){
   .m-view-nav{
-  position:absolute;
-  left:16px;
-  right:16px;
-  bottom:95px;
-  display:flex;
-  justify-content:center;
-  gap:28px;
-}
+    gap:16px;
+  }
 
   .m-nav-btn{
     min-width:90px;
