@@ -319,8 +319,14 @@ img{
 ------------------------------ */
 @media (max-width: 380px){
   .m-view-nav{
-    gap:16px;
-  }
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:95px;
+  display:flex;
+  justify-content:center;
+  gap:28px;
+}
 
   .m-nav-btn{
     min-width:90px;
