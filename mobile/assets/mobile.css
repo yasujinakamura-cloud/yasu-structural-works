@@ -85,7 +85,7 @@ img{
   aspect-ratio:4 / 5;
   object-fit:cover;
   background:#111;
-  border:1px solid rgba(255,255,255,.32);
+  border:1px solid rgba(255,255,255,.55);
 }
 
 .m-thumb-bright{
