@@ -1,15 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="refresh" content="0; url=/mobile/">
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Yasu Nakamura — Mobile</title>
+  <title>Redirect…</title>
+  <script>
+    (function () {
+      var t = new URL("./mobile/index.html", location.href);
+      location.replace(t.pathname + (location.search || "") + (location.hash || ""));
+    })();
+  </script>
+  <meta http-equiv="refresh" content="0;url=mobile/index.html" />
 </head>
 <body>
-  <p>Redirecting… <a href="/mobile/">Open Mobile</a></p>
-  <script>
-    location.replace('/mobile/' + (location.search || '') + (location.hash || ''));
-  </script>
+  <p><a href="mobile/index.html">モバイル入口へ</a></p>
 </body>
 </html>

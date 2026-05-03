@@ -13,7 +13,10 @@
 
 <body class="mobile-series" data-series="nocturne">
   <header class="m-head">
+    <div class="m-head__nav" aria-label="Site navigation">
     <a class="m-back" href="../../index.html">← HOME</a>
+    <a class="m-back" href="../../index.html#grid" aria-label="Categories">← CATEGORIES</a>
+    </div>
     <button class="m-info" type="button" aria-pressed="true">INFO</button>
   </header>
 
@@ -35,12 +38,21 @@
     const head   = document.querySelector('.m-head');
     const title  = document.querySelector('.m-title');
 
-    
-    const series = 'nocturne';
+    // ===== BASE（最重要）：GitHub Pages / ローカルで自動切替 =====
+    // 本番: https://yasujinakamura-cloud.github.io/yasu-structural-works/...
+    //   -> BASE = "/yasu-structural-works/"
+    // ローカル(Live Serverなど): http://127.0.0.1:5500/...
+    //   -> BASE = "/"
+    const BASE = location.hostname.includes('github.io')
+      ? '/yasu-structural-works/'
+      : '/';
+
+    // series は body data-series から取得（コピペ事故防止）
+    const series = document.body.dataset.series || 'nocturne';
 
     // 絶対パスで固定（どこにHTMLを置いても壊れない）
-    const JSON_URL = './nocturne.json';
-    const IMG_DIR  = './images/';
+    const JSON_URL = `${BASE}series/${series}/${series}.json`;
+    const IMG_DIR  = `${BASE}series/${series}/images/`;
 
     // ===== ヘッダー高さをCSS変数へ（ズレ対策） =====
     function setHeadVars(){

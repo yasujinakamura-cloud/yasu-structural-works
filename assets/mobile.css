@@ -24,12 +24,20 @@
     top: 0;
     z-index: 50;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+    gap: 12px;
     padding: 14px 16px;
     background: rgba(0,0,0,.72);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+
+  .m-head__nav{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
   }
 
   .m-back{
@@ -39,6 +47,7 @@
   }
 
   .m-info{
+    align-self: center;
     letter-spacing: .28em;
     font-size: 12px;
     padding: 10px 14px;
@@ -226,15 +235,18 @@ html.show-info .m-gear{
 
   body.mobile-top .m-siteTitle{
     margin: 12px 0 14px;
+    font-family: var(--font-display, "Cormorant Garamond", "Times New Roman", serif);
+    font-weight: 600;
     font-size: 40px;
     line-height: 1.02;
-    letter-spacing: .02em;
+    letter-spacing: .04em;
   }
 
   body.mobile-top .m-siteStmt{
     margin: 0 0 18px;
-    font-size: 18px;
-    letter-spacing: .06em;
+    font-family: var(--font-ui, system-ui, sans-serif);
+    font-size: 17px;
+    letter-spacing: .08em;
     opacity: .92;
   }
 
@@ -264,13 +276,16 @@ html.show-info .m-gear{
   }
 
   body.mobile-top .m-catTitle{
-    font-size: 14px;
-    letter-spacing: .26em;
+    font-family: var(--font-display, "Cormorant Garamond", "Times New Roman", serif);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: .14em;
   }
 
   body.mobile-top .m-catSub{
     margin-top: 6px;
-    font-size: 12px;
+    font-family: var(--font-ui, system-ui, sans-serif);
+    font-size: 11px;
     letter-spacing: .18em;
     opacity: .72;
   }

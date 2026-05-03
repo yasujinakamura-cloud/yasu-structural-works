@@ -4,12 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>VELOCITY — Yasu Nakamura</title>
-  <link rel="stylesheet" href="../assets/theme.css" />
+  <link rel="stylesheet" href="../../assets/theme.css" />
 </head>
 <body>
 
 <header class="seriesHeader">
-  <a class="seriesHeader__back" href="../index.html">← BACK</a>
+  <div class="seriesHeader__nav" aria-label="Site navigation">
+    <a class="seriesHeader__back" href="../../index.html">← BACK</a>
+    <a class="seriesHeader__back" href="../../index.html#grid" aria-label="Categories">← CATEGORIES</a>
+  </div>
 
   <div class="seriesHeader__inner">
     <h1 class="seriesHeader__title">VELOCITY</h1>
@@ -25,6 +28,7 @@
 <main class="seriesMain">
   <section class="seriesGrid" aria-label="Velocity gallery">
     <div id="seriesGrid" class="seriesGrid__items" aria-live="polite"></div>
+    <p class="seriesEmpty" hidden>NO IMAGES YET.</p>
   </section>
 </main>
 
@@ -36,12 +40,12 @@
 
 <script>
   window.SERIES = {
+    slug: "velocity",
     title: "VELOCITY",
-    basePath: "../images/velocity/",
-    dataUrl: "../data/velocity.json"
+    dataUrl: "velocity.json"
   };
 </script>
-<script src="../assets/series.js" defer></script>
+<script src="../../assets/series.js" defer></script>
 
 </body>
 </html>
