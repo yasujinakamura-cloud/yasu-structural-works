@@ -20,4 +20,8 @@
     <loc>https://yasu-nakamura.com/series/nocturne/intro/</loc>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://yasu-nakamura.com/videos/</loc>
+    <priority>0.7</priority>
+  </url>
 </urlset>
