@@ -43,12 +43,13 @@
     const BURST_MS = 920;
     const PAUSE_MS = 110;
     const BURST_EASE = "cubic-bezier(0.11, 0.94, 0.16, 1)";
-    const ORBIT_SPEED = 0.00105;
+    const ORBIT_SPEED = 0.0022;
     const ZOOM_TARGET = 1.5;
     const ZOOM_DURATION_MS = 34000;
 
     const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
     const nextFrame = () => new Promise((resolve) => requestAnimationFrame(() => resolve()));
+    const txOnly = (x, y) => `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
     const txForm = (x, y, scale = 1, rot = 0) =>
       `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rot}deg) scale(${scale})`;
 
@@ -86,12 +87,10 @@
       li.classList.remove("is-active", "is-placed", "cat-card--orbit");
       li.style.animation = "none";
       clearItemMotion(li);
-      li.style.removeProperty("--slot-x");
-      li.style.removeProperty("--slot-y");
-      li.style.transform = txForm(0, 0, 0.45);
       li.style.opacity = "0";
       li.style.filter = "blur(10px)";
       li.style.pointerEvents = "none";
+      li.style.transform = txForm(0, 0, 0.45);
       li.style.zIndex = "1";
     };
 
@@ -102,8 +101,7 @@
       li.style.pointerEvents = "auto";
       li.style.opacity = "1";
       li.style.zIndex = String(z);
-      li.style.setProperty("--slot-x", `${slot.x.toFixed(1)}px`);
-      li.style.setProperty("--slot-y", `${slot.y.toFixed(1)}px`);
+      li.style.transform = txOnly(slot.x, slot.y);
     };
 
     const stage = {
@@ -167,15 +165,15 @@
       },
 
       applyOrbitFrame() {
-        this.root.style.setProperty("--cat-scale", this.zoomScale.toFixed(4));
+        this.root.style.transform = `scale(${this.zoomScale.toFixed(4)})`;
+        this.root.style.transformOrigin = "50% 50%";
         this.items.forEach((li, i) => {
           const slot = this.slots[i];
           if (!slot) return;
           const a = slot.angle + this.orbitAngle;
           const x = Math.cos(a) * slot.radius;
           const y = Math.sin(a) * slot.radius;
-          li.style.setProperty("--slot-x", `${x.toFixed(1)}px`);
-          li.style.setProperty("--slot-y", `${y.toFixed(1)}px`);
+          li.style.transform = txOnly(x, y);
         });
       },
 
@@ -183,8 +181,9 @@
         if (this.orbitRaf) cancelAnimationFrame(this.orbitRaf);
         this.orbitRaf = 0;
         if (this.root) {
-          this.root.style.removeProperty("--cat-scale");
           this.root.style.removeProperty("transform");
+          this.root.style.removeProperty("transform-origin");
+          this.root.style.removeProperty("--cat-scale");
         }
       },
 
@@ -195,7 +194,10 @@
         this.orbitAngle = 0;
         this.zoomScale = 1;
         this.zoomStart = performance.now();
-        this.root.style.setProperty("--cat-scale", "1");
+        this.items.forEach((li, i) => {
+          const slot = this.slots[i];
+          if (slot) li.style.transform = txOnly(slot.x, slot.y);
+        });
         this.applyOrbitFrame();
 
         const tick = (now) => {
