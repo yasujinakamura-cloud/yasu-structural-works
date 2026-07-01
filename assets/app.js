@@ -115,7 +115,8 @@
     void main.offsetHeight;
     main.style.removeProperty("transition");
     stripDripOverlay();
-    window.dispatchEvent(new CustomEvent("yasu:catGridReveal"));
+    window.__yasuPrepCatStage?.();
+    window.__yasuStartCatSequence?.();
   };
 
   const settleReduced = () => {
@@ -134,7 +135,8 @@
 
   const revealCategoryGrid = () => {
     main.classList.add("siteMain--gridReveal");
-    window.dispatchEvent(new CustomEvent("yasu:catGridReveal"));
+    window.__yasuPrepCatStage?.();
+    window.__yasuStartCatSequence?.();
   };
 
   const PRELUDE_TARGET = "Savor the moment.";
@@ -396,7 +398,7 @@
   }, TOP_HOLD_MS);
 })();
 
-// カテゴリ：中央からフレームイン → 放射状に展開（統一サイズ）
+// カテゴリ：1枚ずつ中央接近→弾け飛び→円周 orbit
 (function initCategoryScatter() {
   const main = document.getElementById("siteMain");
   const grid = document.getElementById("grid");
@@ -407,7 +409,7 @@
 
   const CARD_W = 220;
   const CARD_RATIO = 3 / 2;
-  const BURST_DELAY_MS = 380;
+  const EASE = "cubic-bezier(0.18, 0.88, 0.26, 1)";
 
   const shuffle = (arr) => {
     const a = arr.slice();
@@ -418,37 +420,126 @@
     return a;
   };
 
-  let burstPlayed = false;
-  let burstTimer = 0;
+  const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
-  const applyPositions = (items) => {
-    itemsRoot.classList.add("frontGrid__items--scatter");
+  const waapi = (el, keyframes, duration) => {
+    if (typeof el.animate !== "function") {
+      const last = keyframes[keyframes.length - 1];
+      if (last && last.transform) el.style.transform = last.transform;
+      if (last && last.opacity != null) el.style.opacity = String(last.opacity);
+      return Promise.resolve();
+    }
+    return el.animate(keyframes, { duration, easing: EASE, fill: "forwards" }).finished.catch(() => {});
+  };
+
+  let sequenceStarted = false;
+  let orbitRaf = 0;
+  let orbitAngle = 0;
+  let orbitPaused = false;
+  let slotData = [];
+
+  const prepStage = () => {
+    const items = [...itemsRoot.querySelectorAll(":scope > li")];
+    itemsRoot.classList.add("frontGrid__items--scatter", "frontGrid__items--scatter-pending");
+    itemsRoot.classList.remove("frontGrid__items--orbit");
     itemsRoot.style.setProperty("--cat-frame-w", `${CARD_W}px`);
     itemsRoot.style.setProperty("--cat-frame-h", `${Math.round(CARD_W / CARD_RATIO)}px`);
 
+    items.forEach((li) => {
+      li.classList.remove("frontGrid__item--burst-settled");
+      li.style.transform = "translate(-50%, -50%) scale(0.3)";
+      li.style.opacity = "0";
+      li.style.filter = "blur(8px)";
+      li.style.zIndex = "1";
+    });
+  };
+
+  const computeSlots = (count) => {
     const rect = itemsRoot.getBoundingClientRect();
     const stageW = Math.max(rect.width, 320);
     const stageH = Math.max(rect.height, 360);
     const radius = Math.min(stageW, stageH) * 0.38;
     const baseAngle = Math.random() * Math.PI * 2;
-    const order = shuffle(items.map((_, i) => i));
 
-    order.forEach((itemIndex, rank) => {
-      const li = items[itemIndex];
-      const angle = baseAngle + (rank / items.length) * Math.PI * 2;
-      const bx = Math.cos(angle) * radius;
-      const by = Math.sin(angle) * radius;
-
-      li.style.setProperty("--burst-x", `${bx.toFixed(1)}px`);
-      li.style.setProperty("--burst-y", `${by.toFixed(1)}px`);
-      li.style.setProperty("--cat-z", String(rank + 1));
-      li.style.setProperty("--cat-delay", `${(rank * 0.09).toFixed(2)}s`);
-      li.classList.remove("frontGrid__item--burst-settled");
+    return Array.from({ length: count }, (_, i) => {
+      const angle = baseAngle + (i / count) * Math.PI * 2;
+      return {
+        x: Math.cos(angle) * radius,
+        y: Math.sin(angle) * radius,
+        angle,
+        radius,
+      };
     });
   };
 
-  const playBurst = () => {
-    if (burstPlayed) return;
+  const stopOrbit = () => {
+    if (orbitRaf) cancelAnimationFrame(orbitRaf);
+    orbitRaf = 0;
+  };
+
+  const startOrbit = (items) => {
+    stopOrbit();
+    itemsRoot.classList.remove("frontGrid__items--scatter-pending");
+    itemsRoot.classList.add("frontGrid__items--orbit");
+
+    const tick = () => {
+      if (!orbitPaused) orbitAngle += 0.0016;
+      items.forEach((li, i) => {
+        const slot = slotData[i];
+        if (!slot) return;
+        const a = slot.angle + orbitAngle;
+        const x = Math.cos(a) * slot.radius;
+        const y = Math.sin(a) * slot.radius;
+        li.style.transform = `translate(calc(-50% + ${x.toFixed(2)}px), calc(-50% + ${y.toFixed(2)}px))`;
+      });
+      orbitRaf = requestAnimationFrame(tick);
+    };
+    tick();
+  };
+
+  const runSequence = async (items) => {
+    itemsRoot.classList.remove("frontGrid__items--orbit");
+    slotData = computeSlots(items.length);
+    const order = shuffle(items.map((_, i) => i));
+
+    for (const itemIndex of order) {
+      const li = items[itemIndex];
+      const slot = slotData[itemIndex];
+
+      li.style.zIndex = "40";
+      li.style.opacity = "1";
+
+      await waapi(
+        li,
+        [
+          { transform: "translate(-50%, -50%) scale(0.3)", opacity: 0, filter: "blur(10px)" },
+          { transform: "translate(-50%, -50%) scale(1.24)", opacity: 1, filter: "blur(0px)" },
+          { transform: "translate(-50%, -50%) scale(1)", opacity: 1, filter: "blur(0px)" },
+        ],
+        820
+      );
+
+      await waapi(
+        li,
+        [
+          { transform: "translate(-50%, -50%) scale(1)" },
+          {
+            transform: `translate(calc(-50% + ${slot.x.toFixed(1)}px), calc(-50% + ${slot.y.toFixed(1)}px)) scale(1)`,
+          },
+        ],
+        780
+      );
+
+      li.style.zIndex = String(itemIndex + 1);
+      li.classList.add("frontGrid__item--burst-settled");
+      await wait(90);
+    }
+
+    startOrbit(items);
+  };
+
+  const playSequence = () => {
+    if (sequenceStarted) return;
 
     const ready =
       main.classList.contains("siteMain--settled") &&
@@ -457,66 +548,60 @@
 
     if (!ready) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const items = [...itemsRoot.querySelectorAll(":scope > li")];
     if (!items.length) return;
 
-    const run = (attempt = 0) => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const launch = (attempt = 0) => {
       const rect = itemsRoot.getBoundingClientRect();
       if ((rect.width < 80 || rect.height < 80) && attempt < 40) {
-        requestAnimationFrame(() => run(attempt + 1));
+        requestAnimationFrame(() => launch(attempt + 1));
         return;
       }
 
-      applyPositions(items);
-      burstPlayed = true;
+      sequenceStarted = true;
+      prepStage();
 
       if (reduced) {
-        items.forEach((li) => li.classList.add("frontGrid__item--burst-settled"));
+        slotData = computeSlots(items.length);
+        items.forEach((li, i) => {
+          const slot = slotData[i];
+          li.style.opacity = "1";
+          li.style.filter = "none";
+          li.style.transform = `translate(calc(-50% + ${slot.x}px), calc(-50% + ${slot.y}px))`;
+          li.classList.add("frontGrid__item--burst-settled");
+        });
+        itemsRoot.classList.remove("frontGrid__items--scatter-pending");
         return;
       }
 
-      itemsRoot.classList.remove("frontGrid__items--burst-play");
-      void itemsRoot.offsetWidth;
-      itemsRoot.classList.add("frontGrid__items--burst-play");
-
-      items.forEach((li) => {
-        const onEnd = (ev) => {
-          if (ev.target !== li || ev.animationName !== "catRadialBurst") return;
-          li.classList.add("frontGrid__item--burst-settled");
-          li.removeEventListener("animationend", onEnd);
-        };
-        li.addEventListener("animationend", onEnd);
-      });
+      runSequence(items);
     };
 
-    run();
+    requestAnimationFrame(() => launch());
   };
 
-  const scheduleBurst = () => {
-    window.clearTimeout(burstTimer);
-    burstTimer = window.setTimeout(playBurst, BURST_DELAY_MS);
-  };
+  itemsRoot.addEventListener("mouseenter", () => {
+    orbitPaused = true;
+  });
+  itemsRoot.addEventListener("mouseleave", () => {
+    orbitPaused = false;
+  });
 
-  window.addEventListener("yasu:catGridReveal", scheduleBurst);
+  window.__yasuPrepCatStage = prepStage;
+  window.__yasuStartCatSequence = playSequence;
 
   window.addEventListener("resize", () => {
-    if (!burstPlayed) return;
-    burstPlayed = false;
-    itemsRoot.classList.remove("frontGrid__items--burst-play");
-    itemsRoot.querySelectorAll(".frontGrid__item--burst-settled").forEach((li) => {
-      li.classList.remove("frontGrid__item--burst-settled");
-    });
-    scheduleBurst();
+    if (!sequenceStarted) return;
+    stopOrbit();
+    sequenceStarted = false;
+    slotData = [];
+    playSequence();
   });
 
   if (location.hash === "#grid" || document.documentElement.classList.contains("home--grid-direct")) {
-    scheduleBurst();
+    prepStage();
+    playSequence();
   }
-
-  window.setTimeout(() => {
-    if (!burstPlayed && main.classList.contains("siteMain--gridReveal")) {
-      playBurst();
-    }
-  }, 3200);
 })();
