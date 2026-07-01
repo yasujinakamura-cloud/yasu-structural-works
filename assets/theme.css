@@ -527,7 +527,7 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
   font-size: 8px;
 }
 
-/* 弾けた後：配置をJSで円周移動（水平維持）＋ ステージ全体を150%までゆっくりズーム */
+/* 弾けた後：配置をJSで円周移動（水平維持）＋ ステージ全体を120%までゆっくりズーム */
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit{
   transform-origin: 50% 50%;
 }

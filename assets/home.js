@@ -44,7 +44,7 @@
     const PAUSE_MS = 110;
     const BURST_EASE = "cubic-bezier(0.11, 0.94, 0.16, 1)";
     const ORBIT_SPEED = 0.0022;
-    const ZOOM_TARGET = 1.5;
+    const ZOOM_TARGET = 1.2;
     const ZOOM_DURATION_MS = 34000;
 
     const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
