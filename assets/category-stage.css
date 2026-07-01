@@ -1,0 +1,124 @@
+/* =====================================================
+   Category stage — radial burst (standalone)
+   prepare() 直後から gridReveal 前でも中央スタックを維持
+===================================================== */
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready,
+html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage,
+html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-ready{
+  display: block !important;
+  position: relative;
+  flex: 1 1 auto;
+  min-height: min(58vh, 520px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: none !important;
+  grid-template-rows: none !important;
+  gap: 0 !important;
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage > li,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready > li,
+html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage > li,
+html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-ready > li{
+  display: block !important;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--cat-w, 220px);
+  height: var(--cat-h, 147px);
+  margin: 0;
+  padding: 0;
+  grid-column: auto !important;
+  transform: translate(calc(-50% + var(--cat-tx, 0px)), calc(-50% + var(--cat-ty, 0px)));
+  opacity: var(--cat-opacity, 0);
+  transition:
+    transform 0.62s cubic-bezier(0.16, 0.84, 0.22, 1),
+    opacity 0.12s linear;
+  pointer-events: var(--cat-pe, none);
+  z-index: var(--cat-z, 1);
+  will-change: transform, opacity;
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage > li.is-placed,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready > li.is-placed{
+  --cat-pe: auto;
+  --cat-opacity: 1;
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage > li.is-active,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready > li.is-active{
+  z-index: 20;
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage > li:hover,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage > li:focus-within,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready > li:hover,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready > li:focus-within{
+  z-index: 30 !important;
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage .catCard,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .catCard{
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 3 / 2;
+  max-height: none;
+  min-height: 0;
+  align-self: auto;
+  padding: 10px;
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage .frontGrid__item--wide,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .frontGrid__item--wide{
+  display: block !important;
+  grid-column: auto !important;
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage .catCard--streetlog,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .catCard--streetlog{
+  aspect-ratio: 3 / 2;
+  min-height: 0;
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage .catCard__img,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage .catCard__overlay,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage .catCard__grain,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .catCard__img,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .catCard__overlay,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .catCard__grain{
+  inset: 10px;
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage .catCard__text,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .catCard__text{
+  inset: 10px;
+  padding: 12px;
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage .catCard__title,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage .catCard__slug,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .catCard__title,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .catCard__slug{
+  font-size: 14px;
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage .catCard__sub,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage .catCard__enter,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .catCard__sub,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .catCard__enter{
+  font-size: 8px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  #siteMain.siteMain--settled .frontGrid__items.cat-stage > li,
+  #siteMain.siteMain--settled .frontGrid__items.cat-stage-ready > li{
+    transition: none !important;
+    --cat-opacity: 1;
+    --cat-pe: auto;
+  }
+}
