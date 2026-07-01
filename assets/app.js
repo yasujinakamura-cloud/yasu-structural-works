@@ -167,15 +167,22 @@
       },
 
       applyOrbitFrame() {
-        this.root.style.setProperty("--orbit-deg", `${((this.orbitAngle * 180) / Math.PI).toFixed(3)}deg`);
         this.root.style.setProperty("--cat-scale", this.zoomScale.toFixed(4));
+        this.items.forEach((li, i) => {
+          const slot = this.slots[i];
+          if (!slot) return;
+          const a = slot.angle + this.orbitAngle;
+          const x = Math.cos(a) * slot.radius;
+          const y = Math.sin(a) * slot.radius;
+          li.style.setProperty("--slot-x", `${x.toFixed(1)}px`);
+          li.style.setProperty("--slot-y", `${y.toFixed(1)}px`);
+        });
       },
 
       stopOrbitMotion() {
         if (this.orbitRaf) cancelAnimationFrame(this.orbitRaf);
         this.orbitRaf = 0;
         if (this.root) {
-          this.root.style.removeProperty("--orbit-deg");
           this.root.style.removeProperty("--cat-scale");
           this.root.style.removeProperty("transform");
         }
@@ -189,7 +196,6 @@
         this.zoomScale = 1;
         this.zoomStart = performance.now();
         this.root.style.setProperty("--cat-scale", "1");
-        this.root.style.setProperty("--orbit-deg", "0deg");
         this.applyOrbitFrame();
 
         const tick = (now) => {
@@ -229,7 +235,7 @@
               filter: "blur(10px)",
             },
             {
-              transform: txForm(slot.x * 0.52, slot.y * 0.52, 1.26, 2.5),
+              transform: txForm(slot.x * 0.52, slot.y * 0.52, 1.26, 0),
               opacity: 1,
               filter: "blur(0px)",
               offset: 0.52,
