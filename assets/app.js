@@ -394,7 +394,7 @@
   }, TOP_HOLD_MS);
 })();
 
-// カテゴリ：小さなフレームをランダム配置＋ゆっくり漂わせる
+// カテゴリ：中央からフレームイン → 放射状に展開（統一サイズ）
 (function initCategoryScatter() {
   const main = document.getElementById("siteMain");
   const grid = document.getElementById("grid");
@@ -402,6 +402,9 @@
 
   const itemsRoot = grid.querySelector(".frontGrid__items");
   if (!itemsRoot) return;
+
+  const CARD_W = 220;
+  const CARD_RATIO = 3 / 2;
 
   const shuffle = (arr) => {
     const a = arr.slice();
@@ -413,6 +416,7 @@
   };
 
   let resizeTimer = 0;
+  let burstDone = false;
 
   const layoutScatter = () => {
     const active =
@@ -426,41 +430,56 @@
     const items = [...itemsRoot.querySelectorAll(":scope > li")];
     if (!items.length) return;
 
-    const slots = [
-      { x: 2, y: 4, w: 21 },
-      { x: 30, y: 1, w: 22 },
-      { x: 58, y: 6, w: 21 },
-      { x: 8, y: 44, w: 22 },
-      { x: 36, y: 42, w: 21 },
-      { x: 64, y: 40, w: 20 },
-    ];
-
-    const picked = shuffle(slots).slice(0, items.length);
     itemsRoot.classList.add("frontGrid__items--scatter");
+    itemsRoot.style.setProperty("--cat-frame-w", `${CARD_W}px`);
+    itemsRoot.style.setProperty("--cat-frame-h", `${Math.round(CARD_W / CARD_RATIO)}px`);
 
-    items.forEach((li, i) => {
-      const slot = picked[i] || slots[i % slots.length];
-      const jx = Math.random() * 5 - 2.5;
-      const jy = Math.random() * 5 - 2.5;
-      const w = slot.w + (Math.random() * 3 - 1.5);
+    const rect = itemsRoot.getBoundingClientRect();
+    const radius = Math.min(rect.width, rect.height) * 0.36;
+    const baseAngle = Math.random() * Math.PI * 2;
+    const order = shuffle(items.map((_, i) => i));
 
-      li.style.setProperty("--cat-x", `${(slot.x + jx).toFixed(1)}%`);
-      li.style.setProperty("--cat-y", `${(slot.y + jy).toFixed(1)}%`);
-      li.style.setProperty("--cat-w", `${w.toFixed(1)}%`);
-      li.style.setProperty("--cat-z", String(i + 1));
+    order.forEach((itemIndex, rank) => {
+      const li = items[itemIndex];
+      const angle = baseAngle + (rank / items.length) * Math.PI * 2;
+      const bx = Math.cos(angle) * radius;
+      const by = Math.sin(angle) * radius;
+
+      li.style.setProperty("--burst-x", `${bx.toFixed(1)}px`);
+      li.style.setProperty("--burst-y", `${by.toFixed(1)}px`);
+      li.style.setProperty("--cat-z", String(rank + 1));
+      li.style.setProperty("--cat-delay", `${(rank * 0.07 + Math.random() * 0.05).toFixed(2)}s`);
 
       if (reduced) {
-        li.style.removeProperty("--cat-drift-dur");
+        li.classList.add("frontGrid__item--burst-settled");
         return;
       }
 
-      for (let n = 1; n <= 3; n++) {
-        li.style.setProperty(`--drift-x${n}`, `${(Math.random() * 32 - 16).toFixed(1)}px`);
-        li.style.setProperty(`--drift-y${n}`, `${(Math.random() * 26 - 13).toFixed(1)}px`);
-        li.style.setProperty(`--drift-r${n}`, `${(Math.random() * 2.8 - 1.4).toFixed(2)}deg`);
-      }
-      li.style.setProperty("--cat-drift-dur", `${(14 + Math.random() * 22).toFixed(1)}s`);
-      li.style.setProperty("--cat-drift-delay", `${(Math.random() * 6).toFixed(1)}s`);
+      li.classList.remove("frontGrid__item--burst-settled");
+    });
+
+    if (reduced) {
+      itemsRoot.classList.remove("frontGrid__items--burst-play");
+      return;
+    }
+
+    if (burstDone) return;
+
+    itemsRoot.classList.remove("frontGrid__items--burst-play");
+    void itemsRoot.offsetWidth;
+    itemsRoot.classList.add("frontGrid__items--burst-play");
+
+    items.forEach((li) => {
+      const onEnd = (ev) => {
+        if (ev.target !== li || ev.animationName !== "catRadialBurst") return;
+        li.classList.add("frontGrid__item--burst-settled");
+        li.removeEventListener("animationend", onEnd);
+        if (items.every((item) => item.classList.contains("frontGrid__item--burst-settled"))) {
+          burstDone = true;
+          itemsRoot.classList.remove("frontGrid__items--burst-play");
+        }
+      };
+      li.addEventListener("animationend", onEnd);
     });
   };
 
@@ -473,7 +492,13 @@
   obs.observe(main, { attributes: true, attributeFilter: ["class"] });
   obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
-  window.addEventListener("resize", scheduleLayout);
+  window.addEventListener("resize", () => {
+    burstDone = false;
+    itemsRoot.querySelectorAll(".frontGrid__item--burst-settled").forEach((li) => {
+      li.classList.remove("frontGrid__item--burst-settled");
+    });
+    scheduleLayout();
+  });
 
   if (location.hash === "#grid") {
     requestAnimationFrame(() => requestAnimationFrame(layoutScatter));

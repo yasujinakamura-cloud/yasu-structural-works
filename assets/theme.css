@@ -424,19 +424,22 @@ html.home--grid-direct #siteMain.siteMain--settled.siteMain--gridReveal .siteFoo
   align-content: stretch;
 }
 
-/* scatter field — smaller frames, random drift */
-@keyframes catDrift{
+/* scatter field — unified frames, radial burst from center */
+@keyframes catRadialBurst{
   0%{
-    transform: translate3d(0, 0, 0) rotate(0deg);
+    transform: translate(-50%, -50%) scale(0.76);
+    opacity: 0;
+    filter: blur(6px);
   }
-  34%{
-    transform: translate3d(var(--drift-x1, 0px), var(--drift-y1, 0px), 0) rotate(var(--drift-r1, 0deg));
-  }
-  67%{
-    transform: translate3d(var(--drift-x2, 0px), var(--drift-y2, 0px), 0) rotate(var(--drift-r2, 0deg));
+  24%{
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    filter: blur(0);
   }
   100%{
-    transform: translate3d(var(--drift-x3, 0px), var(--drift-y3, 0px), 0) rotate(var(--drift-r3, 0deg));
+    transform: translate(calc(-50% + var(--burst-x, 0px)), calc(-50% + var(--burst-y, 0px))) scale(1);
+    opacity: 1;
+    filter: blur(0);
   }
 }
 
@@ -444,7 +447,7 @@ html.home--grid-direct #siteMain.siteMain--settled.siteMain--gridReveal .siteFoo
   display: block !important;
   position: relative;
   flex: 1 1 auto;
-  min-height: min(56vh, 500px);
+  min-height: min(58vh, 520px);
   margin: 0;
   padding: 0;
 }
@@ -452,35 +455,46 @@ html.home--grid-direct #siteMain.siteMain--settled.siteMain--gridReveal .siteFoo
 #siteMain.siteMain--settled .frontGrid__items--scatter > li{
   display: block;
   position: absolute;
-  width: var(--cat-w, 22%);
-  max-width: 240px;
-  min-width: 148px;
-  left: var(--cat-x, 4%);
-  top: var(--cat-y, 4%);
+  left: 50%;
+  top: 50%;
+  width: var(--cat-frame-w, 220px);
+  height: var(--cat-frame-h, 147px);
   z-index: var(--cat-z, 1);
-  animation: catDrift var(--cat-drift-dur, 20s) ease-in-out infinite alternate;
-  animation-delay: var(--cat-drift-delay, 0s);
-  will-change: transform;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+
+#siteMain.siteMain--settled .frontGrid__items--scatter.frontGrid__items--burst-play > li{
+  animation: catRadialBurst 2.65s var(--ease-editorial-slow) forwards;
+  animation-delay: var(--cat-delay, 0s);
+}
+
+#siteMain.siteMain--settled .frontGrid__items--scatter > li.frontGrid__item--burst-settled{
+  transform: translate(calc(-50% + var(--burst-x, 0px)), calc(-50% + var(--burst-y, 0px)));
+  opacity: 1;
+  filter: none;
 }
 
 #siteMain.siteMain--settled .frontGrid__items--scatter > li:hover,
 #siteMain.siteMain--settled .frontGrid__items--scatter > li:focus-within{
   z-index: 20;
-  animation-play-state: paused;
-}
-
-#siteMain.siteMain--settled .frontGrid__items--scatter > li.frontGrid__item--wide{
-  grid-column: auto;
-  width: var(--cat-w, 22%);
-  max-width: 240px;
 }
 
 #siteMain.siteMain--settled .frontGrid__items--scatter .catCard{
+  width: 100%;
+  height: 100%;
   aspect-ratio: 3 / 2;
-  height: auto;
   max-height: none;
   min-height: 0;
   padding: clamp(8px, 1vw, 12px);
+}
+
+#siteMain.siteMain--settled .frontGrid__items--scatter .catCard--streetlog{
+  aspect-ratio: 3 / 2;
+  background:
+    radial-gradient(120% 80% at 18% 20%, rgba(255,255,255,.04), transparent 55%),
+    rgba(8, 8, 8, 0.65);
 }
 
 #siteMain.siteMain--settled .frontGrid__items--scatter .catCard__img,
@@ -519,18 +533,9 @@ html.home--grid-direct #siteMain.siteMain--settled.siteMain--gridReveal .siteFoo
 @media (prefers-reduced-motion: reduce){
   #siteMain.siteMain--settled .frontGrid__items--scatter > li{
     animation: none !important;
-    transform: none !important;
-  }
-}
-
-@media (max-width: 900px){
-  #siteMain.siteMain--settled .frontGrid__items--scatter{
-    min-height: min(62vh, 560px);
-  }
-
-  #siteMain.siteMain--settled .frontGrid__items--scatter > li{
-    max-width: 200px;
-    min-width: 128px;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: translate(calc(-50% + var(--burst-x, 0px)), calc(-50% + var(--burst-y, 0px))) !important;
   }
 }
 
@@ -785,7 +790,7 @@ html.home--grid-direct #siteMain.siteMain--settled.siteMain--gridReveal .siteFoo
 .catCard--streetlog .catCard__img{
   object-position: 50% 38%;
   filter: grayscale(100%) contrast(1.12) brightness(0.72);
-  transform: scale(1.06);
+  transform: scale(1.03);
 }
 
 .catCard--streetlog .catCard__overlay--streetlog{
