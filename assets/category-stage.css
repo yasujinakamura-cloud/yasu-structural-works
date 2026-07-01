@@ -1,7 +1,4 @@
-/* =====================================================
-   Category stage — radial burst (standalone)
-   prepare() 直後から gridReveal 前でも中央スタックを維持
-===================================================== */
+/* Category stage — radial burst layout */
 
 #siteMain.siteMain--settled .frontGrid__items.cat-stage,
 #siteMain.siteMain--settled .frontGrid__items.cat-stage-ready,
@@ -32,20 +29,17 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
   margin: 0;
   padding: 0;
   grid-column: auto !important;
-  transform: translate(calc(-50% + var(--cat-tx, 0px)), calc(-50% + var(--cat-ty, 0px)));
-  opacity: var(--cat-opacity, 0);
-  transition:
-    transform 0.62s cubic-bezier(0.16, 0.84, 0.22, 1),
-    opacity 0.12s linear;
-  pointer-events: var(--cat-pe, none);
-  z-index: var(--cat-z, 1);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
   will-change: transform, opacity;
 }
 
 #siteMain.siteMain--settled .frontGrid__items.cat-stage > li.is-placed,
 #siteMain.siteMain--settled .frontGrid__items.cat-stage-ready > li.is-placed{
-  --cat-pe: auto;
-  --cat-opacity: 1;
+  pointer-events: auto;
+  opacity: 1;
 }
 
 #siteMain.siteMain--settled .frontGrid__items.cat-stage > li.is-active,
@@ -112,13 +106,4 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
 #siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .catCard__sub,
 #siteMain.siteMain--settled .frontGrid__items.cat-stage-ready .catCard__enter{
   font-size: 8px;
-}
-
-@media (prefers-reduced-motion: reduce){
-  #siteMain.siteMain--settled .frontGrid__items.cat-stage > li,
-  #siteMain.siteMain--settled .frontGrid__items.cat-stage-ready > li{
-    transition: none !important;
-    --cat-opacity: 1;
-    --cat-pe: auto;
-  }
 }

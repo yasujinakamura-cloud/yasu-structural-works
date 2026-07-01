@@ -1,13 +1,14 @@
 /**
  * Category stage — 中央から1枚ずつ放射状に弾け飛ばす
  */
-(function (global) {
+(function () {
   "use strict";
 
   const CARD_W = 220;
   const CARD_H = 147;
   const BURST_MS = 640;
   const PAUSE_MS = 90;
+  const BURST_EASE = "cubic-bezier(0.16, 0.84, 0.22, 1)";
 
   function shuffle(arr) {
     const a = arr.slice();
@@ -26,41 +27,38 @@
     return new Promise((resolve) => requestAnimationFrame(() => resolve()));
   }
 
-  function waitTransition(el, ms) {
-    return new Promise((resolve) => {
-      let done = false;
-      const finish = () => {
-        if (done) return;
-        done = true;
-        el.removeEventListener("transitionend", onEnd);
-        resolve();
-      };
-      const onEnd = (ev) => {
-        if (ev.target !== el || ev.propertyName !== "transform") return;
-        finish();
-      };
-      el.addEventListener("transitionend", onEnd);
-      window.setTimeout(finish, ms + 100);
-    });
+  function txForm(x, y) {
+    return `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+  }
+
+  function animateBurst(li, x, y) {
+    const frames = [
+      { transform: txForm(0, 0), opacity: 1 },
+      { transform: txForm(x, y), opacity: 1 },
+    ];
+    if (typeof li.animate === "function") {
+      return li
+        .animate(frames, { duration: BURST_MS, easing: BURST_EASE, fill: "forwards" })
+        .finished.catch(() => {});
+    }
+    li.style.transform = txForm(x, y);
+    li.style.opacity = "1";
+    return sleep(BURST_MS);
   }
 
   function resetItem(li) {
     li.classList.remove("is-active", "is-placed");
-    li.style.removeProperty("transition");
-    li.style.setProperty("--cat-tx", "0px");
-    li.style.setProperty("--cat-ty", "0px");
-    li.style.setProperty("--cat-opacity", "0");
-    li.style.setProperty("--cat-pe", "none");
-    li.style.setProperty("--cat-z", "1");
+    li.style.transform = txForm(0, 0);
+    li.style.opacity = "0";
+    li.style.pointerEvents = "none";
+    li.style.zIndex = "1";
   }
 
   function placeItem(li, x, y, z) {
-    li.style.removeProperty("transition");
-    li.style.setProperty("--cat-tx", `${x}px`);
-    li.style.setProperty("--cat-ty", `${y}px`);
-    li.style.setProperty("--cat-opacity", "1");
-    li.style.setProperty("--cat-pe", "auto");
-    li.style.setProperty("--cat-z", String(z));
+    li.style.transform = txForm(x, y);
+    li.style.opacity = "1";
+    li.style.pointerEvents = "auto";
+    li.style.zIndex = String(z);
     li.classList.add("is-placed");
     li.classList.remove("is-active");
   }
@@ -80,7 +78,6 @@
       return this.items.length > 0;
     },
 
-    /** グリッド表示前に即座にステージへ（整列フラッシュ防止） */
     prepare() {
       if (!this.root && !this.init()) return;
       this.root.classList.add("cat-stage-ready", "cat-stage");
@@ -118,14 +115,12 @@
       void li.offsetWidth;
 
       li.classList.add("is-active");
-      li.style.setProperty("--cat-opacity", "1");
-      li.style.setProperty("--cat-z", "40");
+      li.style.opacity = "1";
+      li.style.zIndex = "40";
+      li.style.transform = txForm(0, 0);
       void li.offsetWidth;
 
-      li.style.setProperty("--cat-tx", `${target.x}px`);
-      li.style.setProperty("--cat-ty", `${target.y}px`);
-      await waitTransition(li, BURST_MS);
-
+      await animateBurst(li, target.x, target.y);
       placeItem(li, target.x, target.y, zIndex);
     },
 
@@ -137,6 +132,16 @@
         (main.classList.contains("siteMain--gridReveal") ||
           document.documentElement.classList.contains("home--grid-direct"))
       );
+    },
+
+    placeAll(targets) {
+      this.items.forEach((li, i) => {
+        const t = targets[i];
+        placeItem(li, t.x, t.y, i + 1);
+      });
+      this.root.classList.add("cat-stage--done");
+      this.done = true;
+      this.running = false;
     },
 
     async run() {
@@ -153,33 +158,36 @@
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       if (reduced) {
-        this.items.forEach((li, i) => placeItem(li, targets[i].x, targets[i].y, i + 1));
-        this.done = true;
-        this.running = false;
-        this.root.classList.add("cat-stage--done");
+        this.placeAll(targets);
         return;
       }
 
       const order = shuffle(this.items.map((_, i) => i));
 
-      for (let rank = 0; rank < order.length; rank++) {
-        const idx = order[rank];
-        await this.burstOne(this.items[idx], targets[idx], idx + 1);
-        if (rank < order.length - 1) await sleep(PAUSE_MS);
+      try {
+        for (let rank = 0; rank < order.length; rank++) {
+          const idx = order[rank];
+          await this.burstOne(this.items[idx], targets[idx], idx + 1);
+          if (rank < order.length - 1) await sleep(PAUSE_MS);
+        }
+        this.done = true;
+        this.running = false;
+        this.root.classList.add("cat-stage--done");
+      } catch (_) {
+        this.placeAll(targets);
       }
-
-      this.done = true;
-      this.running = false;
-      this.root.classList.add("cat-stage--done");
     },
   };
 
-  global.YasuCategoryStage = CategoryStage;
+  window.YasuCategoryStage = CategoryStage;
 
-  document.addEventListener("DOMContentLoaded", () => {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      CategoryStage.init();
+      if (location.hash === "#grid") CategoryStage.prepare();
+    });
+  } else {
     CategoryStage.init();
-    if (location.hash === "#grid") {
-      CategoryStage.prepare();
-    }
-  });
+    if (location.hash === "#grid") CategoryStage.prepare();
+  }
 })();

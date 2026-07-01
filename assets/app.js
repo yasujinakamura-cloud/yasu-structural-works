@@ -142,6 +142,15 @@
     });
   };
 
+  const revealAfterLift = () => {
+    if (Math.abs(parseFloat(main.style.getPropertyValue("--siteMainLift")) || 0) < 0.5) {
+      runPreludeThenRevealCategory();
+      return;
+    }
+    showDripOverlay();
+    window.setTimeout(runPreludeThenRevealCategory, DRIP_HOLD_MS);
+  };
+
   const PRELUDE_TARGET = "Savor the moment.";
   const PRELUDE_FILLER =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,;:!?&";
@@ -342,19 +351,18 @@
     main.classList.add("siteMain--settled");
 
     if (Math.abs(liftPx) < 0.5) {
-      requestAnimationFrame(() => finishLift());
+      requestAnimationFrame(() => {
+        finishLift();
+        revealAfterLift();
+      });
       return;
     }
 
-    showDripOverlay();
-
-    let dripHoldTimer = 0;
     let fallbackTimer = 0;
     let liftFinished = false;
 
     const cleanup = () => {
       main.removeEventListener("transitionend", onTransformEnd);
-      window.clearTimeout(dripHoldTimer);
       window.clearTimeout(fallbackTimer);
     };
 
@@ -366,9 +374,7 @@
       finishLift();
     };
 
-    dripHoldTimer = window.setTimeout(() => {
-      runPreludeThenRevealCategory();
-    }, DRIP_HOLD_MS);
+    revealAfterLift();
 
     main.addEventListener("transitionend", onTransformEnd);
     fallbackTimer = window.setTimeout(() => {
