@@ -40,13 +40,15 @@
   const categoryStage = (() => {
     const CARD_W = 220;
     const CARD_H = 147;
-    const BURST_MS = 640;
-    const PAUSE_MS = 90;
-    const BURST_EASE = "cubic-bezier(0.16, 0.84, 0.22, 1)";
+    const BURST_MS = 920;
+    const PAUSE_MS = 110;
+    const BURST_EASE = "cubic-bezier(0.11, 0.94, 0.16, 1)";
 
     const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
     const nextFrame = () => new Promise((resolve) => requestAnimationFrame(() => resolve()));
-    const txForm = (x, y) => `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+    const txForm = (x, y, scale = 1, rot = 0) =>
+      `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rot}deg) scale(${scale})`;
+
     const shuffleOrder = (arr) => {
       const a = arr.slice();
       for (let i = a.length - 1; i > 0; i--) {
@@ -56,41 +58,53 @@
       return a;
     };
 
-    const animateBurst = (li, x, y) => {
-      const frames = [
-        { transform: txForm(0, 0), opacity: 1 },
-        { transform: txForm(x, y), opacity: 1 },
-      ];
-      if (typeof li.animate === "function") {
-        return li
-          .animate(frames, { duration: BURST_MS, easing: BURST_EASE, fill: "forwards" })
-          .finished.catch(() => {});
+    const waapi = (el, keyframes, duration) => {
+      if (typeof el.animate !== "function") {
+        const last = keyframes[keyframes.length - 1];
+        if (last.transform) el.style.transform = last.transform;
+        if (last.opacity != null) el.style.opacity = String(last.opacity);
+        if (last.filter) el.style.filter = last.filter;
+        return sleep(duration);
       }
-      li.style.transform = txForm(x, y);
-      li.style.opacity = "1";
-      return sleep(BURST_MS);
+      return el
+        .animate(keyframes, { duration, easing: BURST_EASE, fill: "forwards" })
+        .finished.catch(() => {});
     };
 
     const resetItem = (li) => {
-      li.classList.remove("is-active", "is-placed");
-      li.style.transform = txForm(0, 0);
+      li.classList.remove("is-active", "is-placed", "cat-card--drift");
+      li.style.animation = "none";
+      li.style.transform = txForm(0, 0, 0.45);
       li.style.opacity = "0";
+      li.style.filter = "blur(10px)";
       li.style.pointerEvents = "none";
       li.style.zIndex = "1";
     };
 
-    const placeItem = (li, x, y, z) => {
-      li.style.transform = txForm(x, y);
-      li.style.opacity = "1";
-      li.style.pointerEvents = "auto";
-      li.style.zIndex = String(z);
-      li.classList.add("is-placed");
+    const enableDrift = (li, x, y) => {
+      li.style.removeProperty("animation");
+      li.style.removeProperty("transform");
+      li.style.removeProperty("filter");
+      li.style.setProperty("--bx", `${x.toFixed(1)}px`);
+      li.style.setProperty("--by", `${y.toFixed(1)}px`);
+      li.style.setProperty("--drift-dur", `${(11 + Math.random() * 14).toFixed(1)}s`);
+      li.style.setProperty("--drift-delay", `${(Math.random() * 3.5).toFixed(2)}s`);
+      li.style.setProperty("--drift-x1", `${(Math.random() * 30 - 15).toFixed(1)}px`);
+      li.style.setProperty("--drift-y1", `${(Math.random() * 24 - 12).toFixed(1)}px`);
+      li.style.setProperty("--drift-x2", `${(Math.random() * 30 - 15).toFixed(1)}px`);
+      li.style.setProperty("--drift-y2", `${(Math.random() * 24 - 12).toFixed(1)}px`);
+      li.style.setProperty("--drift-r1", `${(Math.random() * 2.6 - 1.3).toFixed(2)}deg`);
+      li.style.setProperty("--drift-r2", `${(Math.random() * 2.6 - 1.3).toFixed(2)}deg`);
+      li.classList.add("is-placed", "cat-card--drift");
       li.classList.remove("is-active");
+      li.style.pointerEvents = "auto";
+      li.style.opacity = "1";
     };
 
     const stage = {
       root: null,
       items: [],
+      slots: [],
       running: false,
       done: false,
 
@@ -105,6 +119,7 @@
 
       prepare() {
         if (!this.init()) return;
+        this.root.classList.remove("cat-stage--alive", "cat-stage--done");
         this.root.classList.add("cat-stage-ready", "cat-stage");
         this.items.forEach(resetItem);
         void this.root.offsetHeight;
@@ -117,10 +132,14 @@
         const radius = Math.min(w, h) * 0.38;
         const base = Math.random() * Math.PI * 2;
         const n = this.items.length;
-        return this.items.map((_, i) => {
+        this.slots = this.items.map((_, i) => {
           const angle = base + (i / n) * Math.PI * 2;
-          return { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius };
+          return {
+            x: Math.cos(angle) * radius,
+            y: Math.sin(angle) * radius,
+          };
         });
+        return this.slots;
       },
 
       async waitForStageSize(maxTry) {
@@ -135,12 +154,33 @@
         resetItem(li);
         void li.offsetWidth;
         li.classList.add("is-active");
-        li.style.opacity = "1";
         li.style.zIndex = "40";
-        li.style.transform = txForm(0, 0);
-        void li.offsetWidth;
-        await animateBurst(li, target.x, target.y);
-        placeItem(li, target.x, target.y, zIndex);
+
+        await waapi(
+          li,
+          [
+            {
+              transform: txForm(0, 0, 0.45, 0),
+              opacity: 0,
+              filter: "blur(10px)",
+            },
+            {
+              transform: txForm(target.x * 0.52, target.y * 0.52, 1.26, 2.5),
+              opacity: 1,
+              filter: "blur(0px)",
+              offset: 0.52,
+            },
+            {
+              transform: txForm(target.x, target.y, 1, 0),
+              opacity: 1,
+              filter: "blur(0px)",
+            },
+          ],
+          BURST_MS
+        );
+
+        li.style.zIndex = String(zIndex);
+        enableDrift(li, target.x, target.y);
       },
 
       isReady() {
@@ -152,8 +192,17 @@
       },
 
       placeAll(targets) {
-        this.items.forEach((li, i) => placeItem(li, targets[i].x, targets[i].y, i + 1));
-        this.root.classList.add("cat-stage--done");
+        this.items.forEach((li, i) => {
+          li.style.zIndex = String(i + 1);
+          enableDrift(li, targets[i].x, targets[i].y);
+        });
+        this.root.classList.add("cat-stage--done", "cat-stage--alive");
+        this.done = true;
+        this.running = false;
+      },
+
+      startAlive() {
+        this.root.classList.add("cat-stage--done", "cat-stage--alive");
         this.done = true;
         this.running = false;
       },
@@ -182,9 +231,7 @@
             await this.burstOne(this.items[idx], targets[idx], idx + 1);
             if (rank < order.length - 1) await sleep(PAUSE_MS);
           }
-          this.done = true;
-          this.running = false;
-          this.root.classList.add("cat-stage--done");
+          this.startAlive();
         } catch (_) {
           this.placeAll(targets);
         }
@@ -194,11 +241,13 @@
         this.running = false;
         this.done = true;
         if (!this.root) return;
-        this.root.classList.remove("cat-stage", "cat-stage-ready", "cat-stage--done");
+        this.root.classList.remove("cat-stage", "cat-stage-ready", "cat-stage--done", "cat-stage--alive");
         this.items.forEach((li) => {
-          li.classList.remove("is-active", "is-placed");
+          li.classList.remove("is-active", "is-placed", "cat-card--drift");
           li.style.removeProperty("transform");
           li.style.removeProperty("opacity");
+          li.style.removeProperty("filter");
+          li.style.removeProperty("animation");
           li.style.removeProperty("pointer-events");
           li.style.removeProperty("z-index");
         });
