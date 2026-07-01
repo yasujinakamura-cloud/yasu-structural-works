@@ -398,7 +398,7 @@
   }, TOP_HOLD_MS);
 })();
 
-// カテゴリ：1枚ずつ中央接近→弾け飛び→円周 orbit
+// カテゴリ：中央に重なった状態から1枚ずつ放射状に弾け飛ぶ
 (function initCategoryScatter() {
   const main = document.getElementById("siteMain");
   const grid = document.getElementById("grid");
@@ -409,7 +409,7 @@
 
   const CARD_W = 220;
   const CARD_RATIO = 3 / 2;
-  const EASE = "cubic-bezier(0.18, 0.88, 0.26, 1)";
+  const BURST_EASE = "cubic-bezier(0.16, 0.84, 0.22, 1)";
 
   const shuffle = (arr) => {
     const a = arr.slice();
@@ -429,13 +429,10 @@
       if (last && last.opacity != null) el.style.opacity = String(last.opacity);
       return Promise.resolve();
     }
-    return el.animate(keyframes, { duration, easing: EASE, fill: "forwards" }).finished.catch(() => {});
+    return el.animate(keyframes, { duration, easing: BURST_EASE, fill: "forwards" }).finished.catch(() => {});
   };
 
   let sequenceStarted = false;
-  let orbitRaf = 0;
-  let orbitAngle = 0;
-  let orbitPaused = false;
   let slotData = [];
 
   const prepStage = () => {
@@ -447,9 +444,9 @@
 
     items.forEach((li) => {
       li.classList.remove("frontGrid__item--burst-settled");
-      li.style.transform = "translate(-50%, -50%) scale(0.3)";
+      li.style.transform = "translate(-50%, -50%) scale(1)";
       li.style.opacity = "0";
-      li.style.filter = "blur(8px)";
+      li.style.filter = "none";
       li.style.zIndex = "1";
     });
   };
@@ -466,39 +463,22 @@
       return {
         x: Math.cos(angle) * radius,
         y: Math.sin(angle) * radius,
-        angle,
-        radius,
       };
     });
   };
 
-  const stopOrbit = () => {
-    if (orbitRaf) cancelAnimationFrame(orbitRaf);
-    orbitRaf = 0;
-  };
-
-  const startOrbit = (items) => {
-    stopOrbit();
+  const finishSequence = (items) => {
     itemsRoot.classList.remove("frontGrid__items--scatter-pending");
-    itemsRoot.classList.add("frontGrid__items--orbit");
-
-    const tick = () => {
-      if (!orbitPaused) orbitAngle += 0.0016;
-      items.forEach((li, i) => {
-        const slot = slotData[i];
-        if (!slot) return;
-        const a = slot.angle + orbitAngle;
-        const x = Math.cos(a) * slot.radius;
-        const y = Math.sin(a) * slot.radius;
-        li.style.transform = `translate(calc(-50% + ${x.toFixed(2)}px), calc(-50% + ${y.toFixed(2)}px))`;
-      });
-      orbitRaf = requestAnimationFrame(tick);
-    };
-    tick();
+    items.forEach((li, i) => {
+      const slot = slotData[i];
+      if (!slot) return;
+      li.style.transform = `translate(calc(-50% + ${slot.x}px), calc(-50% + ${slot.y}px))`;
+      li.style.opacity = "1";
+      li.classList.add("frontGrid__item--burst-settled");
+    });
   };
 
   const runSequence = async (items) => {
-    itemsRoot.classList.remove("frontGrid__items--orbit");
     slotData = computeSlots(items.length);
     const order = shuffle(items.map((_, i) => i));
 
@@ -508,16 +488,7 @@
 
       li.style.zIndex = "40";
       li.style.opacity = "1";
-
-      await waapi(
-        li,
-        [
-          { transform: "translate(-50%, -50%) scale(0.3)", opacity: 0, filter: "blur(10px)" },
-          { transform: "translate(-50%, -50%) scale(1.24)", opacity: 1, filter: "blur(0px)" },
-          { transform: "translate(-50%, -50%) scale(1)", opacity: 1, filter: "blur(0px)" },
-        ],
-        820
-      );
+      li.style.transform = "translate(-50%, -50%) scale(1)";
 
       await waapi(
         li,
@@ -527,15 +498,15 @@
             transform: `translate(calc(-50% + ${slot.x.toFixed(1)}px), calc(-50% + ${slot.y.toFixed(1)}px)) scale(1)`,
           },
         ],
-        780
+        680
       );
 
       li.style.zIndex = String(itemIndex + 1);
       li.classList.add("frontGrid__item--burst-settled");
-      await wait(90);
+      await wait(80);
     }
 
-    startOrbit(items);
+    finishSequence(items);
   };
 
   const playSequence = () => {
@@ -565,14 +536,7 @@
 
       if (reduced) {
         slotData = computeSlots(items.length);
-        items.forEach((li, i) => {
-          const slot = slotData[i];
-          li.style.opacity = "1";
-          li.style.filter = "none";
-          li.style.transform = `translate(calc(-50% + ${slot.x}px), calc(-50% + ${slot.y}px))`;
-          li.classList.add("frontGrid__item--burst-settled");
-        });
-        itemsRoot.classList.remove("frontGrid__items--scatter-pending");
+        finishSequence(items);
         return;
       }
 
@@ -582,19 +546,11 @@
     requestAnimationFrame(() => launch());
   };
 
-  itemsRoot.addEventListener("mouseenter", () => {
-    orbitPaused = true;
-  });
-  itemsRoot.addEventListener("mouseleave", () => {
-    orbitPaused = false;
-  });
-
   window.__yasuPrepCatStage = prepStage;
   window.__yasuStartCatSequence = playSequence;
 
   window.addEventListener("resize", () => {
     if (!sequenceStarted) return;
-    stopOrbit();
     sequenceStarted = false;
     slotData = [];
     playSequence();

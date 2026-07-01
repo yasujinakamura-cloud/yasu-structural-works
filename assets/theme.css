@@ -424,11 +424,10 @@ html.home--grid-direct #siteMain.siteMain--settled.siteMain--gridReveal .siteFoo
   align-content: stretch;
 }
 
-/* scatter field — sequential burst + orbit */
+/* scatter field — sequential radial burst, then hold */
 #siteMain.siteMain--settled.siteMain--gridReveal .frontGrid__items,
 #siteMain.siteMain--settled.siteMain--gridReveal .frontGrid__items--scatter-pending,
-#siteMain.siteMain--settled.siteMain--gridReveal .frontGrid__items--scatter,
-#siteMain.siteMain--settled .frontGrid__items--orbit{
+#siteMain.siteMain--settled.siteMain--gridReveal .frontGrid__items--scatter{
   display: block !important;
   position: relative;
   flex: 1 1 auto;
@@ -440,8 +439,7 @@ html.home--grid-direct #siteMain.siteMain--settled.siteMain--gridReveal .siteFoo
 }
 
 #siteMain.siteMain--settled .frontGrid__items--scatter > li,
-#siteMain.siteMain--settled .frontGrid__items--scatter-pending > li,
-#siteMain.siteMain--settled .frontGrid__items--orbit > li{
+#siteMain.siteMain--settled .frontGrid__items--scatter-pending > li{
   display: block;
   position: absolute;
   left: 50%;
@@ -449,28 +447,24 @@ html.home--grid-direct #siteMain.siteMain--settled.siteMain--gridReveal .siteFoo
   width: var(--cat-frame-w, 220px);
   height: var(--cat-frame-h, 147px);
   z-index: 1;
-  transform: translate(-50%, -50%) scale(0.3);
+  transform: translate(-50%, -50%) scale(1);
   opacity: 0;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
   pointer-events: none;
 }
 
-#siteMain.siteMain--settled .frontGrid__items--scatter > li.frontGrid__item--burst-settled,
-#siteMain.siteMain--settled .frontGrid__items--orbit > li{
+#siteMain.siteMain--settled .frontGrid__items--scatter > li.frontGrid__item--burst-settled{
   pointer-events: auto;
   opacity: 1;
-  filter: none;
 }
 
 #siteMain.siteMain--settled .frontGrid__items--scatter > li:hover,
-#siteMain.siteMain--settled .frontGrid__items--scatter > li:focus-within,
-#siteMain.siteMain--settled .frontGrid__items--orbit > li:hover,
-#siteMain.siteMain--settled .frontGrid__items--orbit > li:focus-within{
+#siteMain.siteMain--settled .frontGrid__items--scatter > li:focus-within{
   z-index: 30 !important;
 }
 
 #siteMain.siteMain--settled .frontGrid__items--scatter .catCard,
-#siteMain.siteMain--settled .frontGrid__items--orbit .catCard{
+#siteMain.siteMain--settled .frontGrid__items--scatter-pending .catCard{
   width: 100%;
   height: 100%;
   aspect-ratio: 3 / 2;
@@ -480,7 +474,7 @@ html.home--grid-direct #siteMain.siteMain--settled.siteMain--gridReveal .siteFoo
 }
 
 #siteMain.siteMain--settled .frontGrid__items--scatter .catCard--streetlog,
-#siteMain.siteMain--settled .frontGrid__items--orbit .catCard--streetlog{
+#siteMain.siteMain--settled .frontGrid__items--scatter-pending .catCard--streetlog{
   aspect-ratio: 3 / 2;
   background:
     radial-gradient(120% 80% at 18% 20%, rgba(255,255,255,.04), transparent 55%),
@@ -521,11 +515,9 @@ html.home--grid-direct #siteMain.siteMain--settled.siteMain--gridReveal .siteFoo
 }
 
 @media (prefers-reduced-motion: reduce){
-  #siteMain.siteMain--settled .frontGrid__items--scatter > li,
-  #siteMain.siteMain--settled .frontGrid__items--orbit > li{
+  #siteMain.siteMain--settled .frontGrid__items--scatter > li{
     animation: none !important;
     opacity: 1 !important;
-    filter: none !important;
     pointer-events: auto;
   }
 }
