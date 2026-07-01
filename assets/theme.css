@@ -527,51 +527,15 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
   font-size: 8px;
 }
 
-/* 弾けた後：各カードが個別に漂う（円周回転ではない） */
-#siteMain.siteMain--settled .frontGrid__items.cat-stage > li.cat-card--drift{
+/* 弾けた後：全体がゆっくり円周回転 ＋ フレームを150%までゆっくりズーム */
+#siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li.cat-card--orbit{
   pointer-events: auto;
   opacity: 1;
-  animation: catCardAmbientDrift var(--drift-dur, 14s) ease-in-out infinite;
-  animation-delay: var(--drift-delay, 0s);
 }
 
-#siteMain.siteMain--settled .frontGrid__items.cat-stage > li.cat-card--drift:hover,
-#siteMain.siteMain--settled .frontGrid__items.cat-stage > li.cat-card--drift:focus-within{
-  animation-play-state: paused;
-}
-
-@keyframes catCardAmbientDrift{
-  0%, 100%{
-    transform:
-      translate(calc(-50% + var(--bx, 0px)), calc(-50% + var(--by, 0px)))
-      rotate(0deg)
-      scale(1);
-  }
-  33%{
-    transform:
-      translate(
-        calc(-50% + var(--bx, 0px) + var(--drift-x1, 0px)),
-        calc(-50% + var(--by, 0px) + var(--drift-y1, 0px))
-      )
-      rotate(var(--drift-r1, 0deg))
-      scale(1.03);
-  }
-  66%{
-    transform:
-      translate(
-        calc(-50% + var(--bx, 0px) + var(--drift-x2, 0px)),
-        calc(-50% + var(--by, 0px) + var(--drift-y2, 0px))
-      )
-      rotate(var(--drift-r2, 0deg))
-      scale(0.98);
-  }
-}
-
-@media (prefers-reduced-motion: reduce){
-  #siteMain.siteMain--settled .frontGrid__items.cat-stage > li.cat-card--drift{
-    animation: none !important;
-    transform: translate(calc(-50% + var(--bx, 0px)), calc(-50% + var(--by, 0px))) !important;
-  }
+#siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li.cat-card--orbit:hover,
+#siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li.cat-card--orbit:focus-within{
+  z-index: 30 !important;
 }
 
 #siteMain.siteMain--settled .catCard{

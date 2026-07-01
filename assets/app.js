@@ -43,6 +43,9 @@
     const BURST_MS = 920;
     const PAUSE_MS = 110;
     const BURST_EASE = "cubic-bezier(0.11, 0.94, 0.16, 1)";
+    const ORBIT_SPEED = 0.00105;
+    const ZOOM_TARGET = 1.5;
+    const ZOOM_DURATION_MS = 34000;
 
     const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
     const nextFrame = () => new Promise((resolve) => requestAnimationFrame(() => resolve()));
@@ -72,7 +75,7 @@
     };
 
     const resetItem = (li) => {
-      li.classList.remove("is-active", "is-placed", "cat-card--drift");
+      li.classList.remove("is-active", "is-placed", "cat-card--orbit");
       li.style.animation = "none";
       li.style.transform = txForm(0, 0, 0.45);
       li.style.opacity = "0";
@@ -81,24 +84,15 @@
       li.style.zIndex = "1";
     };
 
-    const enableDrift = (li, x, y) => {
+    const settlePlaced = (li, slot, z) => {
       li.style.removeProperty("animation");
-      li.style.removeProperty("transform");
       li.style.removeProperty("filter");
-      li.style.setProperty("--bx", `${x.toFixed(1)}px`);
-      li.style.setProperty("--by", `${y.toFixed(1)}px`);
-      li.style.setProperty("--drift-dur", `${(11 + Math.random() * 14).toFixed(1)}s`);
-      li.style.setProperty("--drift-delay", `${(Math.random() * 3.5).toFixed(2)}s`);
-      li.style.setProperty("--drift-x1", `${(Math.random() * 30 - 15).toFixed(1)}px`);
-      li.style.setProperty("--drift-y1", `${(Math.random() * 24 - 12).toFixed(1)}px`);
-      li.style.setProperty("--drift-x2", `${(Math.random() * 30 - 15).toFixed(1)}px`);
-      li.style.setProperty("--drift-y2", `${(Math.random() * 24 - 12).toFixed(1)}px`);
-      li.style.setProperty("--drift-r1", `${(Math.random() * 2.6 - 1.3).toFixed(2)}deg`);
-      li.style.setProperty("--drift-r2", `${(Math.random() * 2.6 - 1.3).toFixed(2)}deg`);
-      li.classList.add("is-placed", "cat-card--drift");
+      li.classList.add("is-placed", "cat-card--orbit");
       li.classList.remove("is-active");
       li.style.pointerEvents = "auto";
       li.style.opacity = "1";
+      li.style.zIndex = String(z);
+      li.style.transform = txForm(slot.x, slot.y, 1);
     };
 
     const stage = {
@@ -107,6 +101,11 @@
       slots: [],
       running: false,
       done: false,
+      orbitRaf: 0,
+      orbitPaused: false,
+      orbitAngle: 0,
+      zoomScale: 1,
+      zoomStart: 0,
 
       init() {
         this.root = grid.querySelector(".frontGrid__items");
@@ -114,12 +113,24 @@
         this.items = [...this.root.children].filter((el) => el.tagName === "LI");
         this.root.style.setProperty("--cat-w", `${CARD_W}px`);
         this.root.style.setProperty("--cat-h", `${CARD_H}px`);
+        if (!this.root.dataset.orbitBound) {
+          this.root.dataset.orbitBound = "1";
+          this.root.addEventListener("mouseenter", () => {
+            this.orbitPaused = true;
+          });
+          this.root.addEventListener("mouseleave", () => {
+            this.orbitPaused = false;
+          });
+        }
         return this.items.length > 0;
       },
 
       prepare() {
         if (!this.init()) return;
-        this.root.classList.remove("cat-stage--alive", "cat-stage--done");
+        this.stopOrbitMotion();
+        this.orbitAngle = 0;
+        this.zoomScale = 1;
+        this.root.classList.remove("cat-stage--alive", "cat-stage--done", "cat-stage--orbit");
         this.root.classList.add("cat-stage-ready", "cat-stage");
         this.items.forEach(resetItem);
         void this.root.offsetHeight;
@@ -135,11 +146,51 @@
         this.slots = this.items.map((_, i) => {
           const angle = base + (i / n) * Math.PI * 2;
           return {
+            angle,
+            radius,
             x: Math.cos(angle) * radius,
             y: Math.sin(angle) * radius,
           };
         });
         return this.slots;
+      },
+
+      applyOrbitFrame() {
+        this.items.forEach((li, i) => {
+          const slot = this.slots[i];
+          if (!slot) return;
+          const a = slot.angle + this.orbitAngle;
+          const x = Math.cos(a) * slot.radius;
+          const y = Math.sin(a) * slot.radius;
+          li.style.transform = txForm(x, y, this.zoomScale);
+        });
+      },
+
+      stopOrbitMotion() {
+        if (this.orbitRaf) cancelAnimationFrame(this.orbitRaf);
+        this.orbitRaf = 0;
+      },
+
+      startOrbitMotion() {
+        this.stopOrbitMotion();
+        this.root.classList.add("cat-stage--orbit");
+        this.orbitAngle = 0;
+        this.zoomScale = 1;
+        this.zoomStart = performance.now();
+        this.applyOrbitFrame();
+
+        const tick = (now) => {
+          if (!this.orbitPaused) this.orbitAngle += ORBIT_SPEED;
+
+          const t = Math.min(1, (now - this.zoomStart) / ZOOM_DURATION_MS);
+          const eased = 1 - (1 - t) * (1 - t);
+          this.zoomScale = 1 + (ZOOM_TARGET - 1) * eased;
+
+          this.applyOrbitFrame();
+          this.orbitRaf = requestAnimationFrame(tick);
+        };
+
+        this.orbitRaf = requestAnimationFrame(tick);
       },
 
       async waitForStageSize(maxTry) {
@@ -150,7 +201,7 @@
         }
       },
 
-      async burstOne(li, target, zIndex) {
+      async burstOne(li, slot, zIndex) {
         resetItem(li);
         void li.offsetWidth;
         li.classList.add("is-active");
@@ -165,13 +216,13 @@
               filter: "blur(10px)",
             },
             {
-              transform: txForm(target.x * 0.52, target.y * 0.52, 1.26, 2.5),
+              transform: txForm(slot.x * 0.52, slot.y * 0.52, 1.26, 2.5),
               opacity: 1,
               filter: "blur(0px)",
               offset: 0.52,
             },
             {
-              transform: txForm(target.x, target.y, 1, 0),
+              transform: txForm(slot.x, slot.y, 1, 0),
               opacity: 1,
               filter: "blur(0px)",
             },
@@ -179,8 +230,7 @@
           BURST_MS
         );
 
-        li.style.zIndex = String(zIndex);
-        enableDrift(li, target.x, target.y);
+        settlePlaced(li, slot, zIndex);
       },
 
       isReady() {
@@ -191,10 +241,12 @@
         );
       },
 
-      placeAll(targets) {
+      placeAllStatic() {
         this.items.forEach((li, i) => {
+          const slot = this.slots[i];
+          if (!slot) return;
           li.style.zIndex = String(i + 1);
-          enableDrift(li, targets[i].x, targets[i].y);
+          settlePlaced(li, slot, i + 1);
         });
         this.root.classList.add("cat-stage--done", "cat-stage--alive");
         this.done = true;
@@ -205,6 +257,7 @@
         this.root.classList.add("cat-stage--done", "cat-stage--alive");
         this.done = true;
         this.running = false;
+        this.startOrbitMotion();
       },
 
       async run() {
@@ -217,10 +270,10 @@
         await this.waitForStageSize(60);
         await nextFrame();
 
-        const targets = this.computeTargets();
+        this.computeTargets();
         const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         if (reduced) {
-          this.placeAll(targets);
+          this.placeAllStatic();
           return;
         }
 
@@ -228,22 +281,29 @@
         try {
           for (let rank = 0; rank < order.length; rank++) {
             const idx = order[rank];
-            await this.burstOne(this.items[idx], targets[idx], idx + 1);
+            await this.burstOne(this.items[idx], this.slots[idx], idx + 1);
             if (rank < order.length - 1) await sleep(PAUSE_MS);
           }
           this.startAlive();
         } catch (_) {
-          this.placeAll(targets);
+          this.placeAllStatic();
         }
       },
 
       abortToGrid() {
+        this.stopOrbitMotion();
         this.running = false;
         this.done = true;
         if (!this.root) return;
-        this.root.classList.remove("cat-stage", "cat-stage-ready", "cat-stage--done", "cat-stage--alive");
+        this.root.classList.remove(
+          "cat-stage",
+          "cat-stage-ready",
+          "cat-stage--done",
+          "cat-stage--alive",
+          "cat-stage--orbit"
+        );
         this.items.forEach((li) => {
-          li.classList.remove("is-active", "is-placed", "cat-card--drift");
+          li.classList.remove("is-active", "is-placed", "cat-card--orbit");
           li.style.removeProperty("transform");
           li.style.removeProperty("opacity");
           li.style.removeProperty("filter");
