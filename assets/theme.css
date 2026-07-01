@@ -427,11 +427,16 @@ html.home--grid-direct #siteMain.siteMain--settled.siteMain--gridReveal .siteFoo
 /* scatter field — unified frames, radial burst from center */
 @keyframes catRadialBurst{
   0%{
-    transform: translate(-50%, -50%) scale(0.76);
+    transform: translate(-50%, -50%) scale(0.55);
     opacity: 0;
-    filter: blur(6px);
+    filter: blur(8px);
   }
-  24%{
+  20%{
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+  55%{
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
     filter: blur(0);
@@ -466,7 +471,7 @@ html.home--grid-direct #siteMain.siteMain--settled.siteMain--gridReveal .siteFoo
 }
 
 #siteMain.siteMain--settled .frontGrid__items--scatter.frontGrid__items--burst-play > li{
-  animation: catRadialBurst 2.65s var(--ease-editorial-slow) forwards;
+  animation: catRadialBurst 3.2s var(--ease-editorial-slow) forwards;
   animation-delay: var(--cat-delay, 0s);
 }
 

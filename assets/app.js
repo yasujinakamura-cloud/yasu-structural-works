@@ -115,6 +115,7 @@
     void main.offsetHeight;
     main.style.removeProperty("transition");
     stripDripOverlay();
+    window.dispatchEvent(new CustomEvent("yasu:catGridReveal"));
   };
 
   const settleReduced = () => {
@@ -133,6 +134,7 @@
 
   const revealCategoryGrid = () => {
     main.classList.add("siteMain--gridReveal");
+    window.dispatchEvent(new CustomEvent("yasu:catGridReveal"));
   };
 
   const PRELUDE_TARGET = "Savor the moment.";
@@ -405,6 +407,7 @@
 
   const CARD_W = 220;
   const CARD_RATIO = 3 / 2;
+  const BURST_DELAY_MS = 380;
 
   const shuffle = (arr) => {
     const a = arr.slice();
@@ -415,27 +418,18 @@
     return a;
   };
 
-  let resizeTimer = 0;
-  let burstDone = false;
+  let burstPlayed = false;
+  let burstTimer = 0;
 
-  const layoutScatter = () => {
-    const active =
-      main.classList.contains("siteMain--gridReveal") ||
-      main.classList.contains("siteMain--liftDone") ||
-      document.documentElement.classList.contains("home--grid-direct");
-
-    if (!active) return;
-
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const items = [...itemsRoot.querySelectorAll(":scope > li")];
-    if (!items.length) return;
-
+  const applyPositions = (items) => {
     itemsRoot.classList.add("frontGrid__items--scatter");
     itemsRoot.style.setProperty("--cat-frame-w", `${CARD_W}px`);
     itemsRoot.style.setProperty("--cat-frame-h", `${Math.round(CARD_W / CARD_RATIO)}px`);
 
     const rect = itemsRoot.getBoundingClientRect();
-    const radius = Math.min(rect.width, rect.height) * 0.36;
+    const stageW = Math.max(rect.width, 320);
+    const stageH = Math.max(rect.height, 360);
+    const radius = Math.min(stageW, stageH) * 0.38;
     const baseAngle = Math.random() * Math.PI * 2;
     const order = shuffle(items.map((_, i) => i));
 
@@ -448,59 +442,81 @@
       li.style.setProperty("--burst-x", `${bx.toFixed(1)}px`);
       li.style.setProperty("--burst-y", `${by.toFixed(1)}px`);
       li.style.setProperty("--cat-z", String(rank + 1));
-      li.style.setProperty("--cat-delay", `${(rank * 0.07 + Math.random() * 0.05).toFixed(2)}s`);
+      li.style.setProperty("--cat-delay", `${(rank * 0.09).toFixed(2)}s`);
+      li.classList.remove("frontGrid__item--burst-settled");
+    });
+  };
 
-      if (reduced) {
-        li.classList.add("frontGrid__item--burst-settled");
+  const playBurst = () => {
+    if (burstPlayed) return;
+
+    const ready =
+      main.classList.contains("siteMain--settled") &&
+      (main.classList.contains("siteMain--gridReveal") ||
+        document.documentElement.classList.contains("home--grid-direct"));
+
+    if (!ready) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const items = [...itemsRoot.querySelectorAll(":scope > li")];
+    if (!items.length) return;
+
+    const run = (attempt = 0) => {
+      const rect = itemsRoot.getBoundingClientRect();
+      if ((rect.width < 80 || rect.height < 80) && attempt < 40) {
+        requestAnimationFrame(() => run(attempt + 1));
         return;
       }
 
-      li.classList.remove("frontGrid__item--burst-settled");
-    });
+      applyPositions(items);
+      burstPlayed = true;
 
-    if (reduced) {
+      if (reduced) {
+        items.forEach((li) => li.classList.add("frontGrid__item--burst-settled"));
+        return;
+      }
+
       itemsRoot.classList.remove("frontGrid__items--burst-play");
-      return;
-    }
+      void itemsRoot.offsetWidth;
+      itemsRoot.classList.add("frontGrid__items--burst-play");
 
-    if (burstDone) return;
+      items.forEach((li) => {
+        const onEnd = (ev) => {
+          if (ev.target !== li || ev.animationName !== "catRadialBurst") return;
+          li.classList.add("frontGrid__item--burst-settled");
+          li.removeEventListener("animationend", onEnd);
+        };
+        li.addEventListener("animationend", onEnd);
+      });
+    };
 
-    itemsRoot.classList.remove("frontGrid__items--burst-play");
-    void itemsRoot.offsetWidth;
-    itemsRoot.classList.add("frontGrid__items--burst-play");
-
-    items.forEach((li) => {
-      const onEnd = (ev) => {
-        if (ev.target !== li || ev.animationName !== "catRadialBurst") return;
-        li.classList.add("frontGrid__item--burst-settled");
-        li.removeEventListener("animationend", onEnd);
-        if (items.every((item) => item.classList.contains("frontGrid__item--burst-settled"))) {
-          burstDone = true;
-          itemsRoot.classList.remove("frontGrid__items--burst-play");
-        }
-      };
-      li.addEventListener("animationend", onEnd);
-    });
+    run();
   };
 
-  const scheduleLayout = () => {
-    window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(layoutScatter, 120);
+  const scheduleBurst = () => {
+    window.clearTimeout(burstTimer);
+    burstTimer = window.setTimeout(playBurst, BURST_DELAY_MS);
   };
 
-  const obs = new MutationObserver(scheduleLayout);
-  obs.observe(main, { attributes: true, attributeFilter: ["class"] });
-  obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+  window.addEventListener("yasu:catGridReveal", scheduleBurst);
 
   window.addEventListener("resize", () => {
-    burstDone = false;
+    if (!burstPlayed) return;
+    burstPlayed = false;
+    itemsRoot.classList.remove("frontGrid__items--burst-play");
     itemsRoot.querySelectorAll(".frontGrid__item--burst-settled").forEach((li) => {
       li.classList.remove("frontGrid__item--burst-settled");
     });
-    scheduleLayout();
+    scheduleBurst();
   });
 
-  if (location.hash === "#grid") {
-    requestAnimationFrame(() => requestAnimationFrame(layoutScatter));
+  if (location.hash === "#grid" || document.documentElement.classList.contains("home--grid-direct")) {
+    scheduleBurst();
   }
+
+  window.setTimeout(() => {
+    if (!burstPlayed && main.classList.contains("siteMain--gridReveal")) {
+      playBurst();
+    }
+  }, 3200);
 })();
