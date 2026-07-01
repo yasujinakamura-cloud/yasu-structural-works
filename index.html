@@ -12,10 +12,7 @@
 <body>
   <main id="siteMain">
     <section class="hero" aria-label="Hero statement">
-      <nav class="hero__topNav" aria-label="Site links">
-        <a class="hero__mail" href="/videos/">VIDEOS</a>
-        <a class="hero__mail" href="mailto:yasuji.nakamura@gmail.com?subject=Portfolio%20Inquiry">CONTACT</a>
-      </nav>
+      <a class="hero__mail" href="mailto:yasuji.nakamura@gmail.com?subject=Portfolio%20Inquiry">CONTACT</a>
       <div class="hero__inner">
         <h1 class="hero__statement">
           <span class="hero__line"><span class="hero__lineText">LIGHT IS FORCE.</span></span>
@@ -35,7 +32,7 @@
             <p class="frontGrid__kicker">Portfolio index</p>
             <h2 id="cat-heading" class="frontGrid__title">CATEGORIES</h2>
           </div>
-          <p class="frontGrid__note">Four series · Cover photographs → introduction → viewer.</p>
+          <p class="frontGrid__note">Four series · street-log · Cover photographs → introduction → viewer.</p>
         </header>
 
         <ul class="frontGrid__items" role="list">
@@ -87,16 +84,24 @@
               </div>
             </a>
           </li>
+          <li class="frontGrid__item--wide">
+            <a class="catCard catCard--streetlog" href="/street-log/" data-slug="street-log" aria-label="street-log — motion on foot">
+              <span class="catCard__index" aria-hidden="true">05</span>
+              <img class="catCard__img" src="https://i.ytimg.com/vi/AeQr_v7EJYk/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+              <div class="catCard__overlay catCard__overlay--streetlog" aria-hidden="true"></div>
+              <div class="catCard__grain" aria-hidden="true"></div>
+              <div class="catCard__text">
+                <span class="catCard__slug">street-log</span>
+                <span class="catCard__sub">MOTION ON FOOT</span>
+                <span class="catCard__enter">ENTER →</span>
+              </div>
+            </a>
+          </li>
         </ul>
       </div>
     </section>
 
     <footer class="siteFoot" role="contentinfo">
-      <p class="siteFoot__links">
-        <a href="/videos/">VIDEOS</a>
-        <span aria-hidden="true"> · </span>
-        <a href="mailto:yasuji.nakamura@gmail.com?subject=Portfolio%20Inquiry">CONTACT</a>
-      </p>
       <p class="siteFoot__text">Yasu Nakamura — Monochrome photography</p>
     </footer>
   </main>
