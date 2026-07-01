@@ -527,18 +527,16 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
   font-size: 8px;
 }
 
-/* 弾けた後：ステージ全体を回転 ＋ 全フレーム150%までゆっくりズーム */
+/* 弾けた後：ステージ全体を回転 ＋ 150%までゆっくりズーム */
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit{
-  transform: rotate(var(--orbit-deg, 0deg));
+  transform: rotate(var(--orbit-deg, 0deg)) scale(var(--cat-scale, 1));
   transform-origin: 50% 50%;
 }
 
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li.cat-card--orbit{
   pointer-events: auto;
   opacity: 1;
-  transform:
-    translate(calc(-50% + var(--slot-x, 0px)), calc(-50% + var(--slot-y, 0px)))
-    scale(var(--cat-scale, 1));
+  transform: translate(calc(-50% + var(--slot-x, 0px)), calc(-50% + var(--slot-y, 0px)));
   transition: none;
   will-change: transform;
 }
