@@ -97,14 +97,14 @@
       init() {
         this.root = grid.querySelector(".frontGrid__items");
         if (!this.root) return false;
-        this.items = [...this.root.querySelectorAll(":scope > li")];
+        this.items = [...this.root.children].filter((el) => el.tagName === "LI");
         this.root.style.setProperty("--cat-w", `${CARD_W}px`);
         this.root.style.setProperty("--cat-h", `${CARD_H}px`);
         return this.items.length > 0;
       },
 
       prepare() {
-        if (!this.root && !this.init()) return;
+        if (!this.init()) return;
         this.root.classList.add("cat-stage-ready", "cat-stage");
         this.items.forEach(resetItem);
         void this.root.offsetHeight;
@@ -160,7 +160,7 @@
 
       async run() {
         if (this.running || this.done) return;
-        if (!this.root && !this.init()) return;
+        if (!this.init()) return;
         if (!this.isReady()) return;
 
         this.running = true;
@@ -188,6 +188,20 @@
         } catch (_) {
           this.placeAll(targets);
         }
+      },
+
+      abortToGrid() {
+        this.running = false;
+        this.done = true;
+        if (!this.root) return;
+        this.root.classList.remove("cat-stage", "cat-stage-ready", "cat-stage--done");
+        this.items.forEach((li) => {
+          li.classList.remove("is-active", "is-placed");
+          li.style.removeProperty("transform");
+          li.style.removeProperty("opacity");
+          li.style.removeProperty("pointer-events");
+          li.style.removeProperty("z-index");
+        });
       },
     };
 
@@ -274,7 +288,7 @@
     main.style.removeProperty("transition");
     stripDripOverlay();
     categoryStage.prepare();
-    categoryStage.run();
+    void categoryStage.run().catch(() => categoryStage.abortToGrid());
   };
 
   const settleReduced = () => {
@@ -296,7 +310,9 @@
     categoryStage.prepare();
     main.classList.add("siteMain--gridReveal");
     window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => categoryStage.run());
+      window.requestAnimationFrame(() => {
+        void categoryStage.run().catch(() => categoryStage.abortToGrid());
+      });
     });
   };
 
