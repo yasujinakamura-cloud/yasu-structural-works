@@ -394,4 +394,88 @@
   }, TOP_HOLD_MS);
 })();
 
-// カテゴリカードの残像ランダムパルス（.catCard--ghostPulse）は中止。theme.css の定義は残置。
+// カテゴリ：小さなフレームをランダム配置＋ゆっくり漂わせる
+(function initCategoryScatter() {
+  const main = document.getElementById("siteMain");
+  const grid = document.getElementById("grid");
+  if (!main || !grid) return;
+
+  const itemsRoot = grid.querySelector(".frontGrid__items");
+  if (!itemsRoot) return;
+
+  const shuffle = (arr) => {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+
+  let resizeTimer = 0;
+
+  const layoutScatter = () => {
+    const active =
+      main.classList.contains("siteMain--gridReveal") ||
+      main.classList.contains("siteMain--liftDone") ||
+      document.documentElement.classList.contains("home--grid-direct");
+
+    if (!active) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const items = [...itemsRoot.querySelectorAll(":scope > li")];
+    if (!items.length) return;
+
+    const slots = [
+      { x: 2, y: 4, w: 21 },
+      { x: 30, y: 1, w: 22 },
+      { x: 58, y: 6, w: 21 },
+      { x: 8, y: 44, w: 22 },
+      { x: 36, y: 42, w: 21 },
+      { x: 64, y: 40, w: 20 },
+    ];
+
+    const picked = shuffle(slots).slice(0, items.length);
+    itemsRoot.classList.add("frontGrid__items--scatter");
+
+    items.forEach((li, i) => {
+      const slot = picked[i] || slots[i % slots.length];
+      const jx = Math.random() * 5 - 2.5;
+      const jy = Math.random() * 5 - 2.5;
+      const w = slot.w + (Math.random() * 3 - 1.5);
+
+      li.style.setProperty("--cat-x", `${(slot.x + jx).toFixed(1)}%`);
+      li.style.setProperty("--cat-y", `${(slot.y + jy).toFixed(1)}%`);
+      li.style.setProperty("--cat-w", `${w.toFixed(1)}%`);
+      li.style.setProperty("--cat-z", String(i + 1));
+
+      if (reduced) {
+        li.style.removeProperty("--cat-drift-dur");
+        return;
+      }
+
+      for (let n = 1; n <= 3; n++) {
+        li.style.setProperty(`--drift-x${n}`, `${(Math.random() * 32 - 16).toFixed(1)}px`);
+        li.style.setProperty(`--drift-y${n}`, `${(Math.random() * 26 - 13).toFixed(1)}px`);
+        li.style.setProperty(`--drift-r${n}`, `${(Math.random() * 2.8 - 1.4).toFixed(2)}deg`);
+      }
+      li.style.setProperty("--cat-drift-dur", `${(14 + Math.random() * 22).toFixed(1)}s`);
+      li.style.setProperty("--cat-drift-delay", `${(Math.random() * 6).toFixed(1)}s`);
+    });
+  };
+
+  const scheduleLayout = () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(layoutScatter, 120);
+  };
+
+  const obs = new MutationObserver(scheduleLayout);
+  obs.observe(main, { attributes: true, attributeFilter: ["class"] });
+  obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+  window.addEventListener("resize", scheduleLayout);
+
+  if (location.hash === "#grid") {
+    requestAnimationFrame(() => requestAnimationFrame(layoutScatter));
+  }
+})();
