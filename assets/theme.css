@@ -537,6 +537,7 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
   opacity: 1;
   transition: none;
   will-change: transform;
+  overflow: visible;
 }
 
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li.cat-card--orbit:hover,
@@ -547,6 +548,7 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
 /* 水平0度（右端）に来た瞬間：フラッシュ＋拡大（全カテゴリ対象） */
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li.catCard--flash > .catCard{
   animation: catOrbitFlash 6s cubic-bezier(0.16, 0.84, 0.22, 1) both;
+  overflow: visible;
 }
 
 @keyframes catOrbitFlash{
@@ -591,8 +593,10 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption{
   position: absolute;
   top: 50%;
+  left: 0;
   margin: 0;
-  max-width: min(220px, 34vw);
+  width: max-content;
+  max-width: none;
   font-family: var(--font-ui);
   font-size: clamp(10px, 1.1vw, 12px);
   font-weight: 400;
@@ -601,43 +605,66 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
   text-transform: uppercase;
   color: rgba(242, 242, 240, 0.86);
   pointer-events: none;
-  z-index: 35;
+  z-index: 50;
   opacity: 0;
   white-space: nowrap;
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.72);
 }
 
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption--side-left{
-  right: calc(100% + 22px);
   text-align: right;
-  transform: translateY(-50%);
+  transform: translate(calc(-100% - 96px), -50%);
 }
 
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption--side-right{
-  left: calc(100% + 22px);
+  left: 100%;
   text-align: left;
-  transform: translateY(-50%);
+  transform: translate(96px, -50%);
 }
 
-#siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption--show{
-  animation: catOrbitCaptionReveal 6s cubic-bezier(0.16, 0.84, 0.22, 1) both;
+#siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption--show.catOrbitCaption--side-left{
+  animation: catOrbitCaptionRevealLeft 6s cubic-bezier(0.16, 0.84, 0.22, 1) both;
 }
 
-@keyframes catOrbitCaptionReveal{
+#siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption--show.catOrbitCaption--side-right{
+  animation: catOrbitCaptionRevealRight 6s cubic-bezier(0.16, 0.84, 0.22, 1) both;
+}
+
+@keyframes catOrbitCaptionRevealLeft{
   0%{
     opacity: 0;
-    transform: translateY(calc(-50% + 18px));
+    transform: translate(calc(-100% - 96px), calc(-50% + 18px));
   }
   50%{
     opacity: 1;
-    transform: translateY(-50%);
+    transform: translate(calc(-100% - 96px), -50%);
   }
   66.67%{
     opacity: 1;
-    transform: translateY(-50%);
+    transform: translate(calc(-100% - 96px), -50%);
   }
   100%{
     opacity: 0;
-    transform: translateY(calc(-50% - 12px));
+    transform: translate(calc(-100% - 96px), calc(-50% - 12px));
+  }
+}
+
+@keyframes catOrbitCaptionRevealRight{
+  0%{
+    opacity: 0;
+    transform: translate(96px, calc(-50% + 18px));
+  }
+  50%{
+    opacity: 1;
+    transform: translate(96px, -50%);
+  }
+  66.67%{
+    opacity: 1;
+    transform: translate(96px, -50%);
+  }
+  100%{
+    opacity: 0;
+    transform: translate(96px, calc(-50% - 12px));
   }
 }
 
