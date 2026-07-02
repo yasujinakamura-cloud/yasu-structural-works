@@ -6,24 +6,26 @@
   <title>NOCTURNE — Yasu Nakamura</title>
   <meta name="robots" content="noindex,follow" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="/assets/theme.css?v=20" />
-  <link rel="stylesheet" href="/assets/mobile.css?v=21" />
+  <link rel="stylesheet" href="/assets/theme.css?v=22" />
+  <link rel="stylesheet" href="/assets/mobile.css?v=22" />
 </head>
 <body class="mobile-series" data-series="nocturne">
-  <header class="m-head">
-    <a class="m-back" href="/mobile/">← categories</a>
+  <header class="m-head m-head--series">
+    <a class="m-back" href="/mobile/" aria-label="Back to categories">←</a>
+    <div class="m-head__center">
+      <p class="m-head__series">NOCTURNE</p>
+      <div class="m-progress" aria-hidden="true"><span class="m-progress__fill" data-progress-fill></span></div>
+    </div>
     <button class="m-info" type="button" aria-pressed="false">INFO</button>
   </header>
-
-  <h1 class="m-title">NOCTURNE</h1>
 
   <main id="mFeed" class="m-feed" aria-live="polite"></main>
 
   <nav class="m-nav" aria-label="Photo navigation">
-    <button class="m-navBtn" type="button" data-nav="up" aria-label="Previous photo">↑</button>
-    <button class="m-navBtn" type="button" data-nav="down" aria-label="Next photo">↓</button>
+    <button class="m-navBtn" type="button" data-nav="up" aria-label="Previous photo"><span aria-hidden="true">↑</span></button>
+    <button class="m-navBtn" type="button" data-nav="down" aria-label="Next photo"><span aria-hidden="true">↓</span></button>
   </nav>
 
-  <script src="/assets/mobile-series.js?v=21" defer></script>
+  <script src="/assets/mobile-series.js?v=22" defer></script>
 </body>
 </html>
