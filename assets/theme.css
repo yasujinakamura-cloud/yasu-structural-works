@@ -564,7 +564,8 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
     box-shadow:
       0 0 0 1px rgba(255,255,255,0.18) inset,
       0 26px 56px rgba(0,0,0,0.42),
-      0 0 38px rgba(255,255,255,0.22);
+      0 0 57px rgba(255,255,255,0.22),
+      0 0 0 18px rgba(255,255,255,0.06);
   }
   /* 待機 1秒（全体の20%） */
   60%{
@@ -573,7 +574,8 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
     box-shadow:
       0 0 0 1px rgba(255,255,255,0.14) inset,
       0 24px 54px rgba(0,0,0,0.40),
-      0 0 24px rgba(255,255,255,0.14);
+      0 0 36px rgba(255,255,255,0.14),
+      0 0 0 14px rgba(255,255,255,0.05);
   }
   /* 小さくなる 2秒（残り40%） */
   100%{
