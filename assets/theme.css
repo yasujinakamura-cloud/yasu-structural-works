@@ -591,6 +591,7 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
 
 /* 水平通過時：説明文を浮かび上げ（3s / 1s / 2s） */
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption{
+  --cat-caption-gap: 148px;
   position: absolute;
   top: 50%;
   left: 0;
@@ -613,13 +614,13 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
 
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption--side-left{
   text-align: right;
-  transform: translate(calc(-100% - 96px), -50%);
+  transform: translate(calc(-100% - var(--cat-caption-gap)), -50%);
 }
 
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption--side-right{
   left: 100%;
   text-align: left;
-  transform: translate(96px, -50%);
+  transform: translate(var(--cat-caption-gap), -50%);
 }
 
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption--show.catOrbitCaption--side-left{
@@ -633,38 +634,38 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
 @keyframes catOrbitCaptionRevealLeft{
   0%{
     opacity: 0;
-    transform: translate(calc(-100% - 96px), calc(-50% + 18px));
+    transform: translate(calc(-100% - var(--cat-caption-gap)), calc(-50% + 18px));
   }
   50%{
     opacity: 1;
-    transform: translate(calc(-100% - 96px), -50%);
+    transform: translate(calc(-100% - var(--cat-caption-gap)), -50%);
   }
   66.67%{
     opacity: 1;
-    transform: translate(calc(-100% - 96px), -50%);
+    transform: translate(calc(-100% - var(--cat-caption-gap)), -50%);
   }
   100%{
     opacity: 0;
-    transform: translate(calc(-100% - 96px), calc(-50% - 12px));
+    transform: translate(calc(-100% - var(--cat-caption-gap)), calc(-50% - 12px));
   }
 }
 
 @keyframes catOrbitCaptionRevealRight{
   0%{
     opacity: 0;
-    transform: translate(96px, calc(-50% + 18px));
+    transform: translate(var(--cat-caption-gap), calc(-50% + 18px));
   }
   50%{
     opacity: 1;
-    transform: translate(96px, -50%);
+    transform: translate(var(--cat-caption-gap), -50%);
   }
   66.67%{
     opacity: 1;
-    transform: translate(96px, -50%);
+    transform: translate(var(--cat-caption-gap), -50%);
   }
   100%{
     opacity: 0;
-    transform: translate(96px, calc(-50% - 12px));
+    transform: translate(var(--cat-caption-gap), calc(-50% - 12px));
   }
 }
 
