@@ -34,6 +34,7 @@
   }
 
   function formatGear(row) {
+    if (window.SiteSeo) return window.SiteSeo.formatGear(row.camera, row.lens);
     const c = (row.camera || "").trim();
     const l = (row.lens || "").trim();
     if (c && l) return `${c} · ${l}`;
@@ -51,13 +52,32 @@
     }
   }
 
-  function applyRow(row, total, pageIndex) {
+  function applyRow(row, total, pageIndex, seriesTitle) {
     const file = row.file;
     if (!file) return;
 
+    const imageAbs = new URL(`images/${file}`, window.location.href).href;
+    const pageAbs = window.location.href.split("#")[0];
+
+    if (window.SiteSeo) {
+      const seo = window.SiteSeo.applyPhotoSeo({
+        series,
+        seriesTitle,
+        row,
+        pageIndex,
+        total,
+        imageAbs,
+        pageAbs,
+      });
+      img.alt = row.statement
+        ? `${row.statement} — ${window.SiteSeo.formatGear(row.camera, row.lens)}`.replace(/ — $/, "")
+        : seo.photoName;
+    } else {
+      img.alt = row.statement || `${series.toUpperCase()} — ${pageIndex + 1}`;
+    }
+
     img.addEventListener("load", markLoaded, { once: true });
-    img.src = new URL(`images/${file}`, window.location.href).href;
-    img.alt = row.statement || `${series.toUpperCase()} — ${pageIndex + 1}`;
+    img.src = imageAbs;
 
     if (stmt) stmt.textContent = row.statement || "";
     if (gear) gear.textContent = formatGear(row);
@@ -98,7 +118,7 @@
 
       const row = images[pageIndex];
       if (!row) return;
-      applyRow(row, total, pageIndex);
+      applyRow(row, total, pageIndex, data.title || series);
     })
     .catch(() => {
       if (stmt) stmt.textContent = "Could not load series data.";
