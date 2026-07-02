@@ -546,7 +546,7 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
 
 /* 水平0度（右端）に来た瞬間：フラッシュ＋拡大（全カテゴリ対象） */
 #siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li.catCard--flash > .catCard{
-  animation: catOrbitFlash 5s cubic-bezier(0.16, 0.84, 0.22, 1) both;
+  animation: catOrbitFlash 6s cubic-bezier(0.16, 0.84, 0.22, 1) both;
 }
 
 @keyframes catOrbitFlash{
@@ -557,8 +557,8 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
       0 0 0 1px rgba(0,0,0,0.55) inset,
       0 24px 48px rgba(0,0,0,0.35);
   }
-  /* 大きくする 2秒（全体の40%） */
-  40%{
+  /* 大きくする 3秒（全体の50%） */
+  50%{
     transform: scale(1.5);
     filter: brightness(1.5) contrast(1.04);
     box-shadow:
@@ -567,8 +567,8 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
       0 0 57px rgba(255,255,255,0.22),
       0 0 0 18px rgba(255,255,255,0.06);
   }
-  /* 待機 1秒（全体の20%） */
-  60%{
+  /* 待機 1秒（50%→66.67%） */
+  66.67%{
     transform: scale(1.5);
     filter: brightness(1.5) contrast(1.04);
     box-shadow:
@@ -577,7 +577,7 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
       0 0 36px rgba(255,255,255,0.14),
       0 0 0 14px rgba(255,255,255,0.05);
   }
-  /* 小さくなる 2秒（残り40%） */
+  /* 小さくなる 2秒（66.67%→100%） */
   100%{
     transform: scale(1);
     filter: brightness(1) contrast(1);

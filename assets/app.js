@@ -46,7 +46,7 @@
     const ORBIT_SPEED = 0.0022;
     const ZOOM_TARGET = 1.2;
     const ZOOM_DURATION_MS = 34000;
-    const FLASH_COOLDOWN_MS = 5200;
+    const FLASH_COOLDOWN_MS = 6200;
     const FLASH_ANGLE_EPS = 0.18; // rad (~10deg)
 
     const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
@@ -217,7 +217,7 @@
           li.classList.remove("catCard--flash");
           void li.offsetWidth;
           li.classList.add("catCard--flash");
-          window.setTimeout(() => li.classList.remove("catCard--flash"), 5200);
+          window.setTimeout(() => li.classList.remove("catCard--flash"), 6200);
         }
       },
 
