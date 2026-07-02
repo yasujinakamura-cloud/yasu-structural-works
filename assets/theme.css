@@ -587,6 +587,60 @@ html.home--grid-direct #siteMain.siteMain--settled .frontGrid__items.cat-stage-r
   }
 }
 
+/* 水平通過時：説明文を浮かび上げ（3s / 1s / 2s） */
+#siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption{
+  position: absolute;
+  top: 50%;
+  margin: 0;
+  max-width: min(220px, 34vw);
+  font-family: var(--font-ui);
+  font-size: clamp(10px, 1.1vw, 12px);
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  line-height: 1.45;
+  text-transform: uppercase;
+  color: rgba(242, 242, 240, 0.86);
+  pointer-events: none;
+  z-index: 35;
+  opacity: 0;
+  white-space: nowrap;
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption--side-left{
+  right: calc(100% + 22px);
+  text-align: right;
+  transform: translateY(-50%);
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption--side-right{
+  left: calc(100% + 22px);
+  text-align: left;
+  transform: translateY(-50%);
+}
+
+#siteMain.siteMain--settled .frontGrid__items.cat-stage--orbit > li .catOrbitCaption--show{
+  animation: catOrbitCaptionReveal 6s cubic-bezier(0.16, 0.84, 0.22, 1) both;
+}
+
+@keyframes catOrbitCaptionReveal{
+  0%{
+    opacity: 0;
+    transform: translateY(calc(-50% + 18px));
+  }
+  50%{
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+  66.67%{
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+  100%{
+    opacity: 0;
+    transform: translateY(calc(-50% - 12px));
+  }
+}
+
 #siteMain.siteMain--settled .catCard{
   aspect-ratio: auto;
   height: 100%;

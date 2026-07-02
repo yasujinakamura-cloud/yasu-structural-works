@@ -47,7 +47,7 @@
     const ZOOM_TARGET = 1.2;
     const ZOOM_DURATION_MS = 34000;
     const FLASH_COOLDOWN_MS = 6200;
-    const FLASH_ANGLE_EPS = 0.18; // rad (~10deg)
+    const FLASH_MS = 6200;
 
     const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
     const nextFrame = () => new Promise((resolve) => requestAnimationFrame(() => resolve()));
@@ -142,7 +142,42 @@
             this.orbitPaused = false;
           });
         }
+        this.ensureCaptions();
         return this.items.length > 0;
+      },
+
+      ensureCaptions() {
+        this.items.forEach((li) => {
+          if (li.querySelector(".catOrbitCaption")) return;
+          const sub = li.querySelector(".catCard__sub");
+          if (!sub) return;
+          const cap = document.createElement("p");
+          cap.className = "catOrbitCaption";
+          cap.setAttribute("aria-hidden", "true");
+          cap.textContent = sub.textContent.trim();
+          li.appendChild(cap);
+        });
+      },
+
+      triggerFlash(li, captionSide) {
+        li.classList.remove("catCard--flash");
+        void li.offsetWidth;
+        li.classList.add("catCard--flash");
+        window.setTimeout(() => li.classList.remove("catCard--flash"), FLASH_MS);
+
+        const caption = li.querySelector(".catOrbitCaption");
+        if (!caption) return;
+        caption.classList.remove(
+          "catOrbitCaption--show",
+          "catOrbitCaption--side-left",
+          "catOrbitCaption--side-right"
+        );
+        caption.classList.add(
+          captionSide === "left" ? "catOrbitCaption--side-left" : "catOrbitCaption--side-right"
+        );
+        void caption.offsetWidth;
+        caption.classList.add("catOrbitCaption--show");
+        window.setTimeout(() => caption.classList.remove("catOrbitCaption--show"), FLASH_MS);
       },
 
       prepare() {
@@ -188,7 +223,7 @@
         });
       },
 
-      maybeFlashAtZero(nowMs) {
+      maybeFlashAtHorizontal(nowMs) {
         const n = Math.min(this.items.length, this.slots.length);
         if (n <= 0) return;
         if (!Array.isArray(this.lastFlashAtByIndex) || this.lastFlashAtByIndex.length !== n) {
@@ -204,20 +239,22 @@
 
           const aPrev = normRad(slot.angle + this.orbitAnglePrev);
           const aNow = normRad(slot.angle + this.orbitAngle);
+          const xPrev = Math.cos(aPrev) * slot.radius;
+          const yPrev = Math.sin(aPrev) * slot.radius;
+          const xNow = Math.cos(aNow) * slot.radius;
+          const yNow = Math.sin(aNow) * slot.radius;
 
-          const nearNow = Math.abs(aNow) <= FLASH_ANGLE_EPS;
-          const crossed =
-            (aPrev < 0 && aNow >= 0) ||
-            (aPrev > 0 && aNow <= 0) ||
-            (Math.abs(aPrev - aNow) > Math.PI && nearNow);
+          const horizMin = slot.radius * 0.88;
+          const vertMax = slot.radius * 0.28;
+          const isHorizontal = Math.abs(xNow) >= horizMin && Math.abs(yNow) <= vertMax;
+          const wasHorizontal =
+            Math.abs(xPrev) >= horizMin && Math.abs(yPrev) <= vertMax;
 
-          if (!(nearNow || crossed)) continue;
+          if (!isHorizontal || wasHorizontal) continue;
 
+          const captionSide = xNow > 0 ? "left" : "right";
           this.lastFlashAtByIndex[i] = nowMs;
-          li.classList.remove("catCard--flash");
-          void li.offsetWidth;
-          li.classList.add("catCard--flash");
-          window.setTimeout(() => li.classList.remove("catCard--flash"), 6200);
+          this.triggerFlash(li, captionSide);
         }
       },
 
@@ -255,7 +292,7 @@
           this.zoomScale = 1 + (ZOOM_TARGET - 1) * eased;
 
           this.applyOrbitFrame();
-          this.maybeFlashAtZero(now);
+          this.maybeFlashAtHorizontal(now);
           this.orbitRaf = requestAnimationFrame(tick);
         };
 
