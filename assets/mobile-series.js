@@ -19,7 +19,7 @@
     document.documentElement.style.setProperty("--mtitle-h", th + "px");
   }
 
-  let showInfo = true;
+  let showInfo = false;
 
   function applyInfoState() {
     document.documentElement.classList.toggle("show-info", showInfo);
@@ -94,13 +94,6 @@
 
           return `
           <article class="m-post" data-index="${idx}">
-            <div class="m-meta">
-              <div class="m-statement">${stmt}</div>
-              <div class="m-gear" data-gear>
-                ${camLine}
-                ${lensLine}
-              </div>
-            </div>
             <figure class="m-frame">
               <img class="m-photo"
                    src="${imgDir + escapeHtml(it.file)}"
@@ -108,6 +101,13 @@
                    loading="lazy"
                    decoding="async">
             </figure>
+            <div class="m-meta">
+              <div class="m-statement">${stmt}</div>
+              <div class="m-gear" data-gear>
+                ${camLine}
+                ${lensLine}
+              </div>
+            </div>
             <div class="m-count">${n} / ${String(images.length).padStart(2, "0")}</div>
           </article>
         `;

@@ -12,11 +12,10 @@
 
   const isMobile = window.matchMedia("(max-width: 700px)").matches;
 
-  // GitHub Pages: /yasu-structural-works/ でも /index.html でもOKにする
-  const path = location.pathname;
+  const path = location.pathname.replace(/\/+$/, "") || "/";
   const isTop =
+    path === "/" ||
     path.endsWith("/index.html") ||
-    path.endsWith("/yasu-structural-works/") ||
     path.endsWith("/yasu-structural-works");
 
   const isAlreadyMobile =
@@ -48,6 +47,7 @@
     const ZOOM_DURATION_MS = 34000;
     const FLASH_COOLDOWN_MS = 6200;
     const FLASH_MS = 6200;
+    const isMobileViewport = () => window.matchMedia("(max-width: 700px)").matches;
 
     const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
     const nextFrame = () => new Promise((resolve) => requestAnimationFrame(() => resolve()));
@@ -357,20 +357,27 @@
         this.root.classList.add("cat-stage--done", "cat-stage--alive");
         this.done = true;
         this.running = false;
-        this.startOrbitMotion();
+        if (!isMobileViewport()) this.startOrbitMotion();
+        else this.abortToGrid();
       },
 
       startAlive() {
         this.root.classList.add("cat-stage--done", "cat-stage--alive");
         this.done = true;
         this.running = false;
-        this.startOrbitMotion();
+        if (!isMobileViewport()) this.startOrbitMotion();
+        else this.abortToGrid();
       },
 
       async run() {
         if (this.running || this.done) return;
         if (!this.init()) return;
         if (!this.isReady()) return;
+
+        if (isMobileViewport()) {
+          this.abortToGrid();
+          return;
+        }
 
         this.running = true;
         this.prepare();

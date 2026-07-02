@@ -80,78 +80,80 @@
     padding-bottom: calc(18px + env(safe-area-inset-bottom));
   }
 
-  /* ===== 1枚＝1画面（チラ見え防止の核心） ===== */
+  /* ===== 1枚＝1画面：写真優先・キャプションは下 ===== */
   .m-post{
     height: 100%;
     overflow: hidden;
+    box-sizing: border-box;
 
     display: flex;
     flex-direction: column;
-    justify-content: center;  /* 上寄せにするなら flex-start */
-    gap: 10px;
+    justify-content: flex-start;
+    gap: 8px;
 
     scroll-snap-align: start;
     scroll-snap-stop: always;
 
-    margin: 0;               /* 1画面固定なので余白ゼロ */
-    padding: 8px 2px 10px;   /* 画面内の“呼吸”だけ残す */
+    margin: 0;
+    padding: 6px 2px 10px;
   }
 
-  /* ===== 上の情報 ===== */
+  /* ===== キャプション（写真の下） ===== */
   .m-meta{
-    margin: 0 0 6px;
+    flex: 0 0 auto;
+    margin: 0;
+    max-height: 22vh;
+    overflow: hidden;
   }
 
   .m-statement{
-    font-size: 14px;
-    letter-spacing: .22em;
-    line-height: 1.35;
-    margin: 0 0 10px;
+    font-size: 12px;
+    letter-spacing: .16em;
+    line-height: 1.4;
+    margin: 0 0 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
-/* INFOトグルでON/OFF（default: OFF → html.show-info で ON） */
-.m-gear{
-  margin-top: 2px;
-  font-size: 12px;
-  letter-spacing: .18em;
-  opacity: .72;
-  line-height: 1.35;
-
-  /* default OFF */
-  display: none;
-}
-html.show-info .m-gear{
-  display: block;
-}
-
-/* 2段を整える */
-.m-gear__line{
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* 1段目/2段目の微調整（任意） */
-.m-gear__cam{  opacity: .78; }
-.m-gear__lens{ opacity: .68; }
-
-
-
-
-
+  .m-gear{
+    margin-top: 0;
+    font-size: 11px;
+    letter-spacing: .14em;
+    opacity: .72;
+    line-height: 1.35;
+    display: none;
+  }
 
   html.show-info .m-gear{
     display: block;
   }
 
-  /* ===== 写真フレーム（画面内に収める） ===== */
+  html.show-info .m-meta{
+    max-height: 28vh;
+  }
+
+  .m-gear__line{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .m-gear__cam{ opacity: .78; }
+  .m-gear__lens{ opacity: .68; }
+
+  /* ===== 写真フレーム（上・大きく） ===== */
   .m-frame{
+    flex: 1 1 auto;
+    min-height: 0;
     margin: 0;
     border: 1px solid rgba(255,255,255,.35);
-    padding: 8px;
-
-    /* メタ情報が増えても破綻しないように */
-    max-height: 70vh;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: none;
     overflow: hidden;
   }
 
@@ -159,17 +161,15 @@ html.show-info .m-gear{
     display: block;
     width: 100%;
     height: auto;
-
+    max-height: 100%;
     border: 1px solid rgba(255,255,255,.16);
-
-    /* 高さ制限に合わせて画像を収める（切らない） */
-    max-height: 70vh;
     object-fit: contain;
   }
 
   .m-count{
-    margin-top: 8px;
-    font-size: 12px;
+    flex: 0 0 auto;
+    margin: 0;
+    font-size: 11px;
     letter-spacing: .26em;
     opacity: .55;
     text-align: center;
