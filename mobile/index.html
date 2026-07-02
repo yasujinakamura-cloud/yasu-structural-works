@@ -1,92 +1,79 @@
 <!DOCTYPE html>
-<html lang="ja" class="is-mobile-top">
+<html lang="en" class="is-mobile-top">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Yasu Nakamura — Mobile</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Yasu Nakamura — Leica Monochrome Photography</title>
+  <meta name="description" content="Monochrome photography with Leica — mobile portfolio by Yasu Nakamura." />
   <meta name="robots" content="noindex,follow" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap"
-  />
-  <link rel="stylesheet" href="../assets/theme.css" />
-  <link rel="stylesheet" href="../assets/mobile.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" />
+  <link rel="stylesheet" href="/assets/theme.css?v=20" />
+  <link rel="stylesheet" href="/assets/mobile.css?v=20" />
 </head>
 <body class="mobile-top">
   <header class="m-head">
-    <a class="m-back" href="../index.html?desktop=1">← PC TOP</a>
+    <span class="m-head__brand" aria-hidden="true">YASU</span>
     <a class="m-contact" href="mailto:yasuji.nakamura@gmail.com?subject=Portfolio%20Inquiry">CONTACT</a>
   </header>
 
-  <main class="m-top" aria-label="Series index">
-    <p class="seriesIntro__kicker" style="margin: 0 16px 8px; opacity: 0.55">MOBILE</p>
-    <h1 class="m-siteTitle">Yasu Nakamura</h1>
-    <p class="m-siteStmt">Tap a series to open the viewer.</p>
+  <main class="m-top" aria-label="Portfolio index">
+    <section class="m-hero" aria-label="Statement">
+      <p class="m-hero__kicker">studies in light and form</p>
+      <h1 class="m-hero__title">
+        <span>LIGHT IS FORCE.</span>
+        <span>STRUCTURE IS RESISTANCE.</span>
+      </h1>
+      <p class="m-hero__credit">WORKS BY YASU NAKAMURA</p>
+    </section>
 
-    <nav class="m-catGrid" aria-label="Categories">
-      <a class="m-catCard" href="../series/structure/mobile.html" aria-label="STRUCTURE">
-        <img
-          class="m-catImg"
-          src="../images/covers/structure.jpg"
-          alt=""
-          width="1200"
-          height="800"
-          loading="lazy"
-          decoding="async"
-        />
+    <p class="m-sectionLabel">CATEGORIES</p>
+
+    <nav class="m-catGrid" id="mCatGrid" aria-label="Categories">
+      <a class="m-catCard" href="/series/structure/mobile.html" aria-label="STRUCTURE — resistance in form">
+        <img class="m-catImg" src="/images/covers/structure.jpg" alt="" width="1200" height="800" loading="lazy" decoding="async" />
         <div class="m-catText">
           <div class="m-catTitle">STRUCTURE</div>
           <div class="m-catSub">RESISTANCE IN FORM</div>
         </div>
       </a>
-      <a class="m-catCard" href="../series/light/mobile.html" aria-label="LIGHT">
-        <img
-          class="m-catImg"
-          src="../images/covers/light.jpg"
-          alt=""
-          width="1200"
-          height="800"
-          loading="lazy"
-          decoding="async"
-        />
+      <a class="m-catCard" href="/series/light/mobile.html" aria-label="LIGHT — force against void">
+        <img class="m-catImg" src="/images/covers/light.jpg" alt="" width="1200" height="800" loading="lazy" decoding="async" />
         <div class="m-catText">
           <div class="m-catTitle">LIGHT</div>
           <div class="m-catSub">FORCE AGAINST VOID</div>
         </div>
       </a>
-      <a class="m-catCard" href="../series/velocity/mobile.html" aria-label="VELOCITY">
-        <img
-          class="m-catImg"
-          src="../images/covers/velocity.jpg"
-          alt=""
-          width="1200"
-          height="800"
-          loading="lazy"
-          decoding="async"
-        />
+      <a class="m-catCard" href="/series/velocity/mobile.html" aria-label="VELOCITY — motion as pressure">
+        <img class="m-catImg" src="/images/covers/velocity.jpg" alt="" width="1200" height="800" loading="lazy" decoding="async" />
         <div class="m-catText">
           <div class="m-catTitle">VELOCITY</div>
           <div class="m-catSub">MOTION AS PRESSURE</div>
         </div>
       </a>
-      <a class="m-catCard" href="../series/nocturne/mobile.html" aria-label="NOCTURNE">
-        <img
-          class="m-catImg"
-          src="../images/covers/nocturne.jpg"
-          alt=""
-          width="1200"
-          height="800"
-          loading="lazy"
-          decoding="async"
-        />
+      <a class="m-catCard" href="/series/nocturne/mobile.html" aria-label="NOCTURNE — silence with teeth">
+        <img class="m-catImg" src="/images/covers/nocturne.jpg" alt="" width="1200" height="800" loading="lazy" decoding="async" />
         <div class="m-catText">
           <div class="m-catTitle">NOCTURNE</div>
           <div class="m-catSub">SILENCE WITH TEETH</div>
         </div>
       </a>
+      <a class="m-catCard m-catCard--streetlog" href="/mobile/street-log.html" aria-label="street-log — motion on foot">
+        <img class="m-catImg" src="https://i.ytimg.com/vi/AeQr_v7EJYk/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async" />
+        <div class="m-catText">
+          <div class="m-catTitle m-catTitle--slug">street-log</div>
+          <div class="m-catSub">MOTION ON FOOT</div>
+        </div>
+      </a>
     </nav>
+
+    <footer class="m-foot">
+      <a class="m-foot__link" href="https://www.youtube.com/@YasuNakamura" target="_blank" rel="noopener noreferrer">youtube</a>
+      <span aria-hidden="true"> · </span>
+      <a class="m-foot__link" href="/index.html?desktop=1">desktop site</a>
+    </footer>
   </main>
 </body>
 </html>

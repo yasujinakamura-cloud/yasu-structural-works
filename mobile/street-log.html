@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" class="is-mobile-top is-mobile-streetlog">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>street-log — Yasu Nakamura</title>
+  <meta name="description" content="Leica street walks in Osaka and Hong Kong — mobile motion archives." />
+  <meta name="robots" content="noindex,follow" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" />
+  <link rel="stylesheet" href="/assets/theme.css?v=20" />
+  <link rel="stylesheet" href="/assets/mobile.css?v=20" />
+</head>
+<body class="mobile-top mobile-streetlog" data-videos data-src="/assets/videos.json">
+  <header class="m-head">
+    <a class="m-back" href="/mobile/">← categories</a>
+    <a class="m-contact" href="mailto:yasuji.nakamura@gmail.com?subject=Portfolio%20Inquiry">CONTACT</a>
+  </header>
+
+  <main class="m-top m-streetlog" aria-label="street-log archives">
+    <p class="m-streetlog__kicker">archives / motion</p>
+    <h1 class="m-streetlog__slug">street-log</h1>
+    <p class="m-streetlog__lead">Leica walks — Osaka, Hong Kong. Monochrome in motion.</p>
+
+    <section id="videosList" class="m-streetlogList" aria-live="polite"></section>
+
+    <footer class="m-foot">
+      <a class="m-foot__link" href="https://www.youtube.com/@YasuNakamura" target="_blank" rel="noopener noreferrer">youtube</a>
+    </footer>
+  </main>
+
+  <script src="/assets/videos.js?v=20" defer></script>
+</body>
+</html>
