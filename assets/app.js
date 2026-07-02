@@ -46,12 +46,21 @@
     const ORBIT_SPEED = 0.0022;
     const ZOOM_TARGET = 1.2;
     const ZOOM_DURATION_MS = 34000;
+    const FLASH_COOLDOWN_MS = 1400;
+    const FLASH_ANGLE_EPS = 0.18; // rad (~10deg)
 
     const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
     const nextFrame = () => new Promise((resolve) => requestAnimationFrame(() => resolve()));
     const txOnly = (x, y) => `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
     const txForm = (x, y, scale = 1, rot = 0) =>
       `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rot}deg) scale(${scale})`;
+    const normRad = (a) => {
+      const twoPi = Math.PI * 2;
+      let x = a % twoPi;
+      if (x < -Math.PI) x += twoPi;
+      if (x > Math.PI) x -= twoPi;
+      return x;
+    };
 
     const shuffleOrder = (arr) => {
       const a = arr.slice();
@@ -113,8 +122,10 @@
       orbitRaf: 0,
       orbitPaused: false,
       orbitAngle: 0,
+      orbitAnglePrev: 0,
       zoomScale: 1,
       zoomStart: 0,
+      lastFlashAtByIndex: [],
 
       init() {
         this.root = grid.querySelector(".frontGrid__items");
@@ -177,6 +188,39 @@
         });
       },
 
+      maybeFlashAtZero(nowMs) {
+        const n = Math.min(this.items.length, this.slots.length);
+        if (n <= 0) return;
+        if (!Array.isArray(this.lastFlashAtByIndex) || this.lastFlashAtByIndex.length !== n) {
+          this.lastFlashAtByIndex = Array.from({ length: n }, () => 0);
+        }
+
+        for (let i = 0; i < n; i++) {
+          const li = this.items[i];
+          const slot = this.slots[i];
+          if (!li || !slot) continue;
+
+          if (nowMs - (this.lastFlashAtByIndex[i] || 0) < FLASH_COOLDOWN_MS) continue;
+
+          const aPrev = normRad(slot.angle + this.orbitAnglePrev);
+          const aNow = normRad(slot.angle + this.orbitAngle);
+
+          const nearNow = Math.abs(aNow) <= FLASH_ANGLE_EPS;
+          const crossed =
+            (aPrev < 0 && aNow >= 0) ||
+            (aPrev > 0 && aNow <= 0) ||
+            (Math.abs(aPrev - aNow) > Math.PI && nearNow);
+
+          if (!(nearNow || crossed)) continue;
+
+          this.lastFlashAtByIndex[i] = nowMs;
+          li.classList.remove("catCard--flash");
+          void li.offsetWidth;
+          li.classList.add("catCard--flash");
+          window.setTimeout(() => li.classList.remove("catCard--flash"), 1100);
+        }
+      },
+
       stopOrbitMotion() {
         if (this.orbitRaf) cancelAnimationFrame(this.orbitRaf);
         this.orbitRaf = 0;
@@ -192,8 +236,10 @@
         this.items.forEach(clearItemMotion);
         this.root.classList.add("cat-stage--orbit");
         this.orbitAngle = 0;
+        this.orbitAnglePrev = 0;
         this.zoomScale = 1;
         this.zoomStart = performance.now();
+        this.lastFlashAtByIndex = Array.from({ length: this.items.length }, () => 0);
         this.items.forEach((li, i) => {
           const slot = this.slots[i];
           if (slot) li.style.transform = txOnly(slot.x, slot.y);
@@ -201,6 +247,7 @@
         this.applyOrbitFrame();
 
         const tick = (now) => {
+          this.orbitAnglePrev = this.orbitAngle;
           if (!this.orbitPaused) this.orbitAngle += ORBIT_SPEED;
 
           const t = Math.min(1, (now - this.zoomStart) / ZOOM_DURATION_MS);
@@ -208,6 +255,7 @@
           this.zoomScale = 1 + (ZOOM_TARGET - 1) * eased;
 
           this.applyOrbitFrame();
+          this.maybeFlashAtZero(now);
           this.orbitRaf = requestAnimationFrame(tick);
         };
 
