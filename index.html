@@ -54,117 +54,56 @@
     ]
   }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap">
-  <link rel="stylesheet" href="/assets/theme.css?v=19">
+  <link rel="stylesheet" href="/assets/theme.css?v=20261002-editorial">
 </head>
-<body>
-  <main id="siteMain">
-    <section class="hero" aria-label="Hero statement">
-      <a class="hero__mail" href="mailto:yasuji.nakamura@gmail.com?subject=Portfolio%20Inquiry">CONTACT</a>
-      <div class="hero__inner">
-        <h1 class="hero__statement">
-          <span class="hero__line"><span class="hero__lineText">LIGHT IS FORCE.</span></span>
-          <span class="hero__line"><span class="hero__lineText">STRUCTURE IS RESISTANCE.</span></span>
-        </h1>
-        <p class="hero__sub">STUDIES IN LIGHT AND FORM</p>
-        <p class="hero__credit">WORKS BY YASU NAKAMURA</p>
-        <a class="hero__enter" href="#grid" aria-label="Enter gallery">ENTER <span aria-hidden="true">→</span></a>
-      </div>
-      <div class="hero__scroll" aria-hidden="true"><span class="hero__scrollLine"></span></div>
-    </section>
-
-    <section id="grid" class="frontGrid frontGrid--catalog" aria-labelledby="cat-heading">
-      <div class="frontGrid__inner">
-        <header class="frontGrid__head">
-          <div class="frontGrid__headMain">
-            <p class="frontGrid__kicker">Portfolio index</p>
-            <h2 id="cat-heading" class="frontGrid__title">CATEGORIES</h2>
-          </div>
-          <p class="frontGrid__note">Four series · street-log · Cover photographs → introduction → viewer.</p>
-        </header>
-
-        <ul class="frontGrid__items" role="list">
-          <li>
-            <a class="catCard catCard--structure" href="/series/structure/intro.html" data-slug="structure" aria-label="STRUCTURE — resistance in form">
-              <span class="catCard__index" aria-hidden="true">01</span>
-              <img class="catCard__img" src="/images/covers/structure.jpg" alt="" width="1200" height="800" loading="lazy" decoding="async">
-              <div class="catCard__overlay" aria-hidden="true"></div>
-              <div class="catCard__text">
-                <span class="catCard__title">STRUCTURE</span>
-                <span class="catCard__sub">RESISTANCE IN FORM</span>
-                <span class="catCard__enter">ENTER →</span>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a class="catCard catCard--light" href="/series/light/intro.html" data-slug="light" aria-label="LIGHT — force against void">
-              <span class="catCard__index" aria-hidden="true">02</span>
-              <img class="catCard__img" src="/images/covers/light.jpg" alt="" width="1200" height="800" loading="lazy" decoding="async">
-              <div class="catCard__overlay" aria-hidden="true"></div>
-              <div class="catCard__text">
-                <span class="catCard__title">LIGHT</span>
-                <span class="catCard__sub">FORCE AGAINST VOID</span>
-                <span class="catCard__enter">ENTER →</span>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a class="catCard catCard--velocity" href="/series/velocity/intro.html" data-slug="velocity" aria-label="VELOCITY — motion as pressure">
-              <span class="catCard__index" aria-hidden="true">03</span>
-              <img class="catCard__img" src="/images/covers/velocity.jpg" alt="" width="1200" height="800" loading="lazy" decoding="async">
-              <div class="catCard__overlay" aria-hidden="true"></div>
-              <div class="catCard__text">
-                <span class="catCard__title">VELOCITY</span>
-                <span class="catCard__sub">MOTION AS PRESSURE</span>
-                <span class="catCard__enter">ENTER →</span>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a class="catCard catCard--nocturne" href="/series/nocturne/intro.html" data-slug="nocturne" aria-label="NOCTURNE — silence with teeth">
-              <span class="catCard__index" aria-hidden="true">04</span>
-              <img class="catCard__img" src="/images/covers/nocturne.jpg" alt="" width="1200" height="800" loading="lazy" decoding="async">
-              <div class="catCard__overlay" aria-hidden="true"></div>
-              <div class="catCard__text">
-                <span class="catCard__title">NOCTURNE</span>
-                <span class="catCard__sub">SILENCE WITH TEETH</span>
-                <span class="catCard__enter">ENTER →</span>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a class="catCard catCard--streetlog" href="/street-log/" data-slug="street-log" aria-label="street-log — motion on foot">
-              <span class="catCard__index" aria-hidden="true">05</span>
-              <img class="catCard__img" src="https://i.ytimg.com/vi/AeQr_v7EJYk/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
-              <div class="catCard__overlay catCard__overlay--streetlog" aria-hidden="true"></div>
-              <div class="catCard__grain" aria-hidden="true"></div>
-              <div class="catCard__text">
-                <span class="catCard__slug">street-log</span>
-                <span class="catCard__sub">MOTION ON FOOT</span>
-                <span class="catCard__enter">ENTER →</span>
-              </div>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <footer class="siteFoot" role="contentinfo">
-      <p class="siteFoot__text">Yasu Nakamura — Monochrome photography</p>
-    </footer>
-  </main>
-
-  <script src="/assets/home.js?v=21" defer></script>
-  <script type="module">
-    (function () {
-      const a = new URL(location.href);
-      if (a.searchParams.get("desktop") === "1") {
-        a.searchParams.delete("desktop");
-        history.replaceState(null, "", a.pathname + (a.searchParams.toString() ? "?" + a.searchParams.toString() : "") + a.hash);
-      }
-    })();
-  </script>
-</body>
-</html>
+<body><a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="/">YASU NAKAMURA</a><nav aria-label="Main navigation"><a href="/#grid">WORKS</a><a href="/street-log/">street-log</a><a href="mailto:yasuji.nakamura@gmail.com?subject=Portfolio%20Inquiry">CONTACT ↗</a></nav></header><main id="content">
+<section class="home-hero" aria-labelledby="name"><div class="masthead"><p>STUDIES IN LIGHT AND FORM</p><h1 id="name">YASU NAKAMURA</h1></div>
+<div class="hero-layout"><a class="hero-image" href="/series/light/intro.html" aria-label="Explore LIGHT"><img src="/images/covers/light.jpg" alt="A person crosses a station concourse beneath an illuminated staircase." width="1200" height="800" fetchpriority="high"><span class="image-caption">02 / LIGHT <span aria-hidden="true">↗</span></span></a>
+<div class="hero-aside"><p class="hero-statement">LIGHT IS FORCE.<br>STRUCTURE IS RESISTANCE.</p><p class="hero-credit">WORKS BY YASU NAKAMURA</p><div class="city-motion"><div class="city-flow city-scene" aria-hidden="true" hidden><div class="city-cab city-cab--far"><svg viewBox="0 0 210 72" focusable="false"><defs><linearGradient id="taxi-paint-far" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a8d7c"/><stop offset="1" stop-color="#686d5f"/></linearGradient></defs><ellipse cx="108" cy="64" rx="91" ry="5" fill="#131511" opacity=".45"/>
+<path class="taxi-body" style="fill:url(#taxi-paint-far)" d="M10 36 L38 31 L66 13 Q70 10 77 10 L119 10 Q125 10 131 17 L148 30 L184 34 Q197 36 200 43 L200 55 L10 55 Q6 49 10 36Z"/>
+<path fill="#292e2b" d="M48 30 L71 15 L89 15 L89 30Z M94 15 L117 15 Q121 15 125 20 L138 30 L94 30Z"/>
+<path d="M92 32 L92 52 M144 33 L147 52" stroke="#78683f" stroke-width="1" opacity=".7"/><path d="M58 36 H68 M108 36 H118" stroke="#2b2d25" stroke-width="2"/>
+<rect x="91" y="4" width="25" height="7" rx="1" fill="#b7aa7d"/><rect x="97" y="5" width="13" height="3" fill="#35392e"/>
+<path d="M193 37 L201 39 L202 44 L194 43Z" fill="#d7d4b6"/><rect x="9" y="40" width="5" height="5" fill="#716550"/>
+<path d="M10 51 H27 M180 51 H201" stroke="#888c81" stroke-width="3"/>
+<text x="105" y="47" text-anchor="middle" fill="#35372d" font-family="Helvetica,Arial,sans-serif" font-size="8" font-weight="700">NYC TAXI</text>
+<g transform="translate(43 54)"><circle r="12" fill="#171a16"/><circle r="6.5" fill="#73776d"/><g class="taxi-wheel"><path d="M-5 0 H5 M0 -5 V5" stroke="#b5b6a9" stroke-width="1.2"/></g><circle r="2" fill="#353a30"/></g>
+<g transform="translate(165 54)"><circle r="12" fill="#171a16"/><circle r="6.5" fill="#73776d"/><g class="taxi-wheel"><path d="M-5 0 H5 M0 -5 V5" stroke="#b5b6a9" stroke-width="1.2"/></g><circle r="2" fill="#353a30"/></g>
+</svg></div><div class="city-cab"><svg viewBox="0 0 210 72" focusable="false"><defs><linearGradient id="taxi-paint-near" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c4b078"/><stop offset="1" stop-color="#a28b53"/></linearGradient></defs><ellipse cx="108" cy="64" rx="91" ry="5" fill="#131511" opacity=".45"/>
+<path class="taxi-body" style="fill:url(#taxi-paint-near)" d="M10 36 L38 31 L66 13 Q70 10 77 10 L119 10 Q125 10 131 17 L148 30 L184 34 Q197 36 200 43 L200 55 L10 55 Q6 49 10 36Z"/>
+<path fill="#292e2b" d="M48 30 L71 15 L89 15 L89 30Z M94 15 L117 15 Q121 15 125 20 L138 30 L94 30Z"/>
+<path d="M92 32 L92 52 M144 33 L147 52" stroke="#78683f" stroke-width="1" opacity=".7"/><path d="M58 36 H68 M108 36 H118" stroke="#2b2d25" stroke-width="2"/>
+<rect x="91" y="4" width="25" height="7" rx="1" fill="#b7aa7d"/><rect x="97" y="5" width="13" height="3" fill="#35392e"/>
+<path d="M193 37 L201 39 L202 44 L194 43Z" fill="#d7d4b6"/><rect x="9" y="40" width="5" height="5" fill="#716550"/>
+<path d="M10 51 H27 M180 51 H201" stroke="#888c81" stroke-width="3"/>
+<text x="105" y="47" text-anchor="middle" fill="#35372d" font-family="Helvetica,Arial,sans-serif" font-size="8" font-weight="700">NYC TAXI</text>
+<g transform="translate(43 54)"><circle r="12" fill="#171a16"/><circle r="6.5" fill="#73776d"/><g class="taxi-wheel"><path d="M-5 0 H5 M0 -5 V5" stroke="#b5b6a9" stroke-width="1.2"/></g><circle r="2" fill="#353a30"/></g>
+<g transform="translate(165 54)"><circle r="12" fill="#171a16"/><circle r="6.5" fill="#73776d"/><g class="taxi-wheel"><path d="M-5 0 H5 M0 -5 V5" stroke="#b5b6a9" stroke-width="1.2"/></g><circle r="2" fill="#353a30"/></g>
+</svg></div><div class="city-person city-person--3"><svg viewBox="-25 -5 50 115" focusable="false"><g class="pedestrian-direction"><g class="pedestrian-body">
+<g class="walk-leg walk-leg--back"><path d="M0 59 L-5 79 L1 100"/><path d="M-1 99 L7 103 L-3 104" class="walk-shoe"/></g>
+<g class="walk-arm walk-arm--back"><path d="M-2 31 L-10 44 L-4 57"/></g>
+<path class="walker-torso" d="M-5 23 Q1 21 7 26 L10 41 L7 59 L-7 61 L-10 43 L-9 29Z"/>
+<rect x="-2" y="17" width="5" height="10" rx="2"/><path d="M4 7 L9 13 L5 15Z"/><ellipse cx="0" cy="11" rx="6" ry="7.5"/>
+<path d="M-6 8 Q-4 0 3 4 L6 8" fill="#535c4f"/>
+<g class="walk-leg walk-leg--front"><path d="M2 59 L7 80 L1 100"/><path d="M-1 100 L8 103 L-3 104" class="walk-shoe"/></g>
+<g class="walk-arm walk-arm--front"><path d="M4 31 L11 46 L6 58"/></g>
+</g></g></svg></div><div class="city-person city-person--1"><svg viewBox="-25 -5 50 115" focusable="false"><g class="pedestrian-direction"><g class="pedestrian-body">
+<g class="walk-leg walk-leg--back"><path d="M0 59 L-5 79 L1 100"/><path d="M-1 99 L7 103 L-3 104" class="walk-shoe"/></g>
+<g class="walk-arm walk-arm--back"><path d="M-2 31 L-10 44 L-4 57"/></g>
+<path class="walker-torso" d="M-5 23 Q1 21 7 26 L10 41 L7 59 L-7 61 L-10 43 L-9 29Z"/>
+<rect x="-2" y="17" width="5" height="10" rx="2"/><path d="M4 7 L9 13 L5 15Z"/><ellipse cx="0" cy="11" rx="6" ry="7.5"/>
+<path d="M-6 8 Q-4 0 3 4 L6 8" fill="#535c4f"/>
+<g class="walk-leg walk-leg--front"><path d="M2 59 L7 80 L1 100"/><path d="M-1 100 L8 103 L-3 104" class="walk-shoe"/></g>
+<g class="walk-arm walk-arm--front"><path d="M4 31 L11 46 L6 58"/></g>
+</g></g></svg></div><div class="city-person city-person--2"><svg viewBox="-25 -5 50 115" focusable="false"><g class="pedestrian-direction"><g class="pedestrian-body">
+<g class="walk-leg walk-leg--back"><path d="M0 59 L-5 79 L1 100"/><path d="M-1 99 L7 103 L-3 104" class="walk-shoe"/></g>
+<g class="walk-arm walk-arm--back"><path d="M-2 31 L-10 44 L-4 57"/></g>
+<path class="walker-torso" d="M-5 23 Q1 21 7 26 L10 41 L7 59 L-7 61 L-10 43 L-9 29Z"/>
+<rect x="-2" y="17" width="5" height="10" rx="2"/><path d="M4 7 L9 13 L5 15Z"/><ellipse cx="0" cy="11" rx="6" ry="7.5"/>
+<path d="M-6 8 Q-4 0 3 4 L6 8" fill="#535c4f"/>
+<g class="walk-leg walk-leg--front"><path d="M2 59 L7 80 L1 100"/><path d="M-1 100 L8 103 L-3 104" class="walk-shoe"/></g>
+<g class="walk-arm walk-arm--front"><path d="M4 31 L11 46 L6 58"/><path class="walker-bag" d="M8 49 L20 50 L19 69 L9 68Z" fill="#555e51"/><path class="bag-strap" d="M10 50 Q10 40 18 49" fill="none" stroke="#788170" stroke-width="2"/></g>
+</g></g></svg></div></div><button class="city-motion__toggle" hidden type="button" aria-pressed="true" aria-label="Pause city motion">MOTION ON <span aria-hidden="true">Ⅱ</span></button><div class="city-sound" aria-label="New York city ambience"><p class="city-sound__label">NY / CITY AMBIENCE</p><div class="city-sound__controls"><button type="button" data-sound-toggle aria-pressed="false" aria-label="Play New York city sound">SOUND OFF ▶</button><label class="city-sound__volume">VOL<input type="range" min="0" max="100" value="25" step="1" data-sound-volume aria-label="City sound volume"></label></div><p class="city-sound__status" data-sound-status role="status"></p></div></div><a class="text-link" href="#grid">VIEW WORKS <span aria-hidden="true">↓</span></a></div></div></section>
+<section id="grid" class="works" aria-labelledby="cat-heading"><div class="section-heading"><h2 id="cat-heading">CATEGORIES</h2><p>Four series · street-log</p></div><ul class="works-grid" role="list"><li class="work work--structure"><a href="/series/structure/intro.html" aria-label="STRUCTURE — resistance in form"><figure><img src="/images/covers/structure.jpg" alt="" loading="lazy" decoding="async" width="1200" height="800"><figcaption><span class="work-number">01</span><span class="work-label"><span class="work-title">STRUCTURE</span><span class="work-description">RESISTANCE IN FORM</span></span><span class="work-arrow" aria-hidden="true">↗</span></figcaption></figure></a></li><li class="work work--light"><a href="/series/light/intro.html" aria-label="LIGHT — force against void"><figure><img src="/images/covers/light.jpg" alt="" loading="lazy" decoding="async" width="1200" height="800"><figcaption><span class="work-number">02</span><span class="work-label"><span class="work-title">LIGHT</span><span class="work-description">FORCE AGAINST VOID</span></span><span class="work-arrow" aria-hidden="true">↗</span></figcaption></figure></a></li><li class="work work--velocity"><a href="/series/velocity/intro.html" aria-label="VELOCITY — motion as pressure"><figure><img src="/images/covers/velocity.jpg" alt="" loading="lazy" decoding="async" width="1200" height="800"><figcaption><span class="work-number">03</span><span class="work-label"><span class="work-title">VELOCITY</span><span class="work-description">MOTION AS PRESSURE</span></span><span class="work-arrow" aria-hidden="true">↗</span></figcaption></figure></a></li><li class="work work--nocturne"><a href="/series/nocturne/intro.html" aria-label="NOCTURNE — silence with teeth"><figure><img src="/images/covers/nocturne.jpg" alt="" loading="lazy" decoding="async" width="1200" height="800"><figcaption><span class="work-number">04</span><span class="work-label"><span class="work-title">NOCTURNE</span><span class="work-description">SILENCE WITH TEETH</span></span><span class="work-arrow" aria-hidden="true">↗</span></figcaption></figure></a></li><li class="work work--street-log"><a href="/street-log/" aria-label="street-log — motion on foot"><figure><img src="https://i.ytimg.com/vi/AeQr_v7EJYk/maxresdefault.jpg" alt="" loading="lazy" decoding="async" width="1200" height="800"><figcaption><span class="work-number">05</span><span class="work-label"><span class="work-title">street-log</span><span class="work-description">MOTION ON FOOT</span></span><span class="work-arrow" aria-hidden="true">↗</span></figcaption></figure></a></li></ul></section>
+</main><footer class="site-footer"><span>Yasu Nakamura — Monochrome photography</span><a href="mailto:yasuji.nakamura@gmail.com?subject=Portfolio%20Inquiry">CONTACT ↗</a></footer><script src="/assets/site.js?v=20261002-editorial" defer></script><script src="/assets/city-sound.js?v=20261002-editorial" defer></script></body></html>

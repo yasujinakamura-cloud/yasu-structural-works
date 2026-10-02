@@ -96,8 +96,11 @@
   }
 
   if (toggle && main) {
+    toggle.setAttribute("aria-expanded", "true");
+    if (gear) { gear.id = "photo-gear"; toggle.setAttribute("aria-controls", gear.id); }
     toggle.addEventListener("click", () => {
       main.classList.toggle("hide-gear");
+      toggle.setAttribute("aria-expanded", String(!main.classList.contains("hide-gear")));
     });
   }
 
