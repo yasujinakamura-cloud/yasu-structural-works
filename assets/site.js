@@ -26,31 +26,6 @@
     }
     syncCityMotion();
   }
-  const activeReveals = new Set();
-  let revealObserver;
-  if (!motionPreference.matches && 'IntersectionObserver' in window) {
-    revealObserver = new IntersectionObserver(entries => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        revealObserver.unobserve(entry.target);
-        if (motionPreference.matches || typeof entry.target.animate !== 'function') continue;
-        // Never hide or disable content while waiting for the observer.
-        const animation = entry.target.animate([
-          { opacity: 0.8, transform: 'translateY(10px)' },
-          { opacity: 1, transform: 'translateY(0)' }
-        ], { duration: 420, easing: 'cubic-bezier(.2,.7,.2,1)' });
-        activeReveals.add(animation);
-        animation.finished.catch(() => {}).finally(() => activeReveals.delete(animation));
-      }
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.work').forEach(item => revealObserver.observe(item));
-  }
-  motionPreference.addEventListener('change', event => {
-    if (!event.matches) return;
-    revealObserver?.disconnect();
-    activeReveals.forEach(animation => animation.cancel());
-    activeReveals.clear();
-  });
   const main = document.querySelector('[data-series-viewer]');
   if (!main) return;
   // Film-style fades only for the photo pager; native links retain history.
