@@ -69,6 +69,14 @@
     source.stop(at + duration + 0.015);
   }
 
+  function handclap(at) {
+    // Three tightly timed noise bursts and a short tail give a drum-machine clap.
+    percussion(at, 0.011, 1600, 0.10, false, -0.12);
+    percussion(at + 0.012, 0.011, 1900, 0.12, false, 0.12);
+    percussion(at + 0.024, 0.017, 2200, 0.14, false, -0.08);
+    percussion(at + 0.035, 0.11, 2400, 0.09, false, 0.08);
+  }
+
   function tone(at, midi, duration, peak, kind = 'keys', pan = 0) {
     const oscillator = context.createOscillator();
     const gain = context.createGain();
@@ -122,7 +130,8 @@
     const time = at + (step % 2 ? 0.009 : 0);
     if ([0, 6, 10].includes(step) || (bar % 2 && step === 14)) kick(time, step === 0 ? 0.36 : 0.27);
     if (step === 4 || step === 12) {
-      percussion(time + 0.005, 0.14, 2100, 0.19);
+      percussion(time + 0.005, 0.14, 2100, 0.15);
+      handclap(time + 0.008);
       tone(time + 0.005, 55, 0.08, 0.07, 'bass');
     } else if (step === 3 || (bar % 2 && step === 11)) percussion(time, 0.042, 1800, 0.028);
     percussion(time, step === 14 && bar % 2 ? 0.16 : 0.042, 6800, step % 2 ? 0.024 : 0.044, true, 0.23);
