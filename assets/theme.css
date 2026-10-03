@@ -5,9 +5,12 @@
   --muted:rgba(233,228,216,.72);
   --line:rgba(233,228,216,.24);
   --accent:#b3261e;
+  --grain-fine:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22192%22%20height%3D%22192%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.8%22%20numOctaves%3D%221%22%20seed%3D%227%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type%3D%22linear%22%20slope%3D%223%22%20intercept%3D%22-1%22%2F%3E%3CfeFuncG%20type%3D%22linear%22%20slope%3D%223%22%20intercept%3D%22-1%22%2F%3E%3CfeFuncB%20type%3D%22linear%22%20slope%3D%223%22%20intercept%3D%22-1%22%2F%3E%3C%2FfeComponentTransfer%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20opacity%3D%22.08%22%20filter%3D%22url%28%23g%29%22%2F%3E%3C%2Fsvg%3E");
+  --grain-coarse:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22192%22%20height%3D%22192%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.13%22%20numOctaves%3D%221%22%20seed%3D%2219%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type%3D%22linear%22%20slope%3D%223%22%20intercept%3D%22-1%22%2F%3E%3CfeFuncG%20type%3D%22linear%22%20slope%3D%223%22%20intercept%3D%22-1%22%2F%3E%3CfeFuncB%20type%3D%22linear%22%20slope%3D%223%22%20intercept%3D%22-1%22%2F%3E%3C%2FfeComponentTransfer%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20opacity%3D%22.04%22%20filter%3D%22url%28%23g%29%22%2F%3E%3C%2Fsvg%3E");
+  --surface:var(--grain-fine),var(--grain-coarse),var(--bg);
   --gutter:clamp(20px,4.45vw,72px);
   font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
-  background:var(--bg);
+  background:var(--surface);
   color:var(--ink);
 }
 * {
@@ -79,7 +82,7 @@ button:hover {
   align-items:center;
   gap:24px;
   padding:20px var(--gutter);
-  background:var(--bg);
+  background:var(--surface);
   border-bottom:1px solid var(--line);
 }
 .brand {
@@ -118,11 +121,14 @@ button:hover {
   color:var(--muted);
 }
 .masthead h1 {
+  font-family:Georgia,"Times New Roman",serif;
+  font-style:italic;
   font-weight:400;
-  font-size:clamp(40px,8.7vw,142px);
-  line-height:1.08;
-  letter-spacing:-.065em;
+  font-size:clamp(40px,8.3vw,120px);
+  line-height:1.15;
+  letter-spacing:-.02em;
   margin-top:12px;
+  padding-inline:.08em;
 }
 .hero-layout {
   display:grid;
@@ -446,7 +452,7 @@ button:hover {
 .streetlogEntry__embed {
   position:relative;
   aspect-ratio:16/9;
-  background:var(--bg);
+  background:var(--surface);
 }
 .streetlogEntry__embed iframe {
   position:absolute;
@@ -579,8 +585,8 @@ button:hover {
     padding-bottom:22px;
   }
   .masthead h1 {
-    font-size:clamp(31px,9.55vw,58px);
-    letter-spacing:-.055em;
+    font-size:clamp(26px,8.7vw,52px);
+    letter-spacing:-.02em;
     white-space:nowrap;
   }
   .masthead p {
@@ -765,7 +771,7 @@ button:hover {
 .lb {
   position:fixed;
   inset:0;
-  background:var(--bg);
+  background:var(--surface);
   z-index:30;
   padding:60px;
 }
