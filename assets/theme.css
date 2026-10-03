@@ -926,3 +926,40 @@ button:hover {
 
 /* A settled viewer keeps the photograph still after the transition. */
 .viewer .photo { animation: none; }
+
+/* Two white rails surround photographs without covering their pixels. */
+.photo-mount, .viewer .frame {
+  border:2px solid #fff;
+  padding:5px;
+  background:var(--bg);
+}
+.photo-mount {
+  display:block;
+  width:100%;
+}
+.photo-mount > img, .viewer .photo {
+  border:1px solid #fff;
+}
+.viewer .frame {
+  width:fit-content;
+  max-width:100%;
+  margin-inline:auto;
+}
+.viewer .photo {
+  width:auto;
+  height:auto;
+  min-height:0;
+  max-width:100%;
+  max-height:calc(100svh - 306px);
+  object-fit:contain;
+}
+/* The optical transition stays inside the rails so the frame remains steady. */
+.viewer .frame::before, .viewer .frame::after { inset:7px; }
+@media(max-width:900px) {
+  .viewer .photo { max-height:calc(100svh - 326px); }
+}
+@media(max-width:600px) {
+  .photo-mount, .viewer .frame { padding:4px; }
+  .viewer .photo { max-height:65svh; }
+  .viewer .frame::before, .viewer .frame::after { inset:6px; }
+}
