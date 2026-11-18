@@ -215,3 +215,14 @@ body.ed{
   .ed-index{ grid-template-columns:1fr; gap:26px; }
   .ed-card__title{ font-size:32px; }
 }
+
+/* Keep the gallery's double white rails and optional jazz-funk player. */
+.ed-cover__photo a, .ed-card__img { border:2px solid white; padding:5px; background:var(--bg); }
+.ed-cover__photo img, .ed-card__img img { display:block; border:1px solid white; }
+.ed-card:hover .ed-card__img img { transform:none; }
+.ed .city-sound { margin:48px clamp(20px,3.4vw,56px) 0; color:var(--sub); }
+.city-sound__label, .city-sound__volume { font-size:12px; letter-spacing:.12em; }
+.city-sound__controls, .city-sound__volume { display:flex; align-items:center; flex-wrap:wrap; gap:16px; }
+.city-sound__controls button { min-height:44px; background:transparent; border:1px solid var(--line); color:var(--ink); padding:0 14px; cursor:pointer; }
+.city-sound__volume input { width:110px; height:44px; accent-color:var(--ink); }
+.city-sound__status:empty { display:none; }

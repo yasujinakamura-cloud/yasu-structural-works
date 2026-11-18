@@ -5,7 +5,7 @@
   function mountCommission(seriesTitle) {
     const render = () => {
       if (!window.Commission || document.querySelector("body > .cm")) return;
-      document.body.insertAdjacentHTML("beforeend", window.Commission.html(String(seriesTitle).toUpperCase()));
+      main.insertAdjacentHTML("afterend", window.Commission.html(String(seriesTitle).toUpperCase()));
     };
     if (window.Commission) return render();
     if (!selfSrc) return;
@@ -112,8 +112,11 @@
   }
 
   if (toggle && main) {
+    toggle.setAttribute("aria-expanded", "true");
+    if (gear) { gear.id = "photo-gear"; toggle.setAttribute("aria-controls", gear.id); }
     toggle.addEventListener("click", () => {
       main.classList.toggle("hide-gear");
+      toggle.setAttribute("aria-expanded", String(!main.classList.contains("hide-gear")));
     });
   }
 
