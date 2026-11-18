@@ -1,4 +1,14 @@
 (function () {
+  const selfSrc = document.currentScript && document.currentScript.src;
+  const loadCommission = (cb) => {
+    if (window.Commission) return cb();
+    if (!selfSrc) return;
+    const sc = document.createElement("script");
+    sc.src = selfSrc.replace(/mobile-series\.js(\?.*)?$/, "commission.js$1");
+    sc.onload = cb;
+    document.head.appendChild(sc);
+  };
+
   const FEED = document.getElementById("mFeed");
   const infoBtn = document.querySelector(".m-info");
   const head = document.querySelector(".m-head");
@@ -136,7 +146,15 @@
         if (img.complete) mark();
       });
 
-      totalPosts = images.length;
+      // 最後に「Commission a shoot」カードを追加（nav/progress は終端カードまで数える）
+      totalPosts = images.length + 1;
+      const endCard = document.createElement("article");
+      endCard.className = "m-post m-end";
+      endCard.dataset.index = String(images.length);
+      FEED.appendChild(endCard);
+      loadCommission(() => {
+        endCard.innerHTML = window.Commission.html(seriesTitle);
+      });
       setHeadVars();
       setBtnState(0);
       updateProgress();

@@ -1,4 +1,20 @@
 (function () {
+  const selfSrc = document.currentScript && document.currentScript.src;
+
+  // 鑑賞後の「Commission a shoot」ブロック（assets/commission.js を遅延読み込み）
+  function mountCommission(seriesTitle) {
+    const render = () => {
+      if (!window.Commission || document.querySelector("body > .cm")) return;
+      document.body.insertAdjacentHTML("beforeend", window.Commission.html(String(seriesTitle).toUpperCase()));
+    };
+    if (window.Commission) return render();
+    if (!selfSrc) return;
+    const sc = document.createElement("script");
+    sc.src = selfSrc.replace(/series-viewer\.js(\?.*)?$/, "commission.js$1");
+    sc.onload = render;
+    document.head.appendChild(sc);
+  }
+
   const root = document.documentElement;
   root.classList.add("is-ready");
 
@@ -119,6 +135,9 @@
       const row = images[pageIndex];
       if (!row) return;
       applyRow(row, total, pageIndex, data.title || series);
+      if (pageIndex === total - 1) {
+        mountCommission(data.title || series);
+      }
     })
     .catch(() => {
       if (stmt) stmt.textContent = "Could not load series data.";

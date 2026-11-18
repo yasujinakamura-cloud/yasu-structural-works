@@ -1,0 +1,111 @@
+/* commission.css — "Commission a shoot" block (top + series pages) */
+.cm{
+  --cm-ink:#f4f4f2;
+  --cm-sub:#b9b9b4;
+  --cm-line:rgba(255,255,255,.4);
+  box-sizing:border-box;
+  width:min(70vw,1100px);
+  margin:56px auto 0;
+  padding:40px 0 72px;
+  border-top:1px solid var(--cm-line);
+  color:var(--cm-ink);
+  text-align:left;
+  font-family:"Helvetica Neue",Helvetica,Arial,"Hiragino Sans","Yu Gothic",sans-serif;
+  letter-spacing:0;
+}
+.cm *{ box-sizing:border-box; }
+.cm__kicker{
+  margin:0 0 14px;
+  font-size:12px;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:var(--cm-sub);
+}
+.cm__title{
+  margin:0 0 14px;
+  font-family:var(--font-display,"Cormorant Garamond","Times New Roman",serif);
+  font-weight:600;
+  font-size:clamp(34px,4vw,52px);
+  line-height:1.05;
+  letter-spacing:.01em;
+}
+.cm__lede{
+  margin:0 0 26px;
+  max-width:34em;
+  font-size:16px;
+  line-height:1.7;
+  color:var(--cm-sub);
+}
+.cm__btn{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  min-height:48px;
+  padding:0 26px;
+  background:#f4f4f2;
+  color:#0a0a0a;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  text-decoration:none;
+  border:1px solid #f4f4f2;
+  transition:background .2s ease,color .2s ease;
+}
+.cm__btn:hover{ background:#0a0a0a; color:#f4f4f2; }
+.cm__addr{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px 14px;
+  margin:20px 0 0;
+  font-size:16px;
+}
+.cm__email{
+  -webkit-user-select:text;
+  user-select:text;
+  color:var(--cm-ink);
+  letter-spacing:.02em;
+  overflow-wrap:anywhere;
+}
+.cm__copy{
+  min-height:36px;
+  padding:0 14px;
+  background:transparent;
+  color:var(--cm-ink);
+  border:1px solid var(--cm-line);
+  font:inherit;
+  font-size:12px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+.cm__copy:hover{ border-color:var(--cm-ink); }
+.cm__status{ font-size:12px; letter-spacing:.08em; color:var(--cm-sub); min-width:1px; }
+.cm a:focus-visible,
+.cm button:focus-visible{
+  outline:2px solid #fff;
+  outline-offset:4px;
+}
+.cm__btn:focus-visible{ outline-color:#fff; box-shadow:0 0 0 2px #0a0a0a; }
+
+/* desktop viewer: below the pager */
+body.viewer-page > .cm{ margin-top:32px; width:min(82vw,1180px); }
+
+/* mobile feed end card */
+.m-post.m-end{
+  justify-content:center;
+  overflow-y:auto;
+}
+.m-end .cm{
+  width:100%;
+  margin:0;
+  padding:28px 4px 24px;
+  border-top:0;
+}
+.m-end .cm__title{ font-size:40px; }
+.m-end .cm__btn{ width:100%; justify-content:space-between; }
+
+@media (max-width:700px){
+  .cm{ width:calc(100% - 28px); padding-bottom:56px; }
+}
