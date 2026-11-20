@@ -32,7 +32,7 @@
     return m + ' ' + Number(parts[2]) + ', ' + parts[0];
   }
 
-  function createCard(video, index){
+  function createCard(video, index, series){
     const article = document.createElement('article');
     article.className = 'streetlogEntry';
 
@@ -91,6 +91,13 @@
     link.textContent = 'open on youtube →';
 
     meta.appendChild(desc);
+    if(series){
+      const seriesLink = document.createElement('a');
+      seriesLink.className = 'streetlogEntry__link';
+      seriesLink.href = series.href;
+      seriesLink.textContent = 'Explore ' + series.title + ' →';
+      meta.appendChild(seriesLink);
+    }
     meta.appendChild(link);
 
     article.appendChild(head);
@@ -121,15 +128,31 @@
     document.head.appendChild(script);
   }
 
-  fetch(dataUrl)
-    .then(function(res){
-      if(!res.ok) throw new Error('Failed to load videos');
+  function fetchJson(url){
+    return fetch(url).then(function(res){
+      if(!res.ok) throw new Error('Failed to load ' + url);
       return res.json();
+    });
+  }
+
+  const seriesBySlug = fetchJson('/data/categories.json')
+    .then(function(categories){
+      const series = categories.filter(function(category){
+        return category.slug !== 'street-log' && category.title && category.href;
+      });
+      return new Map(series.map(function(category){
+        return [category.slug, category];
+      }));
     })
-    .then(function(videos){
+    .catch(function(){
+      return new Map();
+    });
+
+  Promise.all([fetchJson(dataUrl), seriesBySlug])
+    .then(function([videos, series]){
       const sorted = sortVideos(videos);
       sorted.forEach(function(video, i){
-        listEl.appendChild(createCard(video, i));
+        listEl.appendChild(createCard(video, i, series.get(video.series)));
       });
       injectSchema(sorted);
     })
