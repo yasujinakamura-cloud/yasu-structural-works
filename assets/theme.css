@@ -463,8 +463,9 @@ button:hover {
 }
 .streetlogEntry__meta {
   display:flex;
-  justify-content:space-between;
-  gap:24px;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:14px;
   margin-top:18px;
 }
 .streetlogEntry__desc {
@@ -473,7 +474,6 @@ button:hover {
 }
 .streetlogEntry__link {
   font-size:14px;
-  flex-shrink:0;
 }
 .siteFoot {
   border-top:1px solid var(--line);
@@ -720,10 +720,6 @@ button:hover {
   }
   .streetlogEntry__head {
     gap:16px;
-  }
-  .streetlogEntry__meta {
-    flex-direction:column;
-    gap:14px;
   }
   .streetlogEntry {
     padding-bottom:40px;
